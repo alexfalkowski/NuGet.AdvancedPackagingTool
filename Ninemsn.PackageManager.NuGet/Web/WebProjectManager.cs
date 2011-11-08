@@ -35,7 +35,7 @@
             }
         }
 
-        public static IQueryable<IPackage> GetPackages(IQueryable<IPackage> packages, string searchTerm)
+        public IQueryable<IPackage> GetPackages(IQueryable<IPackage> packages, string searchTerm)
         {
             if (!string.IsNullOrEmpty(searchTerm))
             {
@@ -46,7 +46,7 @@
             return packages;
         }
 
-        public static IEnumerable<IPackage> GetPackagesRequiringLicenseAcceptance(IPackage package, IPackageRepository localRepository, IPackageRepository sourceRepository)
+        public IEnumerable<IPackage> GetPackagesRequiringLicenseAcceptance(IPackage package, IPackageRepository localRepository, IPackageRepository sourceRepository)
         {
             return
                 GetPackageDependencies(package, localRepository, sourceRepository).Where(
@@ -55,29 +55,29 @@
 
         public IQueryable<IPackage> GetPackages(IPackageRepository repository, string searchTerm)
         {
-            return GetPackages(repository.GetPackages(), searchTerm);
+            return this.GetPackages(repository.GetPackages(), searchTerm);
         }
 
         public IQueryable<IPackage> GetInstalledPackages(string searchTerms)
         {
-            return GetPackages(this.LocalRepository, searchTerms);
+            return this.GetPackages(this.LocalRepository, searchTerms);
         }
 
         public IEnumerable<IPackage> GetPackagesRequiringLicenseAcceptance(IPackage package)
         {
             var localRepository = this.LocalRepository;
             var sourceRepository = this.SourceRepository;
-            return GetPackagesRequiringLicenseAcceptance(package, localRepository, sourceRepository);
+            return this.GetPackagesRequiringLicenseAcceptance(package, localRepository, sourceRepository);
         }
 
         public IQueryable<IPackage> GetPackagesWithUpdates(string searchTerms)
         {
-            return GetPackages(this.SourceRepository.GetUpdates(this.LocalRepository.GetPackages()).AsQueryable(), searchTerms);
+            return this.GetPackages(this.SourceRepository.GetUpdates(this.LocalRepository.GetPackages()).AsQueryable(), searchTerms);
         }
 
         public IQueryable<IPackage> GetRemotePackages(string searchTerms)
         {
-            return GetPackages(this.SourceRepository, searchTerms);
+            return this.GetPackages(this.SourceRepository, searchTerms);
         }
 
         public IPackage GetUpdate(IPackage package)
