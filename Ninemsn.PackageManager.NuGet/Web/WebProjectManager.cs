@@ -111,13 +111,14 @@
 
         private static IEnumerable<IPackage> GetPackageDependencies(IPackage package, IPackageRepository localRepository, IPackageRepository sourceRepository)
         {
-            var repository = localRepository;
-            var repository2 = sourceRepository;
             var instance = NullLogger.Instance;
-            var walker = new InstallWalker(repository, repository2, instance, false);
-            return
-                walker.ResolveOperations(package).Where(operation => operation.Action == PackageAction.Install).Select(
-                    operation => operation.Package);
+            var installWalker = new InstallWalker(localRepository, sourceRepository, instance, false);
+
+            var packageDependencies = from packageOperation in installWalker.ResolveOperations(package)
+                                      where packageOperation.Action == PackageAction.Install
+                                      select packageOperation.Package;
+
+            return packageDependencies;
         }
 
         private IEnumerable<string> PerformLoggedAction(Action action)
