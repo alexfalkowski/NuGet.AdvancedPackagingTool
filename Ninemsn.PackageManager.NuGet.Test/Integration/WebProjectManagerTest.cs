@@ -23,8 +23,6 @@
 
         private WebProjectManager manager;
 
-        private string localSource;
-
         [SetUp]
         public void SetUp()
         {
@@ -32,11 +30,11 @@
             var packageSourceFile = new PackageSourceFile("Integration/PackageSources.config");
             this.module = new PackageManagerModule(httpContext, packageSourceFile);
             var localSourceUri = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase) + "/App_Data/packages";
-            this.localSource = new Uri(localSourceUri).LocalPath;
-            this.manager = new WebProjectManager(this.module.ActiveSource.Source, this.localSource);
+            var localSource = new Uri(localSourceUri).LocalPath;
+            this.manager = new WebProjectManager(this.module.ActiveSource.Source, localSource);
 
-            Directory.Delete(this.localSource, true);
-            Directory.CreateDirectory(this.localSource);
+            Directory.Delete(localSource, true);
+            Directory.CreateDirectory(localSource);
         }
 
         [Test]
