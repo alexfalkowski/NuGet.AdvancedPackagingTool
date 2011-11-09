@@ -7,17 +7,20 @@
     {
         private Process process;
 
-        public string Source
-        {
-            get
-            {
-                return "http://localhost:4907/DataServices/Packages.svc";
-            }
-        }
-
         public void StartUp()
         {
+            if (Debugger.IsAttached)
+            {
+                return;
+            }
+
+            foreach (var runningProcess in Process.GetProcessesByName("iisexpress"))
+            {
+                runningProcess.Kill();
+            }
+
             const string FileName = @"C:\Program Files (x86)\IIS Express\iisexpress.exe";
+
             const string Arguments =
                 @"/path:""C:\Users\Alex\Documents\visual studio 2010\Projects\Ninemsn.PackageManager\Ninemsn.PackageManager.NuGet.Server"" /port:4907";
 
@@ -28,6 +31,11 @@
 
         public void Stop()
         {
+            if (Debugger.IsAttached)
+            {
+                return;
+            }
+
             this.process.Kill();
         }
     }

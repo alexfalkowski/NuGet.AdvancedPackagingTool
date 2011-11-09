@@ -4,13 +4,10 @@
     using System.IO;
     using System.Linq;
     using System.Reflection;
-    using System.Web;
 
     using FluentAssertions;
 
     using Ninemsn.PackageManager.NuGet.Web;
-
-    using NSubstitute;
 
     using global::NuGet;
 
@@ -26,12 +23,12 @@
         [SetUp]
         public void SetUp()
         {
-            var httpContext = Substitute.For<HttpContextBase>();
             var packageSourceFile = new PackageSourceFile("Integration/PackageSources.config");
-            this.module = new PackageManagerModule(httpContext, packageSourceFile);
+            this.module = new PackageManagerModule(packageSourceFile);
             var localSourceUri = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase) + "/App_Data/packages";
             var localSource = new Uri(localSourceUri).LocalPath;
-            this.manager = new WebProjectManager(this.module.ActiveSource.Source, localSource);
+            var installationPath = Path.Combine(localSource, "NuGet");
+            this.manager = new WebProjectManager(this.module.ActiveSource.Source, localSource, installationPath);
 
             Directory.Delete(localSource, true);
             Directory.CreateDirectory(localSource);
@@ -62,21 +59,23 @@
         }
 
         [Test]
-        public void ShouldContainSourceRepositoryNLogPackages()
+        public void ShouldContainSourceRepositoryNuGetPackages()
         {
-            var package = this.GetPackage(this.manager.SourceRepository, "NLog");
+            var package = this.GetPackage(this.manager.SourceRepository, "NuGet");
             package.Should().NotBeNull();
         }
 
         [Test]
-        public void ShouldInstallNLogPackageInLocalRepository()
+        public void ShouldInstallNuGetPackageInLocalRepository()
         {
-            var sourcePackage = this.GetPackage(this.manager.SourceRepository, "NLog");
+            var sourcePackage = this.GetPackage(this.manager.SourceRepository, "NuGet");
 
             this.manager.InstallPackage(sourcePackage);
 
-            var localPackage = this.GetPackage(this.manager.LocalRepository, "NLog");
+            var localPackage = this.GetPackage(this.manager.LocalRepository, "NuGet");
             localPackage.Should().NotBeNull();
+
+            this.manager.LocalRepository.GetPackages().FirstOrDefault().Should().NotBeNull();
         }
 
         private IPackage GetPackage(IPackageRepository repository, string packageName)

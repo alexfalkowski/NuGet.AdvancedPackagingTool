@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Integration\LocalWebProjectManagerTest.cs" />
     <Compile Include="Integration\PackageManagerModuleTest.cs" />
     <Compile Include="Integration\WebProjectManagerTest.cs" />
     <Compile Include="Integration\PackagesWebServer.cs" />

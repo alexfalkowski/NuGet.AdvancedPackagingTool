@@ -1,4 +1,4 @@
-﻿namespace Ninemsn.PackageManager.NuGet.Web
+﻿namespace Ninemsn.PackageManager.NuGet
 {
     using System;
     using System.Collections.Generic;
@@ -16,12 +16,12 @@
             this.fileName = fileName;
         }
 
-        public IEnumerable<WebPackageSource> ReadSources()
+        public IEnumerable<PackageSource> ReadSources()
         {
             return ReadFeeds(this.GetStreamForRead);
         }
 
-        public void WriteSources(IEnumerable<WebPackageSource> sources)
+        public void WriteSources(IEnumerable<PackageSource> sources)
         {
             WriteFeeds(sources, this.GetStreamForWrite);
         }
@@ -31,7 +31,7 @@
             return File.Exists(this.fileName);
         }
 
-        private static WebPackageSource ParsePackageSource(XElement element)
+        private static PackageSource ParsePackageSource(XElement element)
         {
             var urlAttribute = element.Attribute("url");
             var displayNameAttribute = element.Attribute("displayname");
@@ -49,14 +49,14 @@
                 throw new FormatException();
             }
 
-            var source = new WebPackageSource(uri.OriginalString, displayNameAttribute.Value)
+            var source = new PackageSource(uri.OriginalString, displayNameAttribute.Value)
                 {
                     FilterPreferredPackages = (filterPreferredAttribute != null) && filterPreferredAttribute.Value.AsBool(false)
                 };
             return source;
         }
 
-        private static IEnumerable<WebPackageSource> ReadFeeds(Func<Stream> getStream)
+        private static IEnumerable<PackageSource> ReadFeeds(Func<Stream> getStream)
         {
             using (var stream = getStream())
             {
@@ -66,7 +66,7 @@
             }
         }
 
-        private static void WriteFeeds(IEnumerable<WebPackageSource> sources, Func<Stream> getStream)
+        private static void WriteFeeds(IEnumerable<PackageSource> sources, Func<Stream> getStream)
         {
             var content =
                 sources.Select(
@@ -80,7 +80,7 @@
             }
         }
 
-        private static XAttribute[] GetAttributesForFeeds(WebPackageSource item)
+        private static XAttribute[] GetAttributesForFeeds(PackageSource item)
         {
             return new[]
                 {
