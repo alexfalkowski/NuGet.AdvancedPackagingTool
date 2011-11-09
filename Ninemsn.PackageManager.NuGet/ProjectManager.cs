@@ -1,4 +1,4 @@
-﻿namespace Ninemsn.PackageManager.NuGet.Web
+﻿namespace Ninemsn.PackageManager.NuGet
 {
     using System;
     using System.Collections.Generic;
@@ -6,17 +6,16 @@
 
     using global::NuGet;
 
-    public class WebProjectManager
+    public class ProjectManager
     {
         private readonly IProjectManager projectManager;
 
-        public WebProjectManager(string remoteSource, string localSource, string installationPath)
+        public ProjectManager(string remoteSource, string localSource, IProjectSystem project)
         {
             var sourceRepository = PackageRepositoryFactory.Default.CreateRepository(remoteSource);
             var pathResolver = new DefaultPackagePathResolver(localSource);
             var localRepository = PackageRepositoryFactory.Default.CreateRepository(localSource);
-            var project = new WebProjectSystem(localSource, installationPath);
-            this.projectManager = new ProjectManager(sourceRepository, pathResolver, project, localRepository);
+            this.projectManager = new global::NuGet.ProjectManager(sourceRepository, pathResolver, project, localRepository);
         }
 
         public IPackageRepository LocalRepository

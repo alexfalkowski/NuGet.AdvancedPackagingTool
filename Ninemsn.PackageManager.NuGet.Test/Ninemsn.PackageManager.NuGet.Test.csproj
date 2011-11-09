@@ -60,9 +60,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Integration\LocalWebProjectManagerTest.cs" />
+    <Compile Include="Integration\LocalProjectManagerDefaultProjectSystemTest.cs" />
+    <Compile Include="Integration\LocalProjectManagerWebProjectSystemTest.cs" />
     <Compile Include="Integration\PackageManagerModuleTest.cs" />
-    <Compile Include="Integration\WebProjectManagerTest.cs" />
+    <Compile Include="Integration\ProjectManagerTest.cs" />
     <Compile Include="Integration\PackagesWebServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

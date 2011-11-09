@@ -2,8 +2,6 @@
 {
     using FluentAssertions;
 
-    using Ninemsn.PackageManager.NuGet.Web;
-
     using global::NuGet;
 
     using NUnit.Framework;
