@@ -3,6 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Management.Automation.Runspaces;
+    using System.Text;
 
     using global::NuGet;
 
@@ -106,6 +108,34 @@
             return
                 this.PerformLoggedAction(
                     () => this.projectManager.UpdatePackageReference(package.Id, package.Version, true));
+        }
+
+        public IEnumerable<IPackageFile> GetToolsFiles(IPackage package)
+        {
+            return package.GetFiles().Where(packageFile => packageFile.Path.StartsWith("tools"));
+        }
+
+        public string ExecutePowerShell(IPackageFile file)
+        {
+            var runspace = RunspaceFactory.CreateRunspace();
+            runspace.Open();
+
+            var pipeline = runspace.CreatePipeline();
+            var scriptContents = file.GetStream().ReadToEnd();
+            pipeline.Commands.AddScript(scriptContents);
+            pipeline.Commands.Add("Out-String");
+
+            var results = pipeline.Invoke();
+
+            runspace.Close();
+
+            var stringBuilder = new StringBuilder();
+            foreach (var result in results)
+            {
+                stringBuilder.AppendLine(result.ToString());
+            }
+
+            return stringBuilder.ToString();
         }
 
         private static IEnumerable<IPackage> GetPackageDependencies(IPackage package, IPackageRepository localRepository, IPackageRepository sourceRepository)

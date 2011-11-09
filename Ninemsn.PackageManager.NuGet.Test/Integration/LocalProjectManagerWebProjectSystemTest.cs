@@ -57,15 +57,15 @@
         [Test]
         public void ShouldInstallLocalPackageInLocalRepository()
         {
-            var sourcePackage = this.GetPackage(this.manager.SourceRepository);
+            var sourcePackage = GetPackage(this.manager.SourceRepository);
 
             this.manager.InstallPackage(sourcePackage);
 
-            var localPackage = this.GetPackage(this.manager.LocalRepository);
+            var localPackage = GetPackage(this.manager.LocalRepository);
             localPackage.Should().NotBeNull();
         }
 
-        private IPackage GetPackage(IPackageRepository repository)
+        private static IPackage GetPackage(IPackageRepository repository)
         {
             var packages = repository.GetPackages();
 

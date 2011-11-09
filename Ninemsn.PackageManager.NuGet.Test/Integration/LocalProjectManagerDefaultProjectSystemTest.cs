@@ -54,17 +54,36 @@
         }
 
         [Test]
+        public void ShouldContainContentFolderInPackage()
+        {
+            var package = GetPackage(this.manager.SourceRepository);
+            var toolsFiles = this.manager.GetToolsFiles(package);
+
+            toolsFiles.Count().Should().Be(3);
+        }
+
+        [Test]
+        public void ShouldExecutePowerShellScript()
+        {
+            var package = GetPackage(this.manager.SourceRepository);
+            var toolsFiles = this.manager.GetToolsFiles(package);
+            var output = this.manager.ExecutePowerShell(toolsFiles.ToList()[0]);
+
+            output.Should().NotBeNullOrEmpty("There was no output.");
+        }
+
+        [Test]
         public void ShouldInstallLocalPackageInLocalRepository()
         {
-            var sourcePackage = this.GetPackage(this.manager.SourceRepository);
+            var sourcePackage = GetPackage(this.manager.SourceRepository);
 
             this.manager.InstallPackage(sourcePackage);
 
-            var localPackage = this.GetPackage(this.manager.LocalRepository);
+            var localPackage = GetPackage(this.manager.LocalRepository);
             localPackage.Should().NotBeNull();
         }
 
-        private IPackage GetPackage(IPackageRepository repository)
+        private static IPackage GetPackage(IPackageRepository repository)
         {
             var packages = repository.GetPackages();
 
