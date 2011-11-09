@@ -16,7 +16,16 @@
 
             foreach (var runningProcess in Process.GetProcessesByName("iisexpress"))
             {
-                runningProcess.Kill();
+                try
+                {
+                    runningProcess.Kill();
+                }
+                // ReSharper disable EmptyGeneralCatchClause
+                catch
+                // ReSharper restore EmptyGeneralCatchClause
+                {
+                    // Ignore the exception.
+                }
             }
 
             const string FileName = @"C:\Program Files (x86)\IIS Express\iisexpress.exe";
@@ -36,7 +45,10 @@
                 return;
             }
 
-            this.process.Kill();
+            if (this.process != null)
+            {
+                this.process.Kill();
+            }
         }
     }
 }

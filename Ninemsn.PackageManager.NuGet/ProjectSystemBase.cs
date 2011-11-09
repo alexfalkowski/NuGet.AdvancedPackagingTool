@@ -1,20 +1,27 @@
-﻿namespace Ninemsn.PackageManager.NuGet.Web
+﻿namespace Ninemsn.PackageManager.NuGet
 {
     using System;
     using System.IO;
-    using System.Linq;
     using System.Runtime.Versioning;
 
     using global::NuGet;
 
-    public class WebProjectSystem : PhysicalFileSystem, IProjectSystem
+    public abstract class ProjectSystemBase : PhysicalFileSystem, IProjectSystem
     {
         private readonly string installationPath;
 
-        public WebProjectSystem(string root, string installationPath)
+        protected ProjectSystemBase(string root, string installationPath)
             : base(root)
         {
             this.installationPath = installationPath;
+        }
+
+        public string InstallationPath
+        {
+            get
+            {
+                return this.installationPath;
+            }
         }
 
         public string ProjectName
@@ -71,18 +78,8 @@
             return this.FileExists(referencePath);
         }
 
-        public void RemoveReference(string name)
-        {
-            this.DeleteFile(this.GetReferencePath(name));
-            if (!this.GetFiles("bin").Any())
-            {
-                this.DeleteDirectory("bin");
-            }
-        }
+        public abstract void RemoveReference(string name);
 
-        protected virtual string GetReferencePath(string name)
-        {
-            return Path.Combine(this.installationPath, "bin", name);
-        }
+        protected abstract string GetReferencePath(string name);
     }
 }

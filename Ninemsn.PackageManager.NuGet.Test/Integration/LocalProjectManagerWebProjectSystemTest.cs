@@ -7,18 +7,16 @@
 
     using FluentAssertions;
 
-    using Ninemsn.PackageManager.NuGet.Web;
-
     using global::NuGet;
 
     using NUnit.Framework;
 
     [TestFixture]
-    public class LocalWebProjectManagerTest
+    public class LocalProjectManagerWebProjectSystemTest
     {
         private PackageManagerModule module;
 
-        private WebProjectManager manager;
+        private NuGet.ProjectManager manager;
 
         private PackagesWebServer server;
 
@@ -30,7 +28,8 @@
             var localSourceUri = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase) + "/App_Data/packages";
             var localSource = new Uri(localSourceUri).LocalPath;
             var installationPath = Path.Combine(localSource, "DummyNews");
-            this.manager = new WebProjectManager(this.module.GetSource("LocalFeed").Source, localSource, installationPath);
+            var webProjectSystem = new WebProjectSystem(localSource, installationPath);
+            this.manager = new NuGet.ProjectManager(this.module.GetSource("LocalFeed").Source, localSource, webProjectSystem);
 
             Directory.Delete(localSource, true);
             Directory.CreateDirectory(localSource);
