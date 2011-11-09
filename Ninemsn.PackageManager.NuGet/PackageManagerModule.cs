@@ -1,32 +1,22 @@
-﻿namespace Ninemsn.PackageManager.NuGet.Web
+﻿namespace Ninemsn.PackageManager.NuGet
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web;
-    using System.Web.Hosting;
 
     public class PackageManagerModule
     {
-        private readonly HttpContextBase httpContext;
-
         private readonly IPackagesSourceFile sourceFile;
 
-        private readonly ISet<WebPackageSource> packageSources;
+        private readonly ISet<PackageSource> packageSources;
 
-        public PackageManagerModule(HttpContextBase httpContext, IPackagesSourceFile sourceFile)
+        public PackageManagerModule(IPackagesSourceFile sourceFile)
         {
-            if (httpContext == null)
-            {
-                throw new ArgumentNullException("httpContext");
-            }
-
             if (sourceFile == null)
             {
                 throw new ArgumentNullException("sourceFile");
             }
 
-            this.httpContext = httpContext;
             this.sourceFile = sourceFile;
 
             if (!this.sourceFile.Exists())
@@ -34,10 +24,10 @@
                 throw new InvalidOperationException();
             }
 
-            this.InitPackageSourceFile(this.sourceFile, out this.packageSources);
+            InitPackageSourceFile(this.sourceFile, out this.packageSources);
         }
 
-        public WebPackageSource ActiveSource
+        public PackageSource ActiveSource
         {
             get
             {
@@ -45,15 +35,7 @@
             }
         }
 
-        public bool Available
-        {
-            get
-            {
-                return this.httpContext.Request.IsLocal;
-            }
-        }
-
-        public IEnumerable<WebPackageSource> PackageSources
+        public IEnumerable<PackageSource> PackageSources
         {
             get
             {
@@ -61,15 +43,7 @@
             }
         }
 
-        public string SiteRoot
-        {
-            get
-            {
-                return HostingEnvironment.MapPath("~/");
-            }
-        }
-
-        public bool AddPackageSource(WebPackageSource packageSource)
+        public bool AddPackageSource(PackageSource packageSource)
         {
             return AddPackageSource(this.sourceFile, this.packageSources, packageSource);
         }
@@ -77,14 +51,12 @@
         public bool AddPackageSource(string source, string name)
         {
             var nameOfSource = string.IsNullOrEmpty(name) ? source : name;
-            var packageSource = new WebPackageSource(source, nameOfSource);
+            var packageSource = new PackageSource(source, nameOfSource);
             return AddPackageSource(this.sourceFile, this.packageSources, packageSource);
         }
 
         public bool AddPackageSource(
-            IPackagesSourceFile packageSourceFile,
-            ISet<WebPackageSource> packageSourcesSet,
-            WebPackageSource packageSource)
+            IPackagesSourceFile packageSourceFile, ISet<PackageSource> packageSourcesSet, PackageSource packageSource)
         {
             if (GetSource(packageSourcesSet, packageSource.Name) != null)
             {
@@ -97,14 +69,15 @@
             return true;
         }
 
-        public WebPackageSource GetSource(string sourceName)
+        public PackageSource GetSource(string sourceName)
         {
             return GetSource(this.PackageSources, sourceName);
         }
 
-        public WebPackageSource GetSource(IEnumerable<WebPackageSource> packageSourcesSet, string sourceName)
+        public PackageSource GetSource(IEnumerable<PackageSource> packageSourcesSet, string sourceName)
         {
-            Func<WebPackageSource, bool> predicate = source => source.Name.Equals(sourceName, StringComparison.OrdinalIgnoreCase);
+            Func<PackageSource, bool> predicate =
+                source => source.Name.Equals(sourceName, StringComparison.OrdinalIgnoreCase);
             return packageSourcesSet.Where(predicate).FirstOrDefault();
         }
 
@@ -114,9 +87,7 @@
         }
 
         public void RemovePackageSource(
-            IPackagesSourceFile packageSourceFile, 
-            ISet<WebPackageSource> packageSourcesSet, 
-            string name)
+            IPackagesSourceFile packageSourceFile, ISet<PackageSource> packageSourcesSet, string name)
         {
             var item = GetSource(packageSourcesSet, name);
 
@@ -127,9 +98,10 @@
             }
         }
 
-        private void InitPackageSourceFile(IPackagesSourceFile packageSourceFile, out ISet<WebPackageSource> packageSourcesSet)
+        private static void InitPackageSourceFile(
+            IPackagesSourceFile packageSourceFile, out ISet<PackageSource> packageSourcesSet)
         {
-            packageSourcesSet = new HashSet<WebPackageSource>(packageSourceFile.ReadSources());
+            packageSourcesSet = new HashSet<PackageSource>(packageSourceFile.ReadSources());
         }
     }
 }

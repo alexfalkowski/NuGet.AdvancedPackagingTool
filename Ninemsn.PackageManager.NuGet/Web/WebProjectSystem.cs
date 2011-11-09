@@ -9,9 +9,12 @@
 
     public class WebProjectSystem : PhysicalFileSystem, IProjectSystem
     {
-        public WebProjectSystem(string root)
+        private readonly string installationPath;
+
+        public WebProjectSystem(string root, string installationPath)
             : base(root)
         {
+            this.installationPath = installationPath;
         }
 
         public string ProjectName
@@ -54,16 +57,12 @@
 
         public bool IsSupportedFile(string path)
         {
-            var fileName = Path.GetFileName(path);
-            return fileName != null
-                   &&
-                   (!path.StartsWith("tools", StringComparison.OrdinalIgnoreCase)
-                    && !fileName.Equals("app.config", StringComparison.OrdinalIgnoreCase));
+            return true;
         }
 
         public string ResolvePath(string path)
         {
-            throw new NotSupportedException();
+            return Path.Combine(this.installationPath, path);
         }
 
         public bool ReferenceExists(string name)
@@ -83,7 +82,7 @@
 
         protected virtual string GetReferencePath(string name)
         {
-            return Path.Combine("bin", name);
+            return Path.Combine(this.installationPath, "bin", name);
         }
     }
 }

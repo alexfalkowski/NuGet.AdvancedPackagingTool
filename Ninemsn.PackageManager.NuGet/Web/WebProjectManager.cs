@@ -10,12 +10,12 @@
     {
         private readonly IProjectManager projectManager;
 
-        public WebProjectManager(string remoteSource, string localSource)
+        public WebProjectManager(string remoteSource, string localSource, string installationPath)
         {
             var sourceRepository = PackageRepositoryFactory.Default.CreateRepository(remoteSource);
             var pathResolver = new DefaultPackagePathResolver(localSource);
             var localRepository = PackageRepositoryFactory.Default.CreateRepository(localSource);
-            var project = new WebProjectSystem(localSource);
+            var project = new WebProjectSystem(localSource, installationPath);
             this.projectManager = new ProjectManager(sourceRepository, pathResolver, project, localRepository);
         }
 

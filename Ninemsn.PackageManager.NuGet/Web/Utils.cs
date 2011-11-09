@@ -17,7 +17,7 @@
             return GetVirtualPath("~/packages");
         }
 
-        public static WebPackageSource GetPackageSource(PackageManagerModule module, string name)
+        public static NuGet.PackageSource GetPackageSource(PackageManagerModule module, string name)
         {
             if (string.IsNullOrEmpty(name))
             {

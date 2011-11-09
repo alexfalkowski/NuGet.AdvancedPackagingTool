@@ -1,10 +1,8 @@
-﻿namespace Ninemsn.PackageManager.NuGet.Web
+﻿namespace Ninemsn.PackageManager.NuGet
 {
-    using global::NuGet;
-
-    public class WebPackageSource : PackageSource
+    public class PackageSource : global::NuGet.PackageSource
     {
-        public WebPackageSource(string source, string name) : base(source, name)
+        public PackageSource(string source, string name) : base(source, name)
         {
         }
 
@@ -15,7 +13,7 @@
 
         public override bool Equals(object obj)
         {
-            var source = (WebPackageSource)obj;
+            var source = (PackageSource)obj;
             return this.Equals(source) && (this.FilterPreferredPackages == source.FilterPreferredPackages);
         }
 

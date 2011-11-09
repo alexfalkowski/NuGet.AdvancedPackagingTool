@@ -51,12 +51,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Web\ErrorLogger.cs" />
-    <Compile Include="Web\IPackagesSourceFile.cs" />
-    <Compile Include="Web\PackageManagerModule.cs" />
-    <Compile Include="Web\PackageSourceFile.cs" />
+    <Compile Include="ErrorLogger.cs" />
+    <Compile Include="IPackagesSourceFile.cs" />
+    <Compile Include="PackageManagerModule.cs" />
+    <Compile Include="PackageSourceFile.cs" />
     <Compile Include="Web\Utils.cs" />
-    <Compile Include="Web\WebPackageSource.cs" />
+    <Compile Include="PackageSource.cs" />
     <Compile Include="Web\WebProjectManager.cs" />
     <Compile Include="Web\WebProjectSystem.cs" />
   </ItemGroup>

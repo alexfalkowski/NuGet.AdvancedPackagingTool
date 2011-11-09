@@ -1,12 +1,8 @@
 ﻿namespace Ninemsn.PackageManager.NuGet.Test.Integration
 {
-    using System.Web;
-
     using FluentAssertions;
 
     using Ninemsn.PackageManager.NuGet.Web;
-
-    using NSubstitute;
 
     using global::NuGet;
 
@@ -22,15 +18,14 @@
         [SetUp]
         public void SetUp()
         {
-            var httpContext = Substitute.For<HttpContextBase>();
             var packageSourceFile = new PackageSourceFile("Integration/PackageSources.config");
-            this.module = new PackageManagerModule(httpContext, packageSourceFile);
+            this.module = new PackageManagerModule(packageSourceFile);
         }
 
         [Test]
         public void ShouldHavePackageSources()
         {
-            this.module.PackageSources.Should().HaveCount(2);
+            this.module.PackageSources.Should().HaveCount(3);
         }
 
         [Test]

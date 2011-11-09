@@ -1,4 +1,4 @@
-namespace Ninemsn.PackageManager.NuGet.Web
+namespace Ninemsn.PackageManager.NuGet
 {
     using System.Collections.Generic;
     using System.Globalization;
