@@ -16,7 +16,7 @@
         [SetUp]
         public void SetUp()
         {
-            var packageSourceFile = new PackageSourceFile("Integration/PackageSources.config");
+            var packageSourceFile = PackageSourceFileFactory.CreatePackageSourceFile();
             this.module = new PackageManagerModule(packageSourceFile);
         }
 

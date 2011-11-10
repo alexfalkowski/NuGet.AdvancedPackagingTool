@@ -1,8 +1,8 @@
-using Ninemsn.PackageManager.NuGet.Server.DataServices;
+using Ninemsn.PackageManager.NuGet.Service.DataServices;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(NuGetRoutes), "Start")]
 
-namespace Ninemsn.PackageManager.NuGet.Server.DataServices 
+namespace Ninemsn.PackageManager.NuGet.Service.DataServices 
 {
     using System.Data.Services;
     using System.ServiceModel.Activation;

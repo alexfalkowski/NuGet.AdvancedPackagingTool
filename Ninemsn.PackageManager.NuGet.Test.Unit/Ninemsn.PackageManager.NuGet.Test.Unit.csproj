@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E5EA40D4-6130-4773-97E1-D1128D357E19}</ProjectGuid>
+    <ProjectGuid>{4C3B52E6-1753-48F2-AAD2-EB2FE6306908}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ninemsn.PackageManager.NuGet.Test</RootNamespace>
-    <AssemblyName>Ninemsn.PackageManager.NuGet.Test</AssemblyName>
+    <RootNamespace>Ninemsn.PackageManager.NuGet.Test.Unit</RootNamespace>
+    <AssemblyName>Ninemsn.PackageManager.NuGet.Test.Unit</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -37,10 +37,6 @@
     <Reference Include="NSubstitute">
       <HintPath>..\packages\NSubstitute.1.2.1.0\lib\NET40\NSubstitute.dll</HintPath>
     </Reference>
-    <Reference Include="NuGet.Core, Version=1.5.20902.9026, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NuGet.Core.1.5.20902.9026\lib\net40-Client\NuGet.Core.dll</HintPath>
-    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.5.10.11092\lib\nunit.framework.dll</HintPath>
     </Reference>
@@ -52,7 +48,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -60,30 +55,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Integration\LocalProjectManagerDefaultProjectSystemTest.cs" />
-    <Compile Include="Integration\LocalProjectManagerWebProjectSystemTest.cs" />
-    <Compile Include="Integration\PackageManagerModuleTest.cs" />
-    <Compile Include="Integration\ProjectManagerTest.cs" />
-    <Compile Include="Integration\PackagesWebServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Integration\PackageSources.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Ninemsn.PackageManager.NuGet\Ninemsn.PackageManager.NuGet.csproj">
-      <Project>{B5FB8812-1B24-4791-8C54-ABF2E64215B8}</Project>
-      <Name>Ninemsn.PackageManager.NuGet</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <Content Include="App_Data\packages\Readme.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

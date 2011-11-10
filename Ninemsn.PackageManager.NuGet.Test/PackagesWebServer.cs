@@ -41,8 +41,8 @@
 
             const string FileName = @"C:\Program Files (x86)\IIS Express\iisexpress.exe";
             var currentPath = new Uri(currentExecutingDirectoryName).LocalPath;
-            var path = Path.GetFullPath(Path.Combine(currentPath, @"..\..\..\Ninemsn.PackageManager.NuGet.Server"));
-            var arguments = string.Format(CultureInfo.CurrentCulture, @"/path:""{0}"" /port:4907", path);
+            var path = Path.GetFullPath(Path.Combine(currentPath, @"..\..\..\Ninemsn.PackageManager.NuGet.Service"));
+            var arguments = string.Format(CultureInfo.CurrentCulture, @"/path:""{0}"" /port:1544", path);
 
             this.process = Process.Start(FileName, arguments);
             Thread.Sleep(3000);

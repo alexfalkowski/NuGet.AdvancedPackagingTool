@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Ninemsn.PackageManager.NuGet.Server")]
+[assembly: AssemblyTitle("Ninemsn.PackageManager.NuGet.Service")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Ninemsn.PackageManager.NuGet.Server")]
+[assembly: AssemblyProduct("Ninemsn.PackageManager.NuGet.Service")]
 [assembly: AssemblyCopyright("Copyright ©  2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("7f5267d7-9209-482d-9279-a68c07dda3fa")]
+[assembly: Guid("9e32ec27-dba0-467c-83d8-d50baf368abe")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -31,5 +31,6 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
+// [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]

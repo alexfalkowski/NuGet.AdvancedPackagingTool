@@ -23,13 +23,14 @@
         [SetUp]
         public void SetUp()
         {
-            var packageSourceFile = new PackageSourceFile("Integration/PackageSources.config");
+            var packageSourceFile = PackageSourceFileFactory.CreatePackageSourceFile();
             this.module = new PackageManagerModule(packageSourceFile);
             var localSourceUri = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase) + "/App_Data/packages";
             var localSource = new Uri(localSourceUri).LocalPath;
             var installationPath = Path.Combine(localSource, "DummyNews");
             var webProjectSystem = new DefaultProjectSystem(localSource, installationPath);
-            this.manager = new NuGet.ProjectManager(this.module.GetSource("LocalFeed").Source, localSource, webProjectSystem);
+            this.manager = new NuGet.ProjectManager(
+                this.module.GetSource("LocalFeed").Source, localSource, webProjectSystem);
 
             Directory.Delete(localSource, true);
             Directory.CreateDirectory(localSource);

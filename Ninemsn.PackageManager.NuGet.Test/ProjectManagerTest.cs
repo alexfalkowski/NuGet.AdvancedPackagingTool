@@ -21,7 +21,7 @@
         [SetUp]
         public void SetUp()
         {
-            var packageSourceFile = new PackageSourceFile("Integration/PackageSources.config");
+            var packageSourceFile = PackageSourceFileFactory.CreatePackageSourceFile();
             this.module = new PackageManagerModule(packageSourceFile);
             var localSourceUri = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase) + "/App_Data/packages";
             var localSource = new Uri(localSourceUri).LocalPath;
