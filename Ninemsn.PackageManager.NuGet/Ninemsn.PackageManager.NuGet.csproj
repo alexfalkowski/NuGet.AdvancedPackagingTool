@@ -52,12 +52,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultProjectSystem.cs" />
+    <Compile Include="ExceptionFactory.cs" />
+    <Compile Include="InitPackageFile.cs" />
+    <Compile Include="InstallPackageFile.cs" />
+    <Compile Include="PackageExtensions.cs" />
+    <Compile Include="PackageInstaller.cs" />
+    <Compile Include="PowerShellPackageFileBase.cs" />
     <Compile Include="ProjectSystemBase.cs" />
+    <Compile Include="ProjectSystemFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ErrorLogger.cs" />
     <Compile Include="IPackagesSourceFile.cs" />
     <Compile Include="PackageManagerModule.cs" />
     <Compile Include="PackageSourceFile.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="UninstallPackageFile.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="PackageSource.cs" />
     <Compile Include="ProjectManager.cs" />
@@ -68,6 +81,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Configuration\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

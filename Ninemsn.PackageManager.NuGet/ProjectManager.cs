@@ -10,30 +10,20 @@
 
     public class ProjectManager
     {
+        private readonly IPackageRepository sourceRepository;
+
+        private readonly IPackageRepository localRepository;
+
         private readonly IProjectManager projectManager;
 
-        public ProjectManager(string remoteSource, string localSource, IProjectSystem project)
+        public ProjectManager(
+            IPackageRepository sourceRepository, IPackageRepository localRepository, IProjectSystem project)
         {
-            var sourceRepository = PackageRepositoryFactory.Default.CreateRepository(remoteSource);
-            var pathResolver = new DefaultPackagePathResolver(localSource);
-            var localRepository = PackageRepositoryFactory.Default.CreateRepository(localSource);
-            this.projectManager = new global::NuGet.ProjectManager(sourceRepository, pathResolver, project, localRepository);
-        }
-
-        public IPackageRepository LocalRepository
-        {
-            get
-            {
-                return this.projectManager.LocalRepository;
-            }
-        }
-
-        public IPackageRepository SourceRepository
-        {
-            get
-            {
-                return this.projectManager.SourceRepository;
-            }
+            this.sourceRepository = sourceRepository;
+            this.localRepository = localRepository;
+            var pathResolver = new DefaultPackagePathResolver(localRepository.Source);
+            this.projectManager = new global::NuGet.ProjectManager(
+                sourceRepository, pathResolver, project, localRepository);
         }
 
         public IQueryable<IPackage> GetPackages(IQueryable<IPackage> packages, string searchTerm)
@@ -47,14 +37,9 @@
             return packages;
         }
 
-        public IEnumerable<IPackage> GetPackagesRequiringLicenseAcceptance(
-            IPackage package, 
-            IPackageRepository localRepository, 
-            IPackageRepository sourceRepository)
+        public IEnumerable<IPackage> GetPackagesRequiringLicenseAcceptance(IPackage package)
         {
-            return
-                GetPackageDependencies(package, localRepository, sourceRepository).Where(
-                    p => p.RequireLicenseAcceptance);
+            return this.GetPackageDependencies(package).Where(p => p.RequireLicenseAcceptance);
         }
 
         public IQueryable<IPackage> GetPackages(IPackageRepository repository, string searchTerm)
@@ -64,27 +49,22 @@
 
         public IQueryable<IPackage> GetInstalledPackages(string searchTerms)
         {
-            return this.GetPackages(this.LocalRepository, searchTerms);
-        }
-
-        public IEnumerable<IPackage> GetPackagesRequiringLicenseAcceptance(IPackage package)
-        {
-            return this.GetPackagesRequiringLicenseAcceptance(package, this.LocalRepository, this.SourceRepository);
+            return this.GetPackages(this.localRepository, searchTerms);
         }
 
         public IQueryable<IPackage> GetPackagesWithUpdates(string searchTerms)
         {
-            return this.GetPackages(this.SourceRepository.GetUpdates(this.LocalRepository.GetPackages()).AsQueryable(), searchTerms);
+            return this.GetPackages(this.sourceRepository.GetUpdates(this.localRepository.GetPackages()).AsQueryable(), searchTerms);
         }
 
         public IQueryable<IPackage> GetRemotePackages(string searchTerms)
         {
-            return this.GetPackages(this.SourceRepository, searchTerms);
+            return this.GetPackages(this.sourceRepository, searchTerms);
         }
 
         public IPackage GetUpdate(IPackage package)
         {
-            return this.SourceRepository.GetUpdates(new[] { package }).SingleOrDefault();
+            return this.sourceRepository.GetUpdates(new[] { package }).SingleOrDefault();
         }
 
         public IEnumerable<string> InstallPackage(IPackage package)
@@ -95,7 +75,7 @@
 
         public bool IsPackageInstalled(IPackage package)
         {
-            return this.LocalRepository.Exists(package);
+            return this.localRepository.Exists(package);
         }
 
         public IEnumerable<string> UninstallPackage(IPackage package, bool removeDependencies)
@@ -109,11 +89,6 @@
             return
                 this.PerformLoggedAction(
                     () => this.projectManager.UpdatePackageReference(package.Id, package.Version, true));
-        }
-
-        public IEnumerable<IPackageFile> GetToolsFiles(IPackage package)
-        {
-            return package.GetFiles().Where(packageFile => packageFile.Path.StartsWith("tools"));
         }
 
         public string ExecutePowerShell(IPackageFile file)
@@ -134,13 +109,10 @@
             }
         }
 
-        private static IEnumerable<IPackage> GetPackageDependencies(
-            IPackage package, 
-            IPackageRepository localRepository, 
-            IPackageRepository sourceRepository)
+        private IEnumerable<IPackage> GetPackageDependencies(IPackage package)
         {
             var instance = NullLogger.Instance;
-            var installWalker = new InstallWalker(localRepository, sourceRepository, instance, false);
+            var installWalker = new InstallWalker(this.localRepository, this.sourceRepository, instance, false);
 
             var packageDependencies = from packageOperation in installWalker.ResolveOperations(package)
                                       where packageOperation.Action == PackageAction.Install

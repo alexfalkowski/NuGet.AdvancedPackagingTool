@@ -57,11 +57,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LocalProjectManagerDefaultProjectSystemTest.cs" />
-    <Compile Include="LocalProjectManagerWebProjectSystemTest.cs" />
+    <Compile Include="PackageInstallerTests.cs" />
     <Compile Include="PackageManagerModuleTest.cs" />
     <Compile Include="PackageSourceFileFactory.cs" />
-    <Compile Include="ProjectManagerTest.cs" />
     <Compile Include="PackagesWebServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
