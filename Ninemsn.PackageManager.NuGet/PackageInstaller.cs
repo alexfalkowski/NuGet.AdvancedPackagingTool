@@ -83,6 +83,11 @@
             return this.projectManager.IsPackageInstalled(this.package);
         }
 
+        public void UninstallPackage()
+        {
+            this.projectManager.UninstallPackage(this.package, true);
+        }
+
         private IPackage GetPackage(string packageName)
         {
             var sourceRepository = PackageRepositoryFactory.Default.CreateRepository(this.source.Source);

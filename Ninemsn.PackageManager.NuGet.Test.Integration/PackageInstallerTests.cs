@@ -67,6 +67,20 @@
         }
 
         [Test]
+        public void ShouldUninstallLocalPackageInLocalRepository()
+        {
+            this.installer.InstallPackage();
+            this.installer.UninstallPackage();
+
+            this.installer.Logs.Count().Should().Be(4);
+
+            var logs = this.installer.Logs.ToArray();
+
+            logs[3].Should().Be("Uninstall");
+            Directory.GetDirectories(this.installationPath).Length.Should().Be(0);
+        }
+
+        [Test]
         public void ShouldContainContentFolderInPackage()
         {
             this.installer.Package.GetToolsFiles().Count().Should().Be(3);
