@@ -1,6 +1,5 @@
 ﻿namespace Ninemsn.PackageManager.NuGet
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Management.Automation;
@@ -67,10 +66,18 @@
             return this.sourceRepository.GetUpdates(new[] { package }).SingleOrDefault();
         }
 
-        public IEnumerable<string> InstallPackage(IPackage package)
+        public void InstallPackage(IPackage package, ILogger logger)
         {
-            return this.PerformLoggedAction(
-                () => this.projectManager.AddPackageReference(package.Id, package.Version, false));
+            this.projectManager.Logger = logger;
+
+            try
+            {
+                this.projectManager.AddPackageReference(package.Id, package.Version, false);
+            }
+            finally
+            {
+                this.projectManager.Logger = null;
+            }
         }
 
         public bool IsPackageInstalled(IPackage package)
@@ -78,20 +85,17 @@
             return this.localRepository.Exists(package);
         }
 
-        public IEnumerable<string> UninstallPackage(IPackage package, bool removeDependencies)
+        public void UninstallPackage(IPackage package, bool removeDependencies)
         {
-            return this.PerformLoggedAction(
-                () => this.projectManager.RemovePackageReference(package.Id, false, removeDependencies));
+            this.projectManager.RemovePackageReference(package.Id, false, removeDependencies);
         }
 
-        public IEnumerable<string> UpdatePackage(IPackage package)
+        public void UpdatePackage(IPackage package)
         {
-            return
-                this.PerformLoggedAction(
-                    () => this.projectManager.UpdatePackageReference(package.Id, package.Version, true));
+            this.projectManager.UpdatePackageReference(package.Id, package.Version, true);
         }
 
-        public string ExecutePowerShell(IPackageFile file)
+        public void ExecutePowerShell(IPackageFile file, ILogger logger)
         {
             using (var powerShell = PowerShell.Create())
             {
@@ -105,7 +109,9 @@
                     stringBuilder.AppendLine(result.ToString());
                 }
 
-                return stringBuilder.ToString();
+                var executePowerShell = stringBuilder.ToString();
+
+                logger.Log(MessageLevel.Warning, executePowerShell);
             }
         }
 
@@ -119,22 +125,6 @@
                                       select packageOperation.Package;
 
             return packageDependencies;
-        }
-
-        private IEnumerable<string> PerformLoggedAction(Action action)
-        {
-            var logger = new ErrorLogger();
-            this.projectManager.Logger = logger;
-            try
-            {
-                action();
-            }
-            finally
-            {
-                this.projectManager.Logger = null;
-            }
-
-            return logger.Errors;
         }
     }
 }

@@ -62,13 +62,17 @@
 
         public IEnumerable<string> InstallPackage()
         {
+            var logger = new ErrorLogger();
+
             var powerShellFiles = this.package.GetPowerShellFiles();
 
-            this.projectManager.ExecutePowerShell(powerShellFiles.Item1);
-            this.projectManager.ExecutePowerShell(powerShellFiles.Item2);
-            this.projectManager.ExecutePowerShell(powerShellFiles.Item3);
+            this.projectManager.ExecutePowerShell(powerShellFiles.Item1, logger);
+            this.projectManager.ExecutePowerShell(powerShellFiles.Item2, logger);
+            this.projectManager.ExecutePowerShell(powerShellFiles.Item3, logger);
 
-            return this.projectManager.InstallPackage(this.package);
+            this.projectManager.InstallPackage(this.package, logger);
+
+            return logger.Errors;
         }
 
         public bool IsPackageInstalled()

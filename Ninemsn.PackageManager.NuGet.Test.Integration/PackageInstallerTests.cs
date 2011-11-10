@@ -50,7 +50,8 @@
         [Test]
         public void ShouldInstallLocalPackageInLocalRepository()
         {
-            this.installer.InstallPackage();
+            var isntallOutput = this.installer.InstallPackage();
+            isntallOutput.Count().Should().Be(3, "There was no output.");
             this.installer.IsPackageInstalled().Should().BeTrue();
         }
 
@@ -71,10 +72,11 @@
         [Test]
         public void ShouldExecutePowerShellScript()
         {
+            var logger = new ErrorLogger();
             var files = this.installer.Package.GetPowerShellFiles();
-            var output = this.installer.Manager.ExecutePowerShell(files.Item1);
+            this.installer.Manager.ExecutePowerShell(files.Item1, logger);
 
-            output.Should().NotBeNullOrEmpty("There was no output.");
+            logger.Errors.Count().Should().Be(1, "There was no output.");
         }
     }
 }
