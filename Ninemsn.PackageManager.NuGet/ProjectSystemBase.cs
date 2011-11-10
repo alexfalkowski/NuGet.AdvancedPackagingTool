@@ -78,7 +78,10 @@
             return this.FileExists(referencePath);
         }
 
-        public abstract void RemoveReference(string name);
+        public virtual void RemoveReference(string name)
+        {
+            this.DeleteFile(this.GetReferencePath(name));
+        }
 
         protected abstract string GetReferencePath(string name);
     }

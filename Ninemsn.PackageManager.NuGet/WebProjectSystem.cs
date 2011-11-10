@@ -12,7 +12,8 @@
 
         public override void RemoveReference(string name)
         {
-            this.DeleteFile(this.GetReferencePath(name));
+            base.RemoveReference(name);
+
             if (!this.GetFiles("bin").Any())
             {
                 this.DeleteDirectory("bin");

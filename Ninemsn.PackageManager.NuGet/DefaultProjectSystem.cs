@@ -9,11 +9,6 @@
         {
         }
 
-        public override void RemoveReference(string name)
-        {
-            this.DeleteFile(this.GetReferencePath(name));
-        }
-
         protected override string GetReferencePath(string name)
         {
             return Path.Combine(this.InstallationPath, name);
