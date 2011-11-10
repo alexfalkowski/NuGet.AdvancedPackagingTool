@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConsoleTests.cs" />
     <Compile Include="PackageInstallerTests.cs" />
     <Compile Include="PackageManagerModuleTest.cs" />
     <Compile Include="PackageSourceFileFactory.cs" />

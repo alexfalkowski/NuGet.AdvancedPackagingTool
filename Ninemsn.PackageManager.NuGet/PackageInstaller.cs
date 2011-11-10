@@ -64,16 +64,16 @@
 
         public void InstallPackage()
         {
-            var powerShellFiles = this.package.GetPowerShellFiles();
-
-            this.ExecutePowerShell(powerShellFiles.Item1);
-            this.ExecutePowerShell(powerShellFiles.Item2);
-            this.ExecutePowerShell(powerShellFiles.Item3);
+            var initPackageFile = this.package.GetInitPackageFile();
+            this.ExecutePowerShell(initPackageFile);
 
             this.projectManager.InstallPackage(this.package);
+
+            var installPackageFile = this.package.GetInstallPackageFile();
+            this.ExecutePowerShell(installPackageFile);
         }
 
-        public void ExecutePowerShell(PowerShellPackageFileBase file)
+        public void ExecutePowerShell(IPackageFile file)
         {
             this.projectManager.ExecutePowerShell(file);
         }

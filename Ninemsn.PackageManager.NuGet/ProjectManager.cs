@@ -124,7 +124,7 @@
                     stringBuilder.AppendLine(result.ToString());
                 }
 
-                var executePowerShell = stringBuilder.ToString();
+                var executePowerShell = stringBuilder.ToString().Trim();
 
                 this.logger.Log(MessageLevel.Info, executePowerShell);
             }

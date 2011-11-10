@@ -1,6 +1,5 @@
 ﻿namespace Ninemsn.PackageManager.NuGet
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -15,14 +14,19 @@
             return package.GetFiles().Where(packageFile => packageFile.Path.StartsWith("tools"));
         }
 
-        public static Tuple<InitPackageFile, InstallPackageFile, UninstallPackageFile> GetPowerShellFiles(this IPackage package)
+        public static IPackageFile GetInitPackageFile(this IPackage package)
         {
-            var initPowershellFile = new InitPackageFile(GetToolFile(package.GetToolsFiles(), "Init.ps1"));
-            var installPowershellFile = new InstallPackageFile(GetToolFile(package.GetToolsFiles(), "Install.ps1"));
-            var unistallPowershellFile = new UninstallPackageFile(GetToolFile(package.GetToolsFiles(), "Uninstall.ps1"));
+            return new InitPackageFile(GetToolFile(package.GetToolsFiles(), "Init.ps1"));
+        }
 
-            return new Tuple<InitPackageFile, InstallPackageFile, UninstallPackageFile>(
-                initPowershellFile, installPowershellFile, unistallPowershellFile);
+        public static IPackageFile GetInstallPackageFile(this IPackage package)
+        {
+            return new InstallPackageFile(GetToolFile(package.GetToolsFiles(), "Install.ps1"));
+        }
+
+        public static IPackageFile GetUninstallPackageFile(this IPackage package)
+        {
+            return new UninstallPackageFile(GetToolFile(package.GetToolsFiles(), "Uninstall.ps1"));
         }
 
         private static IPackageFile GetToolFile(IEnumerable<IPackageFile> toolsFiles, string fileName)

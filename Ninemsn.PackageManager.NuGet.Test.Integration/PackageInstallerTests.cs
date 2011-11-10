@@ -53,7 +53,14 @@
         {
             this.installer.IsPackageInstalled().Should().BeFalse();
             this.installer.InstallPackage();
-            this.installer.Logs.Count().Should().Be(4, "There was no output.");
+            this.installer.Logs.Count().Should().Be(3);
+
+            var logs = this.installer.Logs.ToArray();
+
+            logs[0].Should().Be("Init");
+            logs[1].Should().StartWith("Successfully");
+            logs[2].Should().Be("Install");
+
             this.installer.IsPackageInstalled().Should().BeTrue();
             Directory.GetFiles(this.installationPath).Length.Should().BeGreaterThan(1);
             Directory.GetDirectories(this.installationPath, "bin").Length.Should().Be(1);
@@ -68,16 +75,24 @@
         [Test]
         public void ShouldContainPowershellScriptsInToolsFolder()
         {
-            Action action = () => this.installer.Package.GetPowerShellFiles();
+            Action initPackageFile = () => this.installer.Package.GetInitPackageFile();
 
-            action.ShouldNotThrow<InvalidOperationException>();
+            initPackageFile.ShouldNotThrow<InvalidOperationException>();
+
+            Action installPackageFile = () => this.installer.Package.GetInstallPackageFile();
+
+            installPackageFile.ShouldNotThrow<InvalidOperationException>();
+
+            Action unsitallPackageFile = () => this.installer.Package.GetUninstallPackageFile();
+
+            unsitallPackageFile.ShouldNotThrow<InvalidOperationException>();
         }
 
         [Test]
         public void ShouldExecutePowerShellScript()
         {
-            var files = this.installer.Package.GetPowerShellFiles();
-            this.installer.ExecutePowerShell(files.Item1);
+            var file = this.installer.Package.GetInitPackageFile();
+            this.installer.ExecutePowerShell(file);
 
             this.installer.Logs.Count().Should().Be(1, "There was no output.");
         }
