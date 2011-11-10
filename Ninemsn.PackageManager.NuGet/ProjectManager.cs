@@ -13,16 +13,30 @@
 
         private readonly IPackageRepository localRepository;
 
+        private readonly PackageLogger logger;
+
         private readonly IProjectManager projectManager;
 
         public ProjectManager(
-            IPackageRepository sourceRepository, IPackageRepository localRepository, IProjectSystem project)
+            IPackageRepository sourceRepository, 
+            IPackageRepository localRepository, 
+            IProjectSystem project, 
+            PackageLogger logger)
         {
             this.sourceRepository = sourceRepository;
             this.localRepository = localRepository;
+            this.logger = logger;
             var pathResolver = new DefaultPackagePathResolver(localRepository.Source);
             this.projectManager = new global::NuGet.ProjectManager(
                 sourceRepository, pathResolver, project, localRepository);
+        }
+
+        public IEnumerable<string> Logs
+        {
+            get
+            {
+                return this.logger.Logs;
+            }
         }
 
         public IQueryable<IPackage> GetPackages(IQueryable<IPackage> packages, string searchTerm)
@@ -53,7 +67,8 @@
 
         public IQueryable<IPackage> GetPackagesWithUpdates(string searchTerms)
         {
-            return this.GetPackages(this.sourceRepository.GetUpdates(this.localRepository.GetPackages()).AsQueryable(), searchTerms);
+            return this.GetPackages(
+                this.sourceRepository.GetUpdates(this.localRepository.GetPackages()).AsQueryable(), searchTerms);
         }
 
         public IQueryable<IPackage> GetRemotePackages(string searchTerms)
@@ -66,9 +81,9 @@
             return this.sourceRepository.GetUpdates(new[] { package }).SingleOrDefault();
         }
 
-        public void InstallPackage(IPackage package, ILogger logger)
+        public void InstallPackage(IPackage package)
         {
-            this.projectManager.Logger = logger;
+            this.projectManager.Logger = this.logger;
 
             try
             {
@@ -95,7 +110,7 @@
             this.projectManager.UpdatePackageReference(package.Id, package.Version, true);
         }
 
-        public void ExecutePowerShell(IPackageFile file, ILogger logger)
+        public void ExecutePowerShell(IPackageFile file)
         {
             using (var powerShell = PowerShell.Create())
             {
@@ -111,7 +126,7 @@
 
                 var executePowerShell = stringBuilder.ToString();
 
-                logger.Log(MessageLevel.Warning, executePowerShell);
+                this.logger.Log(MessageLevel.Info, executePowerShell);
             }
         }
 

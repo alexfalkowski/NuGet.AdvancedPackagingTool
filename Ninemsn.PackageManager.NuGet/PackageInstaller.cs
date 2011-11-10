@@ -41,7 +41,9 @@
             var projectSystem = ProjectSystemFactory.CreateProjectSystem(
                 this.package, this.destination.Source, installationPath);
 
-            this.projectManager = new ProjectManager(sourceRepository, destinationRepository, projectSystem);
+            var logger = new PackageLogger();
+
+            this.projectManager = new ProjectManager(sourceRepository, destinationRepository, projectSystem, logger);
         }
 
         public IPackage Package
@@ -52,27 +54,28 @@
             }
         }
 
-        public ProjectManager Manager
+        public IEnumerable<string> Logs
         {
             get
             {
-                return this.projectManager;
+                return this.projectManager.Logs;
             }
         }
 
-        public IEnumerable<string> InstallPackage()
+        public void InstallPackage()
         {
-            var logger = new ErrorLogger();
-
             var powerShellFiles = this.package.GetPowerShellFiles();
 
-            this.projectManager.ExecutePowerShell(powerShellFiles.Item1, logger);
-            this.projectManager.ExecutePowerShell(powerShellFiles.Item2, logger);
-            this.projectManager.ExecutePowerShell(powerShellFiles.Item3, logger);
+            this.ExecutePowerShell(powerShellFiles.Item1);
+            this.ExecutePowerShell(powerShellFiles.Item2);
+            this.ExecutePowerShell(powerShellFiles.Item3);
 
-            this.projectManager.InstallPackage(this.package, logger);
+            this.projectManager.InstallPackage(this.package);
+        }
 
-            return logger.Errors;
+        public void ExecutePowerShell(PowerShellPackageFileBase file)
+        {
+            this.projectManager.ExecutePowerShell(file);
         }
 
         public bool IsPackageInstalled()

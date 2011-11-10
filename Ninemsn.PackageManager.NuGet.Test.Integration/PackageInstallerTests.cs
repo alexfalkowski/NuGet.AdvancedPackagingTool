@@ -18,6 +18,8 @@
 
         private PackageInstaller installer;
 
+        private string installationPath;
+
         [SetUp]
         public void SetUp()
         {
@@ -28,17 +30,16 @@
             this.module = new PackageManagerModule(packageSourceFile);
             var localSourceUri = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase) + "/App_Data/packages";
             var localSource = new Uri(localSourceUri).LocalPath;
-            var installationPath = Path.Combine(localSource, "DummyNews");
+            this.installationPath = Path.Combine(localSource, "DummyNews");
 
             this.installer = new PackageInstaller(
                 this.module.GetSource("LocalFeed"), 
                 this.module.GetSource("InstallPath"), 
                 "DummyNews", 
-                installationPath);
+                this.installationPath);
 
             Directory.Delete(localSource, true);
             Directory.CreateDirectory(localSource);
-            Directory.CreateDirectory(installationPath);
         }
 
         [TearDown]
@@ -50,9 +51,12 @@
         [Test]
         public void ShouldInstallLocalPackageInLocalRepository()
         {
-            var isntallOutput = this.installer.InstallPackage();
-            isntallOutput.Count().Should().Be(3, "There was no output.");
+            this.installer.IsPackageInstalled().Should().BeFalse();
+            this.installer.InstallPackage();
+            this.installer.Logs.Count().Should().Be(4, "There was no output.");
             this.installer.IsPackageInstalled().Should().BeTrue();
+            Directory.GetFiles(this.installationPath).Length.Should().BeGreaterThan(1);
+            Directory.GetDirectories(this.installationPath, "bin").Length.Should().Be(1);
         }
 
         [Test]
@@ -72,11 +76,10 @@
         [Test]
         public void ShouldExecutePowerShellScript()
         {
-            var logger = new ErrorLogger();
             var files = this.installer.Package.GetPowerShellFiles();
-            this.installer.Manager.ExecutePowerShell(files.Item1, logger);
+            this.installer.ExecutePowerShell(files.Item1);
 
-            logger.Errors.Count().Should().Be(1, "There was no output.");
+            this.installer.Logs.Count().Should().Be(1, "There was no output.");
         }
     }
 }

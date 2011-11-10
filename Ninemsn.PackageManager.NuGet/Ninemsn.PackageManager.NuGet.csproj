@@ -61,7 +61,7 @@
     <Compile Include="ProjectSystemBase.cs" />
     <Compile Include="ProjectSystemFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ErrorLogger.cs" />
+    <Compile Include="PackageLogger.cs" />
     <Compile Include="IPackagesSourceFile.cs" />
     <Compile Include="PackageManagerModule.cs" />
     <Compile Include="PackageSourceFile.cs" />
