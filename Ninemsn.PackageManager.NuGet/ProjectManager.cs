@@ -47,7 +47,10 @@
             return packages;
         }
 
-        public IEnumerable<IPackage> GetPackagesRequiringLicenseAcceptance(IPackage package, IPackageRepository localRepository, IPackageRepository sourceRepository)
+        public IEnumerable<IPackage> GetPackagesRequiringLicenseAcceptance(
+            IPackage package, 
+            IPackageRepository localRepository, 
+            IPackageRepository sourceRepository)
         {
             return
                 GetPackageDependencies(package, localRepository, sourceRepository).Where(
@@ -66,9 +69,7 @@
 
         public IEnumerable<IPackage> GetPackagesRequiringLicenseAcceptance(IPackage package)
         {
-            var localRepository = this.LocalRepository;
-            var sourceRepository = this.SourceRepository;
-            return this.GetPackagesRequiringLicenseAcceptance(package, localRepository, sourceRepository);
+            return this.GetPackagesRequiringLicenseAcceptance(package, this.LocalRepository, this.SourceRepository);
         }
 
         public IQueryable<IPackage> GetPackagesWithUpdates(string searchTerms)
@@ -133,7 +134,10 @@
             }
         }
 
-        private static IEnumerable<IPackage> GetPackageDependencies(IPackage package, IPackageRepository localRepository, IPackageRepository sourceRepository)
+        private static IEnumerable<IPackage> GetPackageDependencies(
+            IPackage package, 
+            IPackageRepository localRepository, 
+            IPackageRepository sourceRepository)
         {
             var instance = NullLogger.Instance;
             var installWalker = new InstallWalker(localRepository, sourceRepository, instance, false);

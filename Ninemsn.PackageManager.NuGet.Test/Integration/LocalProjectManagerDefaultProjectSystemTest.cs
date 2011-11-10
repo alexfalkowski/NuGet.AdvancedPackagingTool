@@ -1,6 +1,7 @@
 ﻿namespace Ninemsn.PackageManager.NuGet.Test.Integration
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Reflection;
@@ -63,6 +64,21 @@
         }
 
         [Test]
+        public void ShouldContainPowershellScriptsInToolsFolder()
+        {
+            var package = GetPackage(this.manager.SourceRepository);
+
+            var initPowershellFile = GetToolFile(this.manager.GetToolsFiles(package), "Init.ps1");
+            initPowershellFile.Should().NotBeNull();
+
+            var installPowershellFile = GetToolFile(this.manager.GetToolsFiles(package), "Install.ps1");
+            installPowershellFile.Should().NotBeNull();
+
+            var unistallPowershellFile = GetToolFile(this.manager.GetToolsFiles(package), "Uninstall.ps1");
+            unistallPowershellFile.Should().NotBeNull();
+        }
+
+        [Test]
         public void ShouldExecutePowerShellScript()
         {
             var package = GetPackage(this.manager.SourceRepository);
@@ -81,6 +97,12 @@
 
             var localPackage = GetPackage(this.manager.LocalRepository);
             localPackage.Should().NotBeNull();
+        }
+
+        private static IPackageFile GetToolFile(IEnumerable<IPackageFile> toolsFiles, string fileName)
+        {
+            var initPowershellFile = toolsFiles.Where(packgeFile => packgeFile.Path.EndsWith(fileName)).FirstOrDefault();
+            return initPowershellFile;
         }
 
         private static IPackage GetPackage(IPackageRepository repository)
