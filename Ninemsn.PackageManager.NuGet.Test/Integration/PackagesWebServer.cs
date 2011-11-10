@@ -1,6 +1,10 @@
 ﻿namespace Ninemsn.PackageManager.NuGet.Test.Integration
 {
+    using System;
     using System.Diagnostics;
+    using System.Globalization;
+    using System.IO;
+    using System.Reflection;
     using System.Threading;
 
     public class PackagesWebServer
@@ -28,13 +32,19 @@
                 }
             }
 
+            var currentExecutingDirectoryName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase);
+
+            if (currentExecutingDirectoryName == null)
+            {
+                return;
+            }
+
             const string FileName = @"C:\Program Files (x86)\IIS Express\iisexpress.exe";
+            var currentPath = new Uri(currentExecutingDirectoryName).LocalPath;
+            var path = Path.GetFullPath(Path.Combine(currentPath, @"..\..\..\Ninemsn.PackageManager.NuGet.Server"));
+            var arguments = string.Format(CultureInfo.CurrentCulture, @"/path:""{0}"" /port:4907", path);
 
-            const string Arguments =
-                @"/path:""C:\Users\Alex\Documents\visual studio 2010\Projects\Ninemsn.PackageManager\Ninemsn.PackageManager.NuGet.Server"" /port:4907";
-
-            this.process = Process.Start(FileName, Arguments);
-
+            this.process = Process.Start(FileName, arguments);
             Thread.Sleep(3000);
         }
 
@@ -49,6 +59,6 @@
             {
                 this.process.Kill();
             }
-        }
+        } 
     }
 }
