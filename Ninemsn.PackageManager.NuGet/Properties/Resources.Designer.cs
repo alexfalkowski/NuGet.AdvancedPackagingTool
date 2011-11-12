@@ -70,7 +70,7 @@ namespace Ninemsn.PackageManager.NuGet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please choose the install flag or the uninstall flag..
+        ///   Looks up a localized string similar to Install or uninstall was not specified..
         /// </summary>
         internal static string InvalidInstallUninstallFlag {
             get {

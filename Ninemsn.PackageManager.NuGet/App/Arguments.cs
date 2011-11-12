@@ -1,16 +1,12 @@
 ﻿namespace Ninemsn.PackageManager.NuGet.App
 {
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
+    using System.Linq;
 
-    using Ninemsn.PackageManager.NuGet.Properties;
+    using FluentValidation.Results;
 
     public class Arguments
     {
-        private readonly IList<string> errors = new Collection<string>();
-
-        private bool hasValidated;
-
         public bool Install { get; set; }
 
         public bool Uninstall { get; set; }
@@ -25,49 +21,26 @@
         {
             get
             {
-                return this.errors;
+                return this.ValidationResult.Errors.Select(error => error.ErrorMessage);
             }
         }
 
-        public bool IsValid()
+        public bool IsValid
         {
-            if (!this.hasValidated)
+            get
             {
-                this.hasValidated = true;
-
-                if ((this.Install && this.Uninstall) || (!this.Install && !this.Uninstall))
-                {
-                    return this.LogError(Resources.InvalidInstallUninstallFlag);
-                }
-
-                var isPackageSpecified = string.IsNullOrWhiteSpace(this.Package);
-
-                if (this.Install && isPackageSpecified)
-                {
-                    return this.LogError(Resources.PackageNotSpecified);
-                }
-
-                if (this.Uninstall && isPackageSpecified)
-                {
-                    return this.LogError(Resources.PackageNotSpecified);
-                }
-
-                if (string.IsNullOrWhiteSpace(this.Source))
-                {
-                    return this.LogError(Resources.SourceNotSpecified);
-                }
-
-                return true;
+                return this.ValidationResult.IsValid;
             }
-
-            return this.errors.Count == 0;
         }
 
-        private bool LogError(string errorMessage)
+        private ValidationResult ValidationResult
         {
-            this.errors.Add(errorMessage);
-
-            return false;
+            get
+            {
+                var validator = new ArgumentsValidator();
+                var result = validator.Validate(this);
+                return result;
+            }
         }
     }
 }

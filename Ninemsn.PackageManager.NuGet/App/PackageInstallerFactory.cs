@@ -7,7 +7,7 @@
     {
         public static IPackageInstaller CreatePackageInstaller(Arguments args)
         {
-            if (args.IsValid())
+            if (args.IsValid)
             {
                 var packageSourceFile = PackageSourceFileFactory.CreatePackageSourceFile();
                 var packageManager = new PackageManagerModule(packageSourceFile);

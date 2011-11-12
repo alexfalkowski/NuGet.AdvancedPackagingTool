@@ -124,7 +124,7 @@
     <value>Could not find '{0}' in the tools folder of the package.</value>
   </data>
   <data name="InvalidInstallUninstallFlag" xml:space="preserve">
-    <value>Please choose the install flag or the uninstall flag.</value>
+    <value>Install or uninstall was not specified.</value>
   </data>
   <data name="PackageNotSpecified" xml:space="preserve">
     <value>The package was not specified.</value>

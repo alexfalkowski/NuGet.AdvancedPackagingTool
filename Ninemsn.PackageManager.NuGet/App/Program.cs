@@ -26,7 +26,7 @@
 
         public void Start()
         {
-            if (!this.args.IsValid())
+            if (!this.args.IsValid)
             {
                 this.WriteErrorsToConsole();
 
