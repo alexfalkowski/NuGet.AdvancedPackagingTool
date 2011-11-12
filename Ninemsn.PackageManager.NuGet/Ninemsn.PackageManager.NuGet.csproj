@@ -52,11 +52,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App\Arguments.cs" />
+    <Compile Include="App\PackageInstallerFactory.cs" />
     <Compile Include="App\Program.cs" />
     <Compile Include="DefaultProjectSystem.cs" />
     <Compile Include="ExceptionFactory.cs" />
     <Compile Include="InitPackageFile.cs" />
     <Compile Include="InstallPackageFile.cs" />
+    <Compile Include="IPackageInstaller.cs" />
+    <Compile Include="NullPackageInstaller.cs" />
     <Compile Include="PackageExtensions.cs" />
     <Compile Include="PackageInstaller.cs" />
     <Compile Include="PowerShellPackageFileBase.cs" />

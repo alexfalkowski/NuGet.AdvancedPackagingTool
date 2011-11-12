@@ -1,21 +1,32 @@
 ﻿namespace Ninemsn.PackageManager.NuGet.App
 {
-    using Ninemsn.PackageManager.NuGet.Properties;
-
     public class Program
     {
         private readonly Arguments args;
 
-        public Program(Arguments args)
+        private readonly IPackageInstaller installer;
+
+        public Program(Arguments args, IPackageInstaller installer)
         {
             this.args = args;
+            this.installer = installer;
         }
 
         public void Start()
         {
-            if (this.args.Install && this.args.Uninstall)
+            if (!this.args.IsValid())
             {
-                throw ExceptionFactory.CreateArgumentException(Resources.InvalidInstallUninstallFlag);
+                return;
+            }
+
+            if (this.args.Install)
+            {
+                this.installer.InstallPackage();
+            }
+
+            if (this.args.Uninstall)
+            {
+                this.installer.UninstallPackage();
             }
         }
     }

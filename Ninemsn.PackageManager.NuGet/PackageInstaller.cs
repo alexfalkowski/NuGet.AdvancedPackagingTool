@@ -8,7 +8,7 @@
 
     using global::NuGet;
 
-    public class PackageInstaller
+    public class PackageInstaller : IPackageInstaller
     {
         private readonly PackageSource source;
 
@@ -17,7 +17,10 @@
         private readonly IPackage package;
 
         public PackageInstaller(
-            PackageSource source, string destinationRepositoryPath, string packageName, string installationPath)
+            PackageSource source, 
+            string destinationRepositoryPath, 
+            string packageName, 
+            string installationPath)
         {
             if (source == null)
             {

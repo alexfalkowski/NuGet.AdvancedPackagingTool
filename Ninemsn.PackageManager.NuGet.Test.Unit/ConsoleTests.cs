@@ -1,10 +1,10 @@
 ﻿namespace Ninemsn.PackageManager.NuGet.Test.Unit
 {
-    using System;
-
     using FluentAssertions;
 
     using Ninemsn.PackageManager.NuGet.App;
+
+    using NSubstitute;
 
     using NUnit.Framework;
 
@@ -15,10 +15,33 @@
         public void ShouldNotAllowInstallAndUninstallOptions()
         {
             var arguments = new Arguments { Install = true, Uninstall = true };
-            var program = new Program(arguments);
-            Action action = program.Start;
 
-            action.ShouldThrow<ArgumentException>("The program should not allow the install flag to be set along with the uninstall flag.");
+            arguments.IsValid().Should().BeFalse(
+                "The program should not allow the install flag to be set along with the uninstall flag.");
+        }
+
+        [Test]
+        public void ShouldInstallPackage()
+        {
+            var arguments = new Arguments { Install = true };
+            var installer = Substitute.For<IPackageInstaller>();
+            var program = new Program(arguments, installer);
+
+            program.Start();
+
+            installer.Received().InstallPackage();
+        }
+
+        [Test]
+        public void ShouldUninstallPackage()
+        {
+            var arguments = new Arguments { Uninstall = true };
+            var installer = Substitute.For<IPackageInstaller>();
+            var program = new Program(arguments, installer);
+
+            program.Start();
+
+            installer.Received().UninstallPackage();
         }
     }
 }
