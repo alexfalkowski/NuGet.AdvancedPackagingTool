@@ -6,19 +6,19 @@
 
     using Ninemsn.PackageManager.NuGet.Properties;
 
-    public class Program
+    public class Console
     {
-        private readonly Arguments args;
+        private readonly Arguments arguments;
 
         private readonly IPackageInstaller installer;
 
         private readonly ILog logger = LogManager.GetCurrentClassLogger();
 
-        public Program(Arguments args, IPackageInstaller installer)
+        public Console(Arguments arguments, IPackageInstaller installer)
         {
-            if (args == null)
+            if (arguments == null)
             {
-                throw ExceptionFactory.CreateArgumentNullException("args");
+                throw ExceptionFactory.CreateArgumentNullException("arguments");
             }
 
             if (installer == null)
@@ -26,13 +26,13 @@
                 throw ExceptionFactory.CreateArgumentNullException("installer");
             }
 
-            this.args = args;
+            this.arguments = arguments;
             this.installer = installer;
         }
 
         public void Start()
         {
-            if (!this.args.IsValid)
+            if (!this.arguments.IsValid)
             {
                 this.WriteErrorsToConsole();
 
@@ -41,12 +41,12 @@
 
             try
             {
-                if (this.args.Install)
+                if (this.arguments.Install)
                 {
                     this.installer.InstallPackage();
                 }
 
-                if (this.args.Uninstall)
+                if (this.arguments.Uninstall)
                 {
                     this.installer.UninstallPackage();
                 }
@@ -61,9 +61,9 @@
 
         private void WriteErrorsToConsole()
         {
-            foreach (var error in this.args.Errors)
+            foreach (var error in this.arguments.Errors)
             {
-                Console.WriteLine(error);
+                System.Console.WriteLine(error);
             }
         }
     }

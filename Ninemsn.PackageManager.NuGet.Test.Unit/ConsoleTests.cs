@@ -78,7 +78,7 @@
         {
             var arguments = new Arguments { Install = true, Package = "DummyNews", Source = "LocalFeed" };
             var installer = Substitute.For<IPackageInstaller>();
-            var program = new Program(arguments, installer);
+            var program = new Console(arguments, installer);
 
             program.Start();
 
@@ -90,7 +90,7 @@
         {
             var arguments = new Arguments { Uninstall = true, Package = "DummyNews", Source = "LocalFeed" };
             var installer = Substitute.For<IPackageInstaller>();
-            var program = new Program(arguments, installer);
+            var program = new Console(arguments, installer);
 
             program.Start();
 

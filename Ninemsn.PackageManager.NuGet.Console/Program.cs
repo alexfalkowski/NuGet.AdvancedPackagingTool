@@ -10,7 +10,7 @@
         {
             var arguments = Configuration.Configure<Arguments>().CreateAndBind(args);
 
-            var program = new Application.Program(arguments, PackageInstallerFactory.CreatePackageInstaller(arguments));
+            var program = new Console(arguments, PackageInstallerFactory.CreatePackageInstaller(arguments));
             program.Start();
         }
     }
