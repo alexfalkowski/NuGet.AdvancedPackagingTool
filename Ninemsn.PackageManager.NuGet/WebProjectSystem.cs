@@ -10,19 +10,22 @@
         {
         }
 
+        protected override string ReferencePath
+        {
+            get
+            {
+                return Path.Combine(this.InstallationPath, "bin");
+            }
+        }
+
         public override void RemoveReference(string name)
         {
             base.RemoveReference(name);
 
-            if (!this.GetFiles("bin").Any())
+            if (!Directory.GetFiles(this.ReferencePath).Any())
             {
-                this.DeleteDirectory("bin");
+                Directory.Delete(this.ReferencePath);
             }
-        }
-
-        protected override string GetReferencePath(string name)
-        {
-            return Path.Combine(this.InstallationPath, "bin", name);
         }
     }
 }

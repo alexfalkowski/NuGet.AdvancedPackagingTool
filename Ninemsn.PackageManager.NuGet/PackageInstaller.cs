@@ -82,6 +82,9 @@
 
         public void UninstallPackage()
         {
+            var unistallPackageFile = this.package.GetUninstallPackageFile();
+            this.ExecutePowerShell(unistallPackageFile);
+
             this.projectManager.UninstallPackage(this.package, true);
         }
 

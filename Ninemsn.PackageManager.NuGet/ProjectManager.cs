@@ -1,5 +1,6 @@
 ﻿namespace Ninemsn.PackageManager.NuGet
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Management.Automation;
@@ -83,16 +84,7 @@
 
         public void InstallPackage(IPackage package)
         {
-            this.projectManager.Logger = this.logger;
-
-            try
-            {
-                this.projectManager.AddPackageReference(package.Id, package.Version, false);
-            }
-            finally
-            {
-                this.projectManager.Logger = null;
-            }
+            this.ExecuteUsingLogger(() => this.projectManager.AddPackageReference(package.Id, package.Version, false));
         }
 
         public bool IsPackageInstalled(IPackage package)
@@ -102,7 +94,8 @@
 
         public void UninstallPackage(IPackage package, bool removeDependencies)
         {
-            this.projectManager.RemovePackageReference(package.Id, false, removeDependencies);
+            this.ExecuteUsingLogger(
+                () => this.projectManager.RemovePackageReference(package.Id, false, removeDependencies));
         }
 
         public void UpdatePackage(IPackage package)
@@ -140,6 +133,20 @@
                                       select packageOperation.Package;
 
             return packageDependencies;
+        }
+
+        private void ExecuteUsingLogger(Action actionToExecute)
+        {
+            this.projectManager.Logger = this.logger;
+
+            try
+            {
+                actionToExecute();
+            }
+            finally
+            {
+                this.projectManager.Logger = null;
+            }
         }
     }
 }

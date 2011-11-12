@@ -9,9 +9,12 @@
         {
         }
 
-        protected override string GetReferencePath(string name)
+        protected override string ReferencePath
         {
-            return Path.Combine(this.InstallationPath, name);
+            get
+            {
+                return this.InstallationPath;
+            }
         }
     }
 }

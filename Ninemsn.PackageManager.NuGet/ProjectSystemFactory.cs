@@ -18,7 +18,7 @@
 
             if (packageFile != null)
             {
-                return new WebProjectSystem(root, installationPath); 
+                return new WebProjectSystem(root, installationPath);
             }
 
             return new DefaultProjectSystem(root, installationPath); 

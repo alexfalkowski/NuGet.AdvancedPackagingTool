@@ -58,7 +58,7 @@
             var logs = this.installer.Logs.ToArray();
 
             logs[0].Should().Be("Init");
-            logs[1].Should().StartWith("Successfully");
+            logs[1].Should().Contain("added");
             logs[2].Should().Be("Install");
 
             this.installer.IsPackageInstalled().Should().BeTrue();
@@ -72,11 +72,12 @@
             this.installer.InstallPackage();
             this.installer.UninstallPackage();
 
-            this.installer.Logs.Count().Should().Be(4);
+            this.installer.Logs.Count().Should().Be(5);
 
             var logs = this.installer.Logs.ToArray();
 
             logs[3].Should().Be("Uninstall");
+            logs[4].Should().Contain("removed");
             Directory.GetDirectories(this.installationPath).Length.Should().Be(0);
         }
 

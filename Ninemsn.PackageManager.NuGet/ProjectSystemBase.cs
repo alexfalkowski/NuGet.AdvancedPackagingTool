@@ -1,7 +1,9 @@
 ﻿namespace Ninemsn.PackageManager.NuGet
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Runtime.Versioning;
 
     using global::NuGet;
@@ -40,6 +42,18 @@
             }
         }
 
+        protected abstract string ReferencePath { get; }
+
+        public override IEnumerable<string> GetFiles(string path, string filter)
+        {
+            return !Directory.Exists(path) ? Enumerable.Empty<string>() : Directory.GetFiles(path, filter);
+        }
+
+        public override IEnumerable<string> GetDirectories(string path)
+        {
+            return !Directory.Exists(path) ? Enumerable.Empty<string>() : Directory.GetDirectories(path);
+        }
+
         public void AddFrameworkReference(string name)
         {
             throw new NotSupportedException();
@@ -48,7 +62,7 @@
         public void AddReference(string referencePath, Stream stream)
         {
             var fileName = Path.GetFileName(referencePath);
-            var fullPath = this.GetFullPath(this.GetReferencePath(fileName));
+            var fullPath = this.GetFullPath(this.GetReferenceFile(fileName));
             this.AddFile(fullPath, stream);
         }
 
@@ -74,15 +88,18 @@
 
         public bool ReferenceExists(string name)
         {
-            string referencePath = this.GetReferencePath(name);
+            var referencePath = this.GetReferenceFile(name);
             return this.FileExists(referencePath);
         }
 
         public virtual void RemoveReference(string name)
         {
-            this.DeleteFile(this.GetReferencePath(name));
+            this.DeleteFile(this.GetReferenceFile(name));
         }
 
-        protected abstract string GetReferencePath(string name);
+        protected string GetReferenceFile(string name)
+        {
+            return Path.Combine(this.ReferencePath, name);
+        }
     }
 }
