@@ -17,6 +17,14 @@
 
         public string Destination { get; set; }
 
+        public IEnumerable<string> Errors
+        {
+            get
+            {
+                return this.errors;
+            }
+        }
+
         public bool IsValid()
         {
             if (this.Install && this.Uninstall)

@@ -1,5 +1,7 @@
 ﻿namespace Ninemsn.PackageManager.NuGet.App
 {
+    using System;
+
     public class Program
     {
         private readonly Arguments args;
@@ -16,6 +18,11 @@
         {
             if (!this.args.IsValid())
             {
+                foreach (var error in this.args.Errors)
+                {
+                    Console.WriteLine(error);
+                }
+
                 return;
             }
 
