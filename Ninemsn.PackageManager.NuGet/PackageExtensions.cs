@@ -3,8 +3,6 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using Ninemsn.PackageManager.NuGet.Properties;
-
     using global::NuGet;
 
     public static class PackageExtensions
@@ -16,30 +14,25 @@
 
         public static IPackageFile GetInitPackageFile(this IPackage package)
         {
-            return new InitPackageFile(GetToolFile(package.GetToolsFiles(), "Init.ps1"));
+            return new InitPackageFile(GetToolFile(package.GetToolsFiles(), "Init"));
         }
 
         public static IPackageFile GetInstallPackageFile(this IPackage package)
         {
-            return new InstallPackageFile(GetToolFile(package.GetToolsFiles(), "Install.ps1"));
+            return new InstallPackageFile(GetToolFile(package.GetToolsFiles(), "Install"));
         }
 
         public static IPackageFile GetUninstallPackageFile(this IPackage package)
         {
-            return new UninstallPackageFile(GetToolFile(package.GetToolsFiles(), "Uninstall.ps1"));
+            return new UninstallPackageFile(GetToolFile(package.GetToolsFiles(), "Uninstall"));
         }
 
         private static IPackageFile GetToolFile(IEnumerable<IPackageFile> toolsFiles, string fileName)
         {
-            var powershellFile = toolsFiles.Where(packgeFile => packgeFile.Path.EndsWith(fileName)).FirstOrDefault();
+            var powershellFilesQuery = toolsFiles.Where(packgeFile => packgeFile.Path.Contains(fileName));
+            var powershellFile = powershellFilesQuery.FirstOrDefault();
 
-            if (powershellFile == null)
-            {
-                throw ExceptionFactory.CreateInvalidOperationException(
-                    Resources.FileNameDoesNotExistInToolsFolder, fileName);
-            }
-
-            return powershellFile;
+            return powershellFile ?? new NullPackageFile();
         }
     }
 }

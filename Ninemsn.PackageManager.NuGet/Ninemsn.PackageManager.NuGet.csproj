@@ -72,6 +72,7 @@
     <Compile Include="InitPackageFile.cs" />
     <Compile Include="InstallPackageFile.cs" />
     <Compile Include="IPackageInstaller.cs" />
+    <Compile Include="NullPackageFile.cs" />
     <Compile Include="NullPackageInstaller.cs" />
     <Compile Include="PackageExtensions.cs" />
     <Compile Include="PackageInstaller.cs" />
