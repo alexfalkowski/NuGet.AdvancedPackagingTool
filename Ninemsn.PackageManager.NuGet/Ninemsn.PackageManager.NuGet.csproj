@@ -51,6 +51,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App\Arguments.cs" />
+    <Compile Include="App\Program.cs" />
     <Compile Include="DefaultProjectSystem.cs" />
     <Compile Include="ExceptionFactory.cs" />
     <Compile Include="InitPackageFile.cs" />

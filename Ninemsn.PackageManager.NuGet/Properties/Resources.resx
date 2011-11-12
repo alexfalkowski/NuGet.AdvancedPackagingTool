@@ -104,4 +104,7 @@
   <data name="FileNameDoesNotExistInToolsFolder">
     <value xml:space="preserve">Could not find '{0}' in the tools folder of the package.</value>
   </data>
+  <data name="InvalidInstallUninstallFlag">
+    <value xml:space="preserve">Please choose the install flag or the uninstall flag, however not both.</value>
+  </data>
 </root>

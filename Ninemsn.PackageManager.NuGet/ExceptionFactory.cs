@@ -6,9 +6,17 @@
     public static class ExceptionFactory
     {
         public static InvalidOperationException CreateInvalidOperationException(
-            string message, params object[] parameters)
+            string message, 
+            params object[] parameters)
         {
             return new InvalidOperationException(FormatMessage(message, parameters));
+        }
+
+        public static ArgumentException CreateArgumentException(
+            string message, 
+            params object[] parameters)
+        {
+            return new ArgumentException(FormatMessage(message, parameters));
         }
 
         private static string FormatMessage(string message, object[] parameters)

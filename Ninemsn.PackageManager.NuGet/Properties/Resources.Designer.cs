@@ -70,6 +70,15 @@ namespace Ninemsn.PackageManager.NuGet.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please choose the install flag or the uninstall flag, however not both..
+        /// </summary>
+        internal static string InvalidInstallUninstallFlag {
+            get {
+                return ResourceManager.GetString("InvalidInstallUninstallFlag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The package &apos;{0} cannot be found in repository &apos;{1}&apos;..
         /// </summary>
         internal static string InvalidPackage {

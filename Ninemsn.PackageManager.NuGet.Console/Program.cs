@@ -2,15 +2,16 @@
 {
     using Args;
 
-    public class Program
+    using Ninemsn.PackageManager.NuGet.App;
+
+    public static class Program
     {
         public static void Main(string[] args)
         {
-            var arguments = Configuration.Configure<Arguments>().CreateAndBind(args); 
+            var arguments = Configuration.Configure<Arguments>().CreateAndBind(args);
 
-            if (arguments.Install)
-            {
-            }
+            var program = new App.Program(arguments);
+            program.Start();
         }
     }
 }
