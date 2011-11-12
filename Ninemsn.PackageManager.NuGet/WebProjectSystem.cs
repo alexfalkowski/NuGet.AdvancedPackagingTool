@@ -5,6 +5,8 @@
 
     public class WebProjectSystem : DefaultProjectSystem
     {
+        private const string BinFolderName = "bin";
+
         public WebProjectSystem(string installationPath)
             : base(installationPath)
         {
@@ -14,7 +16,7 @@
         {
             get
             {
-                return Path.Combine(base.ReferencePath, "bin");
+                return Path.Combine(base.ReferencePath, BinFolderName);
             }
         }
 
@@ -22,9 +24,9 @@
         {
             base.RemoveReference(name);
 
-            if (!this.GetFiles("bin").Any())
+            if (!this.GetFiles(BinFolderName).Any())
             {
-                this.DeleteDirectory("bin");
+                this.DeleteDirectory(BinFolderName);
             }
         }
     }
