@@ -14,14 +14,12 @@
                 throw new ArgumentNullException("package");
             }
 
-            var packageFile = package.GetFiles().Where(file => file.Path.Contains("Web.config")).FirstOrDefault();
+            var packageFileQuery = package.GetContentFiles().Where(file => file.Path.Contains("Web.config"));
+            var packageFile = packageFileQuery.FirstOrDefault();
 
-            if (packageFile != null)
-            {
-                return new WebProjectSystem(installationPath);
-            }
-
-            return new DefaultProjectSystem(installationPath); 
+            return packageFile != null
+                       ? new WebProjectSystem(installationPath)
+                       : new DefaultProjectSystem(installationPath);
         }
     }
 }

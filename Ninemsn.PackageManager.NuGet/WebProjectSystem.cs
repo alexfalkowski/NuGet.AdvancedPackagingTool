@@ -3,7 +3,7 @@
     using System.IO;
     using System.Linq;
 
-    public class WebProjectSystem : ProjectSystemBase
+    public class WebProjectSystem : DefaultProjectSystem
     {
         public WebProjectSystem(string installationPath)
             : base(installationPath)
@@ -14,7 +14,7 @@
         {
             get
             {
-                return Path.Combine(this.Root, "bin");
+                return Path.Combine(base.ReferencePath, "bin");
             }
         }
 
