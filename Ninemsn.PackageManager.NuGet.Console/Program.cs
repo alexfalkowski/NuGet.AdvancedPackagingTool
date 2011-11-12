@@ -6,7 +6,7 @@
 
     using Common.Logging;
 
-    using Ninemsn.PackageManager.NuGet.App;
+    using Ninemsn.PackageManager.NuGet.Application;
     using Ninemsn.PackageManager.NuGet.Console.Properties;
 
     public static class Program
@@ -18,7 +18,7 @@
 
             try
             {
-                var program = new App.Program(arguments, PackageInstallerFactory.CreatePackageInstaller(arguments));
+                var program = new Application.Program(arguments, PackageInstallerFactory.CreatePackageInstaller(arguments));
                 program.Start();
             }
             catch (Exception e)

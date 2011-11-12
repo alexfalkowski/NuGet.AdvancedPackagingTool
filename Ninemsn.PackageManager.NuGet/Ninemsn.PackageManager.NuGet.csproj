@@ -64,10 +64,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App\Arguments.cs" />
-    <Compile Include="App\ArgumentsValidator.cs" />
-    <Compile Include="App\PackageInstallerFactory.cs" />
-    <Compile Include="App\Program.cs" />
+    <Compile Include="Application\Arguments.cs" />
+    <Compile Include="Application\ArgumentsValidator.cs" />
+    <Compile Include="Application\PackageInstallerFactory.cs" />
+    <Compile Include="Application\Program.cs" />
     <Compile Include="ExceptionFactory.cs" />
     <Compile Include="InitPackageFile.cs" />
     <Compile Include="InstallPackageFile.cs" />

@@ -4,7 +4,7 @@
 
     using FluentAssertions;
 
-    using Ninemsn.PackageManager.NuGet.App;
+    using Ninemsn.PackageManager.NuGet.Application;
 
     using NSubstitute;
 

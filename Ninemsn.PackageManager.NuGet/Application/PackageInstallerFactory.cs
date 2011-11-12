@@ -1,4 +1,4 @@
-﻿namespace Ninemsn.PackageManager.NuGet.App
+﻿namespace Ninemsn.PackageManager.NuGet.Application
 {
     using System.Configuration;
     using System.IO;
