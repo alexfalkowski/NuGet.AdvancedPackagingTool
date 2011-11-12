@@ -1,6 +1,7 @@
 ﻿namespace Ninemsn.PackageManager.NuGet.Application
 {
     using System;
+    using System.Collections.Generic;
 
     using Common.Logging;
 
@@ -34,7 +35,7 @@
         {
             if (!this.arguments.IsValid)
             {
-                this.WriteErrorsToConsole();
+                WriteInformationToConsole(this.arguments.Errors);
 
                 return;
             }
@@ -43,12 +44,12 @@
             {
                 if (this.arguments.Install)
                 {
-                    this.installer.InstallPackage();
+                    WriteInformationToConsole(this.installer.InstallPackage());
                 }
 
                 if (this.arguments.Uninstall)
                 {
-                    this.installer.UninstallPackage();
+                    WriteInformationToConsole(this.installer.UninstallPackage());
                 }
             }
             catch (Exception e)
@@ -59,11 +60,11 @@
             }
         }
 
-        private void WriteErrorsToConsole()
+        private static void WriteInformationToConsole(IEnumerable<string> information)
         {
-            foreach (var error in this.arguments.Errors)
+            foreach (var value in information)
             {
-                System.Console.WriteLine(error);
+                System.Console.WriteLine(value);
             }
         }
     }
