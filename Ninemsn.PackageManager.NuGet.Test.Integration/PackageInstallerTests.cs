@@ -33,8 +33,8 @@
             this.installationPath = Path.Combine(localSource, "DummyNews");
 
             this.installer = new PackageInstaller(
-                this.module.GetSource("LocalFeed"), 
-                this.module.GetSource("InstallPath"), 
+                this.module.GetSource("LocalFeed"),
+                localSource, 
                 "DummyNews", 
                 this.installationPath);
 

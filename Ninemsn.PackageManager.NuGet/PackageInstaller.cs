@@ -12,34 +12,31 @@
     {
         private readonly PackageSource source;
 
-        private readonly PackageSource destination;
-
         private readonly ProjectManager projectManager;
 
         private readonly IPackage package;
 
         public PackageInstaller(
-            PackageSource source, PackageSource destination, string packageName, string installationPath)
+            PackageSource source, string destinationRepositoryPath, string packageName, string installationPath)
         {
             if (source == null)
             {
                 throw new ArgumentNullException("source");
             }
 
-            if (destination == null)
+            if (string.IsNullOrWhiteSpace(destinationRepositoryPath))
             {
-                throw new ArgumentNullException("destination");
+                throw new ArgumentNullException("destinationRepositoryPath");
             }
 
             this.source = source;
-            this.destination = destination;
 
             var sourceRepository = PackageRepositoryFactory.Default.CreateRepository(this.source.Source);
             this.package = this.GetPackage(packageName);
 
-            var destinationRepository = PackageRepositoryFactory.Default.CreateRepository(this.destination.Source);
+            var destinationRepository = PackageRepositoryFactory.Default.CreateRepository(destinationRepositoryPath);
             var projectSystem = ProjectSystemFactory.CreateProjectSystem(
-                this.package, this.destination.Source, installationPath);
+                this.package, destinationRepositoryPath, installationPath);
 
             var logger = new PackageLogger();
 
