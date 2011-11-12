@@ -65,7 +65,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PackageSources.config">
+    <None Include="..\Ninemsn.PackageManager.NuGet.Console\PackageSources.config">
+      <Link>PackageSources.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
