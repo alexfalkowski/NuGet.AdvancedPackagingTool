@@ -7,7 +7,7 @@
 
     public static class ProjectSystemFactory
     {
-        public static IProjectSystem CreateProjectSystem(IPackage package, string root, string installationPath)
+        public static IProjectSystem CreateProjectSystem(IPackage package, string installationPath)
         {
             if (package == null)
             {
@@ -18,10 +18,10 @@
 
             if (packageFile != null)
             {
-                return new WebProjectSystem(root, installationPath);
+                return new WebProjectSystem(installationPath);
             }
 
-            return new DefaultProjectSystem(root, installationPath); 
+            return new DefaultProjectSystem(installationPath); 
         }
     }
 }

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
 
     using Ninemsn.PackageManager.NuGet.Properties;
@@ -11,6 +12,8 @@
     public class PackageInstaller : IPackageInstaller
     {
         private readonly PackageSource source;
+
+        private readonly string installationPath;
 
         private readonly PackageManager packageManager;
 
@@ -33,13 +36,13 @@
             }
 
             this.source = source;
+            this.installationPath = installationPath;
 
             var sourceRepository = PackageRepositoryFactory.Default.CreateRepository(this.source.Source);
             this.package = this.GetPackage(packageName);
 
             var destinationRepository = PackageRepositoryFactory.Default.CreateRepository(destinationRepositoryPath);
-            var projectSystem = ProjectSystemFactory.CreateProjectSystem(
-                this.package, destinationRepositoryPath, installationPath);
+            var projectSystem = ProjectSystemFactory.CreateProjectSystem(this.package, installationPath);
 
             var logger = new PackageLogger();
 
@@ -56,6 +59,8 @@
 
         public void InstallPackage()
         {
+            Directory.CreateDirectory(this.installationPath);
+
             var initPackageFile = this.package.GetInitPackageFile();
             this.packageManager.ExecutePowerShell(initPackageFile);
 
@@ -76,6 +81,8 @@
             this.packageManager.ExecutePowerShell(unistallPackageFile);
 
             this.packageManager.UninstallPackage(this.package, true);
+
+            Directory.Delete(this.installationPath);
         }
 
         private IPackage GetPackage(string packageName)

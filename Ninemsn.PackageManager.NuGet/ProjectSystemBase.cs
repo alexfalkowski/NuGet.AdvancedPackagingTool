@@ -10,20 +10,9 @@
 
     public abstract class ProjectSystemBase : PhysicalFileSystem, IProjectSystem
     {
-        private readonly string installationPath;
-
-        protected ProjectSystemBase(string root, string installationPath)
-            : base(root)
+        protected ProjectSystemBase(string installationPath)
+            : base(installationPath)
         {
-            this.installationPath = installationPath;
-        }
-
-        public string InstallationPath
-        {
-            get
-            {
-                return this.installationPath;
-            }
         }
 
         public string ProjectName
@@ -83,7 +72,7 @@
 
         public string ResolvePath(string path)
         {
-            return Path.Combine(this.installationPath, path);
+            return Path.Combine(this.Root, path);
         }
 
         public bool ReferenceExists(string name)

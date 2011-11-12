@@ -5,8 +5,8 @@
 
     public class WebProjectSystem : ProjectSystemBase
     {
-        public WebProjectSystem(string root, string installationPath)
-            : base(root, installationPath)
+        public WebProjectSystem(string installationPath)
+            : base(installationPath)
         {
         }
 
@@ -14,7 +14,7 @@
         {
             get
             {
-                return Path.Combine(this.InstallationPath, "bin");
+                return Path.Combine(this.Root, "bin");
             }
         }
 
@@ -22,9 +22,9 @@
         {
             base.RemoveReference(name);
 
-            if (!Directory.GetFiles(this.ReferencePath).Any())
+            if (!this.GetFiles("bin").Any())
             {
-                Directory.Delete(this.ReferencePath);
+                this.DeleteDirectory("bin");
             }
         }
     }

@@ -39,7 +39,6 @@
                 this.installationPath);
 
             Directory.Delete(localSource, true);
-            Directory.CreateDirectory(localSource);
         }
 
         [TearDown]
@@ -78,7 +77,7 @@
 
             logs[3].Should().Be("Uninstall");
             logs[4].Should().Contain("removed");
-            Directory.GetDirectories(this.installationPath).Length.Should().Be(0);
+            Directory.Exists(this.installationPath).Should().BeFalse();
         }
     }
 }
