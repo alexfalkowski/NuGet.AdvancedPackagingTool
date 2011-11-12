@@ -43,14 +43,6 @@
             this.projectManager = new ProjectManager(sourceRepository, destinationRepository, projectSystem, logger);
         }
 
-        public IPackage Package
-        {
-            get
-            {
-                return this.package;
-            }
-        }
-
         public IEnumerable<string> Logs
         {
             get
@@ -62,17 +54,12 @@
         public void InstallPackage()
         {
             var initPackageFile = this.package.GetInitPackageFile();
-            this.ExecutePowerShell(initPackageFile);
+            this.projectManager.ExecutePowerShell(initPackageFile);
 
             this.projectManager.InstallPackage(this.package);
 
             var installPackageFile = this.package.GetInstallPackageFile();
-            this.ExecutePowerShell(installPackageFile);
-        }
-
-        public void ExecutePowerShell(IPackageFile file)
-        {
-            this.projectManager.ExecutePowerShell(file);
+            this.projectManager.ExecutePowerShell(installPackageFile);
         }
 
         public bool IsPackageInstalled()
@@ -83,7 +70,7 @@
         public void UninstallPackage()
         {
             var unistallPackageFile = this.package.GetUninstallPackageFile();
-            this.ExecutePowerShell(unistallPackageFile);
+            this.projectManager.ExecutePowerShell(unistallPackageFile);
 
             this.projectManager.UninstallPackage(this.package, true);
         }

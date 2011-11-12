@@ -80,36 +80,5 @@
             logs[4].Should().Contain("removed");
             Directory.GetDirectories(this.installationPath).Length.Should().Be(0);
         }
-
-        [Test]
-        public void ShouldContainContentFolderInPackage()
-        {
-            this.installer.Package.GetToolsFiles().Count().Should().Be(3);
-        }
-
-        [Test]
-        public void ShouldContainPowershellScriptsInToolsFolder()
-        {
-            Action initPackageFile = () => this.installer.Package.GetInitPackageFile();
-
-            initPackageFile.ShouldNotThrow<InvalidOperationException>();
-
-            Action installPackageFile = () => this.installer.Package.GetInstallPackageFile();
-
-            installPackageFile.ShouldNotThrow<InvalidOperationException>();
-
-            Action unsitallPackageFile = () => this.installer.Package.GetUninstallPackageFile();
-
-            unsitallPackageFile.ShouldNotThrow<InvalidOperationException>();
-        }
-
-        [Test]
-        public void ShouldExecutePowerShellScript()
-        {
-            var file = this.installer.Package.GetInitPackageFile();
-            this.installer.ExecutePowerShell(file);
-
-            this.installer.Logs.Count().Should().Be(1, "There was no output.");
-        }
     }
 }
