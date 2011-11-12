@@ -8,7 +8,7 @@
 
     using global::NuGet;
 
-    public class ProjectManager
+    public class PackageManager
     {
         private readonly IPackageRepository sourceRepository;
 
@@ -18,7 +18,7 @@
 
         private readonly IProjectManager projectManager;
 
-        public ProjectManager(
+        public PackageManager(
             IPackageRepository sourceRepository, 
             IPackageRepository localRepository, 
             IProjectSystem project, 
@@ -28,8 +28,7 @@
             this.localRepository = localRepository;
             this.logger = logger;
             var pathResolver = new DefaultPackagePathResolver(localRepository.Source);
-            this.projectManager = new global::NuGet.ProjectManager(
-                sourceRepository, pathResolver, project, localRepository);
+            this.projectManager = new ProjectManager(sourceRepository, pathResolver, project, localRepository);
         }
 
         public IEnumerable<string> Logs

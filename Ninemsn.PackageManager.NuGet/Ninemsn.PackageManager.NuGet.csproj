@@ -73,7 +73,7 @@
     <Compile Include="UninstallPackageFile.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="PackageSource.cs" />
-    <Compile Include="ProjectManager.cs" />
+    <Compile Include="PackageManager.cs" />
     <Compile Include="WebProjectSystem.cs" />
   </ItemGroup>
   <ItemGroup>

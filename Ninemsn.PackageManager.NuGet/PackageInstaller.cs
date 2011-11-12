@@ -12,7 +12,7 @@
     {
         private readonly PackageSource source;
 
-        private readonly ProjectManager projectManager;
+        private readonly PackageManager packageManager;
 
         private readonly IPackage package;
 
@@ -40,39 +40,39 @@
 
             var logger = new PackageLogger();
 
-            this.projectManager = new ProjectManager(sourceRepository, destinationRepository, projectSystem, logger);
+            this.packageManager = new PackageManager(sourceRepository, destinationRepository, projectSystem, logger);
         }
 
         public IEnumerable<string> Logs
         {
             get
             {
-                return this.projectManager.Logs;
+                return this.packageManager.Logs;
             }
         }
 
         public void InstallPackage()
         {
             var initPackageFile = this.package.GetInitPackageFile();
-            this.projectManager.ExecutePowerShell(initPackageFile);
+            this.packageManager.ExecutePowerShell(initPackageFile);
 
-            this.projectManager.InstallPackage(this.package);
+            this.packageManager.InstallPackage(this.package);
 
             var installPackageFile = this.package.GetInstallPackageFile();
-            this.projectManager.ExecutePowerShell(installPackageFile);
+            this.packageManager.ExecutePowerShell(installPackageFile);
         }
 
         public bool IsPackageInstalled()
         {
-            return this.projectManager.IsPackageInstalled(this.package);
+            return this.packageManager.IsPackageInstalled(this.package);
         }
 
         public void UninstallPackage()
         {
             var unistallPackageFile = this.package.GetUninstallPackageFile();
-            this.projectManager.ExecutePowerShell(unistallPackageFile);
+            this.packageManager.ExecutePowerShell(unistallPackageFile);
 
-            this.projectManager.UninstallPackage(this.package, true);
+            this.packageManager.UninstallPackage(this.package, true);
         }
 
         private IPackage GetPackage(string packageName)
