@@ -6,12 +6,12 @@
 
     public static class Program
     {
-        public static void Main(string[] args)
+        public static int Main(string[] args)
         {
             var arguments = Configuration.Configure<Arguments>().CreateAndBind(args);
 
             var program = new Console(arguments, PackageInstallerFactory.CreatePackageInstaller(arguments));
-            program.Start();
+            return program.Start();
         }
     }
 }

@@ -31,13 +31,13 @@
             this.installer = installer;
         }
 
-        public void Start()
+        public int Start()
         {
             if (!this.arguments.IsValid)
             {
                 WriteInformationToConsole(this.arguments.Errors);
 
-                return;
+                return 1;
             }
 
             try
@@ -51,12 +51,14 @@
                 {
                     WriteInformationToConsole(this.installer.UninstallPackage());
                 }
+
+                return 0;
             }
             catch (Exception e)
             {
                 this.logger.Error(Resources.InvalidExecutionErrorMessage, e);
 
-                throw ExceptionFactory.CreateInvalidOperationException(Resources.InvalidExecutionExceptionMessage);
+                return 1;
             }
         }
 
