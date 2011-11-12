@@ -1,4 +1,4 @@
-﻿namespace Ninemsn.PackageManager.NuGet.Test.Integration
+﻿namespace Ninemsn.PackageManager.NuGet
 {
     public static class PackageSourceFileFactory
     {

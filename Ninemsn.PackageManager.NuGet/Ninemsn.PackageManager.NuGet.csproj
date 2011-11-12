@@ -36,6 +36,7 @@
       <HintPath>..\packages\NuGet.Core.1.5.20902.9026\lib\net40-Client\NuGet.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Services" />
     <Reference Include="System.Management.Automation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -61,6 +62,7 @@
     <Compile Include="NullPackageInstaller.cs" />
     <Compile Include="PackageExtensions.cs" />
     <Compile Include="PackageInstaller.cs" />
+    <Compile Include="PackageSourceFileFactory.cs" />
     <Compile Include="PowerShellPackageFileBase.cs" />
     <Compile Include="DefaultProjectSystem.cs" />
     <Compile Include="ProjectSystemFactory.cs" />

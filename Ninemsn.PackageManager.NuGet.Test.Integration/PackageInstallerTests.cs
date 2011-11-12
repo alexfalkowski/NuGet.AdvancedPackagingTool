@@ -77,7 +77,7 @@
 
             logs[3].Should().Be("Uninstall");
             logs[4].Should().Contain("removed");
-            Directory.Exists(this.installationPath).Should().BeFalse();
+            Directory.Exists(this.installationPath).Should().BeFalse("The package DummyNews should not be installed.");
         }
     }
 }

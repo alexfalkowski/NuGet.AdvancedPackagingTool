@@ -70,7 +70,7 @@ namespace Ninemsn.PackageManager.NuGet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please choose the install flag or the uninstall flag, however not both..
+        ///   Looks up a localized string similar to Please choose the install flag or the uninstall flag..
         /// </summary>
         internal static string InvalidInstallUninstallFlag {
             get {
@@ -84,6 +84,24 @@ namespace Ninemsn.PackageManager.NuGet.Properties {
         internal static string InvalidPackage {
             get {
                 return ResourceManager.GetString("InvalidPackage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The package was not specified..
+        /// </summary>
+        internal static string PackageNotSpecified {
+            get {
+                return ResourceManager.GetString("PackageNotSpecified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The source was not specified..
+        /// </summary>
+        internal static string SourceNotSpecified {
+            get {
+                return ResourceManager.GetString("SourceNotSpecified", resourceCulture);
             }
         }
     }
