@@ -59,23 +59,5 @@ namespace Ninemsn.PackageManager.NuGet.Console.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invalid execution of the package manager..
-        /// </summary>
-        internal static string InvalidExecutionErrorMessage {
-            get {
-                return ResourceManager.GetString("InvalidExecutionErrorMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invalid execution of the package manager, please check the logs..
-        /// </summary>
-        internal static string InvalidExecutionExceptionMessage {
-            get {
-                return ResourceManager.GetString("InvalidExecutionExceptionMessage", resourceCulture);
-            }
-        }
     }
 }

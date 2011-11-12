@@ -13,11 +13,11 @@
     {
         private readonly PackageSource source;
 
+        private readonly string destinationRepositoryPath;
+
+        private readonly string packageName;
+
         private readonly string installationPath;
-
-        private readonly PackageManager packageManager;
-
-        private readonly IPackage package;
 
         public PackageInstaller(
             PackageSource source, 
@@ -27,73 +27,96 @@
         {
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw ExceptionFactory.CreateArgumentNullException("source");
             }
 
             if (string.IsNullOrWhiteSpace(destinationRepositoryPath))
             {
-                throw new ArgumentNullException("destinationRepositoryPath");
+                throw ExceptionFactory.CreateArgumentNullException("destinationRepositoryPath");
+            }
+
+            if (string.IsNullOrWhiteSpace(packageName))
+            {
+                throw ExceptionFactory.CreateArgumentNullException("packageName");
+            }
+
+            if (string.IsNullOrWhiteSpace(installationPath))
+            {
+                throw ExceptionFactory.CreateArgumentNullException("installationPath");
             }
 
             this.source = source;
+            this.destinationRepositoryPath = destinationRepositoryPath;
+            this.packageName = packageName;
             this.installationPath = installationPath;
-
-            var sourceRepository = PackageRepositoryFactory.Default.CreateRepository(this.source.Source);
-            this.package = this.GetPackage(packageName);
-
-            var destinationRepository = PackageRepositoryFactory.Default.CreateRepository(destinationRepositoryPath);
-            var projectSystem = ProjectSystemFactory.CreateProjectSystem(this.package, installationPath);
-
-            var logger = new PackageLogger();
-
-            this.packageManager = new PackageManager(sourceRepository, destinationRepository, projectSystem, logger);
         }
 
-        public IEnumerable<string> Logs
+        public IEnumerable<string> InstallPackage()
         {
-            get
-            {
-                return this.packageManager.Logs;
-            }
-        }
+            var managerAndPackage = this.GetManagerAndPackage();
 
-        public void InstallPackage()
-        {
             Directory.CreateDirectory(this.installationPath);
 
-            var initPackageFile = this.package.GetInitPackageFile();
-            this.packageManager.ExecutePowerShell(initPackageFile);
+            var package = managerAndPackage.Item2;
+            var initPackageFile = package.GetInitPackageFile();
+            var packageManager = managerAndPackage.Item1;
+            packageManager.ExecutePowerShell(initPackageFile);
 
-            this.packageManager.InstallPackage(this.package);
+            packageManager.InstallPackage(package);
 
-            var installPackageFile = this.package.GetInstallPackageFile();
-            this.packageManager.ExecutePowerShell(installPackageFile);
+            var installPackageFile = package.GetInstallPackageFile();
+            packageManager.ExecutePowerShell(installPackageFile);
+
+            return packageManager.Logs;
         }
 
         public bool IsPackageInstalled()
         {
-            return this.packageManager.IsPackageInstalled(this.package);
+            var managerAndPackage = this.GetManagerAndPackage();
+
+            return managerAndPackage.Item1.IsPackageInstalled(managerAndPackage.Item2);
         }
 
-        public void UninstallPackage()
+        public IEnumerable<string> UninstallPackage()
         {
-            var unistallPackageFile = this.package.GetUninstallPackageFile();
-            this.packageManager.ExecutePowerShell(unistallPackageFile);
+            var managerAndPackage = this.GetManagerAndPackage();
 
-            this.packageManager.UninstallPackage(this.package, true);
+            var package = managerAndPackage.Item2;
+            var unistallPackageFile = package.GetUninstallPackageFile();
+            var packageManager = managerAndPackage.Item1;
+            packageManager.ExecutePowerShell(unistallPackageFile);
+
+            packageManager.UninstallPackage(package, true);
 
             Directory.Delete(this.installationPath);
+
+            return packageManager.Logs;
         }
 
-        private IPackage GetPackage(string packageName)
+        private Tuple<PackageManager, IPackage> GetManagerAndPackage()
         {
             var sourceRepository = PackageRepositoryFactory.Default.CreateRepository(this.source.Source);
-            var sourcePackage = sourceRepository.GetPackages().Find(packageName).FirstOrDefault();
+            var package = this.GetPackage();
+
+            var destinationRepository = PackageRepositoryFactory.Default.CreateRepository(this.destinationRepositoryPath);
+            var projectSystem = ProjectSystemFactory.CreateProjectSystem(package, this.installationPath);
+
+            var logger = new PackageLogger();
+
+            var packageManager = new PackageManager(sourceRepository, destinationRepository, projectSystem, logger);
+
+            return new Tuple<PackageManager, IPackage>(packageManager, package);
+        }
+
+        private IPackage GetPackage()
+        {
+            var sourceRepository = PackageRepositoryFactory.Default.CreateRepository(this.source.Source);
+            var sourcePackage = sourceRepository.GetPackages().Find(this.packageName).FirstOrDefault();
 
             if (sourcePackage == null)
             {
                 throw ExceptionFactory.CreateInvalidOperationException(
-                    Resources.InvalidPackage, this.source.Source, packageName);
+                    Resources.InvalidPackage, this.source.Source, this.packageName);
             }
 
             return sourcePackage;

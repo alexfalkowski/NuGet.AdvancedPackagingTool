@@ -4,12 +4,10 @@
 
     public interface IPackageInstaller
     {
-        IEnumerable<string> Logs { get; }
-
-        void InstallPackage();
+        IEnumerable<string> InstallPackage();
 
         bool IsPackageInstalled();
 
-        void UninstallPackage();
+        IEnumerable<string> UninstallPackage();
     }
 }

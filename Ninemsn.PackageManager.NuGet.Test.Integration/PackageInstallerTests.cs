@@ -51,10 +51,8 @@
         public void ShouldInstallLocalPackageInLocalRepository()
         {
             this.installer.IsPackageInstalled().Should().BeFalse();
-            this.installer.InstallPackage();
-            this.installer.Logs.Count().Should().Be(3);
-
-            var logs = this.installer.Logs.ToArray();
+            var logs = this.installer.InstallPackage().ToArray();
+            logs.Count().Should().Be(3);
 
             logs[0].Should().Be("Init");
             logs[1].Should().Contain("added");
@@ -68,12 +66,9 @@
         [Test]
         public void ShouldUninstallLocalPackageInLocalRepository()
         {
-            this.installer.InstallPackage();
-            this.installer.UninstallPackage();
+            var logs = this.installer.InstallPackage().Union(this.installer.UninstallPackage()).ToArray();
 
-            this.installer.Logs.Count().Should().Be(5);
-
-            var logs = this.installer.Logs.ToArray();
+            logs.Length.Should().Be(5);
 
             logs[3].Should().Be("Uninstall");
             logs[4].Should().Contain("removed");

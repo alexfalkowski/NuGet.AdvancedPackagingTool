@@ -5,16 +5,9 @@
 
     public class NullPackageInstaller : IPackageInstaller
     {
-        public IEnumerable<string> Logs
+        public IEnumerable<string> InstallPackage()
         {
-            get
-            {
-                return Enumerable.Empty<string>();
-            }
-        }
-
-        public void InstallPackage()
-        {
+            return Enumerable.Empty<string>();
         }
 
         public bool IsPackageInstalled()
@@ -22,8 +15,9 @@
             return false;
         }
 
-        public void UninstallPackage()
+        public IEnumerable<string> UninstallPackage()
         {
+            return Enumerable.Empty<string>();
         }
     }
 }
