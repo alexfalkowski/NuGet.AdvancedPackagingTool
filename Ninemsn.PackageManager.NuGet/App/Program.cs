@@ -10,6 +10,16 @@
 
         public Program(Arguments args, IPackageInstaller installer)
         {
+            if (args == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException("args");
+            }
+
+            if (installer == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException("installer");
+            }
+
             this.args = args;
             this.installer = installer;
         }
@@ -18,10 +28,7 @@
         {
             if (!this.args.IsValid())
             {
-                foreach (var error in this.args.Errors)
-                {
-                    Console.WriteLine(error);
-                }
+                this.WriteErrorsToConsole();
 
                 return;
             }
@@ -34,6 +41,14 @@
             if (this.args.Uninstall)
             {
                 this.installer.UninstallPackage();
+            }
+        }
+
+        private void WriteErrorsToConsole()
+        {
+            foreach (var error in this.args.Errors)
+            {
+                Console.WriteLine(error);
             }
         }
     }
