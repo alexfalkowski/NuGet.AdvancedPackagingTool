@@ -9,7 +9,9 @@
     [TestFixture]
     public class PackageManagerModuleTest
     {
-        private const string DefaultSourceName = "DefaultPackageSourceName";
+        private const string FirstSourceName = "LocalFeed";
+
+        private const string FirstFeedUrl = "http://localhost:1544/DataServices/Packages.svc";
 
         private PackageManagerModule module;
 
@@ -37,7 +39,7 @@
         [Test]
         public void ShouldHaveDefaultPackageSourceName()
         {
-            var packageSource = this.module.GetSource(DefaultSourceName);
+            var packageSource = this.module.GetSource(FirstSourceName);
 
             ShouldBeDefaultSourcePackage(packageSource);
         }
@@ -45,8 +47,8 @@
         private static void ShouldBeDefaultSourcePackage(PackageSource packageSource)
         {
             packageSource.Should().NotBeNull();
-            packageSource.Name.Should().Be(DefaultSourceName);
-            packageSource.Source.Should().Be("http://go.microsoft.com/fwlink/?LinkID=206971");
+            packageSource.Name.Should().Be(FirstSourceName);
+            packageSource.Source.Should().Be(FirstFeedUrl);
         }
     }
 }

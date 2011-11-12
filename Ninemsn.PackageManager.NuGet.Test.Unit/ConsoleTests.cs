@@ -54,29 +54,9 @@
         }
 
         [Test]
-        public void ShouldNotAllowInstallIfSourceIsNotSpecified()
-        {
-            var arguments = new Arguments { Install = true, Package = "DummyNews" };
-
-            arguments.IsValid.Should().BeFalse(
-                "The program should not allow the install if the source is not provided.");
-            arguments.Errors.Count().Should().BeGreaterOrEqualTo(1);
-        }
-
-        [Test]
-        public void ShouldNotAllowUninstallIfSourceNameIsNotSpecified()
-        {
-            var arguments = new Arguments { Uninstall = true, Package = "DummyNews" };
-
-            arguments.IsValid.Should().BeFalse(
-                "The program should not allow the uninstall if the source is not provided.");
-            arguments.Errors.Count().Should().BeGreaterOrEqualTo(1);
-        }
-
-        [Test]
         public void ShouldInstallPackage()
         {
-            var arguments = new Arguments { Install = true, Package = "DummyNews", Source = "LocalFeed" };
+            var arguments = new Arguments { Install = true, Package = "DummyNews" };
             var installer = Substitute.For<IPackageInstaller>();
             var program = new Console(arguments, installer);
 
@@ -88,7 +68,7 @@
         [Test]
         public void ShouldUninstallPackage()
         {
-            var arguments = new Arguments { Uninstall = true, Package = "DummyNews", Source = "LocalFeed" };
+            var arguments = new Arguments { Uninstall = true, Package = "DummyNews" };
             var installer = Substitute.For<IPackageInstaller>();
             var program = new Console(arguments, installer);
 

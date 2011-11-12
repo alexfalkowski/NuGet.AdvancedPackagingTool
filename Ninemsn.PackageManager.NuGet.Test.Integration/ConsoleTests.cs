@@ -38,12 +38,12 @@
         [Test]
         public void ShouldInstallAndUninstallPackage()
         {
-            RunPackageManagerProcess("/i /p DummyNews /s LocalFeed /d DummyNews");
+            RunPackageManagerProcess("/i /p DummyNews /d DummyNews");
 
             Directory.EnumerateDirectories(this.PackagePath, "DummyNews.1.0").Any().Should().BeTrue(
                 "The package DummyNews should be installed.");
 
-            RunPackageManagerProcess("/u /p DummyNews /s LocalFeed /d DummyNews");
+            RunPackageManagerProcess("/u /p DummyNews /d DummyNews");
 
             Directory.Exists(this.PackagePath).Should().BeFalse("The package DummyNews should not be installed.");
         }
