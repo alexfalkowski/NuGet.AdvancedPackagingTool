@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Ninemsn.PackageManager.NuGet.Properties {
+namespace Ninemsn.PackageManager.NuGet.Console.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Ninemsn.PackageManager.NuGet.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Ninemsn.PackageManager.NuGet.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Ninemsn.PackageManager.NuGet.Console.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,15 +61,6 @@ namespace Ninemsn.PackageManager.NuGet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Could not find &apos;{0}&apos; in the tools folder of the package..
-        /// </summary>
-        internal static string FileNameDoesNotExistInToolsFolder {
-            get {
-                return ResourceManager.GetString("FileNameDoesNotExistInToolsFolder", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Invalid execution of the package manager..
         /// </summary>
         internal static string InvalidExecutionErrorMessage {
@@ -84,42 +75,6 @@ namespace Ninemsn.PackageManager.NuGet.Properties {
         internal static string InvalidExecutionExceptionMessage {
             get {
                 return ResourceManager.GetString("InvalidExecutionExceptionMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Install or uninstall was not specified..
-        /// </summary>
-        internal static string InvalidInstallUninstallFlag {
-            get {
-                return ResourceManager.GetString("InvalidInstallUninstallFlag", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The package &apos;{0} cannot be found in repository &apos;{1}&apos;..
-        /// </summary>
-        internal static string InvalidPackage {
-            get {
-                return ResourceManager.GetString("InvalidPackage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The package was not specified..
-        /// </summary>
-        internal static string PackageNotSpecified {
-            get {
-                return ResourceManager.GetString("PackageNotSpecified", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The source was not specified..
-        /// </summary>
-        internal static string SourceNotSpecified {
-            get {
-                return ResourceManager.GetString("SourceNotSpecified", resourceCulture);
             }
         }
     }

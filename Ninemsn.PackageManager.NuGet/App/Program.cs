@@ -2,11 +2,17 @@
 {
     using System;
 
+    using Common.Logging;
+
+    using Ninemsn.PackageManager.NuGet.Properties;
+
     public class Program
     {
         private readonly Arguments args;
 
         private readonly IPackageInstaller installer;
+
+        private readonly ILog logger = LogManager.GetCurrentClassLogger();
 
         public Program(Arguments args, IPackageInstaller installer)
         {
@@ -33,14 +39,23 @@
                 return;
             }
 
-            if (this.args.Install)
+            try
             {
-                this.installer.InstallPackage();
-            }
+                if (this.args.Install)
+                {
+                    this.installer.InstallPackage();
+                }
 
-            if (this.args.Uninstall)
+                if (this.args.Uninstall)
+                {
+                    this.installer.UninstallPackage();
+                }
+            }
+            catch (Exception e)
             {
-                this.installer.UninstallPackage();
+                this.logger.Error(Resources.InvalidExecutionErrorMessage, e);
+
+                throw ExceptionFactory.CreateInvalidOperationException(Resources.InvalidExecutionExceptionMessage);
             }
         }
 
