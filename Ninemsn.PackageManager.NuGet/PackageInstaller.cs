@@ -79,13 +79,6 @@
             return packageManager.Logs;
         }
 
-        public bool IsPackageInstalled(Version version = null)
-        {
-            var packageArtifact = this.GetPackageArtifact(version);
-
-            return packageArtifact.Manager.IsPackageInstalled(packageArtifact.Package);
-        }
-
         public IEnumerable<string> UninstallPackage(Version version = null)
         {
             var packageArtifact = this.GetPackageArtifact(version);

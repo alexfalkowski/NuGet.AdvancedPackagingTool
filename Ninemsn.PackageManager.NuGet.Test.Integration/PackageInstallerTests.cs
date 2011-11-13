@@ -57,7 +57,6 @@
         {
             var version = new Version(1, 0);
 
-            this.installer.IsPackageInstalled(version).Should().BeFalse();
             var logs = this.installer.InstallPackage(version).ToArray();
             logs.Count().Should().Be(3);
 
@@ -72,7 +71,6 @@
         [Test]
         public void ShouldInstallLatestPackage()
         {
-            this.installer.IsPackageInstalled().Should().BeFalse();
             this.installer.InstallPackage();
 
             Directory.EnumerateDirectories(this.packagePath, "DummyNews.1.1").Any().Should().BeTrue();

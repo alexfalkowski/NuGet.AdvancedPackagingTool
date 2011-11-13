@@ -7,8 +7,6 @@
     {
         IEnumerable<string> InstallPackage(Version version = null);
 
-        bool IsPackageInstalled(Version version = null);
-
         IEnumerable<string> UninstallPackage(Version version = null);
     }
 }

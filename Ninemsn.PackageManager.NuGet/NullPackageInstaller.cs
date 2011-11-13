@@ -11,11 +11,6 @@
             return Enumerable.Empty<string>();
         }
 
-        public bool IsPackageInstalled(Version version = null)
-        {
-            return false;
-        }
-
         public IEnumerable<string> UninstallPackage(Version version = null)
         {
             return Enumerable.Empty<string>();
