@@ -23,8 +23,7 @@
             PackageSource source, 
             string destinationRepositoryPath, 
             string packageName,
-            string installationPath,
-            Version version = null)
+            string installationPath)
         {
             if (source == null)
             {
@@ -50,14 +49,11 @@
             this.destinationRepositoryPath = destinationRepositoryPath;
             this.packageName = packageName;
             this.installationPath = installationPath;
-            this.Version = version;
         }
 
-        public Version Version { get; set; }
-
-        public IEnumerable<string> InstallPackage()
+        public IEnumerable<string> InstallPackage(Version version = null)
         {
-            var packageArtifact = this.GetPackageArtifact();
+            var packageArtifact = this.GetPackageArtifact(version);
 
             Directory.CreateDirectory(this.installationPath);
 
@@ -74,16 +70,16 @@
             return packageManager.Logs;
         }
 
-        public bool IsPackageInstalled()
+        public bool IsPackageInstalled(Version version = null)
         {
-            var packageArtifact = this.GetPackageArtifact();
+            var packageArtifact = this.GetPackageArtifact(version);
 
             return packageArtifact.Manager.IsPackageInstalled(packageArtifact.Package);
         }
 
-        public IEnumerable<string> UninstallPackage()
+        public IEnumerable<string> UninstallPackage(Version version = null)
         {
-            var packageArtifact = this.GetPackageArtifact();
+            var packageArtifact = this.GetPackageArtifact(version);
 
             var package = packageArtifact.Package;
             var unistallPackageFile = package.GetUninstallPackageFile();
@@ -97,10 +93,10 @@
             return packageManager.Logs;
         }
 
-        private PackageArtifact GetPackageArtifact()
+        private PackageArtifact GetPackageArtifact(Version version)
         {
             var sourceRepository = PackageRepositoryFactory.Default.CreateRepository(this.source.Source);
-            var package = this.GetPackage();
+            var package = this.GetPackage(version);
 
             var destinationRepository = PackageRepositoryFactory.Default.CreateRepository(
                 this.destinationRepositoryPath);
@@ -110,7 +106,7 @@
 
             var packageManager = new PackageManager(sourceRepository, destinationRepository, projectSystem, logger);
 
-            if (this.Version != null)
+            if (version != null)
             {
                 return new PackageArtifact { Manager = packageManager, Package = package };
             }
@@ -126,7 +122,7 @@
                 };
         }
 
-        private IPackage GetPackage()
+        private IPackage GetPackage(Version version)
         {
             var sourceRepository = PackageRepositoryFactory.Default.CreateRepository(this.source.Source);
             var packages = sourceRepository.GetPackages();
@@ -138,9 +134,9 @@
                     Resources.InvalidPackage, this.source.Source, this.packageName);
             }
 
-            if (this.Version != null)
+            if (version != null)
             {
-                var versionSourcePackage = sourceRepository.FindPackage(sourcePackage.Id, this.Version);
+                var versionSourcePackage = sourceRepository.FindPackage(sourcePackage.Id, version);
 
                 if (versionSourcePackage == null)
                 {

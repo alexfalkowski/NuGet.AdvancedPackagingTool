@@ -52,10 +52,10 @@
         [Test]
         public void ShouldInstallFirstVersionOfThePackage()
         {
-            this.installer.Version = new Version(1, 0, 0, 0);
+            var version = new Version(1, 0, 0, 0);
 
-            this.installer.IsPackageInstalled().Should().BeFalse();
-            var logs = this.installer.InstallPackage().ToArray();
+            this.installer.IsPackageInstalled(version).Should().BeFalse();
+            var logs = this.installer.InstallPackage(version).ToArray();
             logs.Count().Should().Be(3);
 
             logs[0].Should().Be("Init");
@@ -79,7 +79,19 @@
         [Test]
         public void ShouldUninstallFirstVersionOfThePackage()
         {
-            this.installer.Version = new Version(1, 0, 0, 0);
+            var version = new Version(1, 0, 0, 0);
+            var logs = this.installer.InstallPackage(version).Union(this.installer.UninstallPackage(version)).ToArray();
+
+            logs.Length.Should().Be(5);
+
+            logs[3].Should().Be("Uninstall");
+            logs[4].Should().Contain("removed");
+            Directory.Exists(this.installationPath).Should().BeFalse("The package DummyNews should not be installed.");
+        }
+
+        [Test]
+        public void ShouldUninstallLatestVersionOfThePackage()
+        {
             var logs = this.installer.InstallPackage().Union(this.installer.UninstallPackage()).ToArray();
 
             logs.Length.Should().Be(5);

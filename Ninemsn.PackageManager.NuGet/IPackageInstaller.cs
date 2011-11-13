@@ -1,13 +1,14 @@
 ﻿namespace Ninemsn.PackageManager.NuGet
 {
+    using System;
     using System.Collections.Generic;
 
     public interface IPackageInstaller
     {
-        IEnumerable<string> InstallPackage();
+        IEnumerable<string> InstallPackage(Version version = null);
 
-        bool IsPackageInstalled();
+        bool IsPackageInstalled(Version version = null);
 
-        IEnumerable<string> UninstallPackage();
+        IEnumerable<string> UninstallPackage(Version version = null);
     }
 }
