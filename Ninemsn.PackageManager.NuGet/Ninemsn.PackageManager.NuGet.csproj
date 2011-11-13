@@ -70,8 +70,10 @@
     <Compile Include="Application\Console.cs" />
     <Compile Include="ExceptionFactory.cs" />
     <Compile Include="IPackageInstaller.cs" />
+    <Compile Include="IPackageManager.cs" />
     <Compile Include="NullPackageFile.cs" />
     <Compile Include="NullPackageInstaller.cs" />
+    <Compile Include="PackageArtifact.cs" />
     <Compile Include="PackageExtensions.cs" />
     <Compile Include="PackageInstaller.cs" />
     <Compile Include="PackageSourceFileFactory.cs" />

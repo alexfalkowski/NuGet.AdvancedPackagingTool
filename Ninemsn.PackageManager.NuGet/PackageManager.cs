@@ -8,7 +8,7 @@
 
     using global::NuGet;
 
-    public class PackageManager
+    public class PackageManager : IPackageManager
     {
         private readonly IPackageRepository sourceRepository;
 

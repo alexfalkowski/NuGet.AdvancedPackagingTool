@@ -1,6 +1,5 @@
 ﻿namespace Ninemsn.PackageManager.NuGet
 {
-    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -53,13 +52,13 @@
 
         public IEnumerable<string> InstallPackage()
         {
-            var managerAndPackage = this.GetManagerAndPackage();
+            var packageArtifact = this.GetPackageArtifact();
 
             Directory.CreateDirectory(this.installationPath);
 
-            var package = managerAndPackage.Item2;
+            var package = packageArtifact.Package;
             var initPackageFile = package.GetInitPackageFile();
-            var packageManager = managerAndPackage.Item1;
+            var packageManager = packageArtifact.Manager;
             packageManager.ExecutePowerShell(initPackageFile);
 
             packageManager.InstallPackage(package);
@@ -72,18 +71,18 @@
 
         public bool IsPackageInstalled()
         {
-            var managerAndPackage = this.GetManagerAndPackage();
+            var packageArtifact = this.GetPackageArtifact();
 
-            return managerAndPackage.Item1.IsPackageInstalled(managerAndPackage.Item2);
+            return packageArtifact.Manager.IsPackageInstalled(packageArtifact.Package);
         }
 
         public IEnumerable<string> UninstallPackage()
         {
-            var managerAndPackage = this.GetManagerAndPackage();
+            var packageArtifact = this.GetPackageArtifact();
 
-            var package = managerAndPackage.Item2;
+            var package = packageArtifact.Package;
             var unistallPackageFile = package.GetUninstallPackageFile();
-            var packageManager = managerAndPackage.Item1;
+            var packageManager = packageArtifact.Manager;
             packageManager.ExecutePowerShell(unistallPackageFile);
 
             packageManager.UninstallPackage(package, true);
@@ -93,19 +92,28 @@
             return packageManager.Logs;
         }
 
-        private Tuple<PackageManager, IPackage> GetManagerAndPackage()
+        private PackageArtifact GetPackageArtifact()
         {
             var sourceRepository = PackageRepositoryFactory.Default.CreateRepository(this.source.Source);
             var package = this.GetPackage();
 
-            var destinationRepository = PackageRepositoryFactory.Default.CreateRepository(this.destinationRepositoryPath);
+            var destinationRepository = PackageRepositoryFactory.Default.CreateRepository(
+                this.destinationRepositoryPath);
             var projectSystem = ProjectSystemFactory.CreateProjectSystem(package, this.installationPath);
 
             var logger = new PackageLogger();
 
             var packageManager = new PackageManager(sourceRepository, destinationRepository, projectSystem, logger);
 
-            return new Tuple<PackageManager, IPackage>(packageManager, package);
+            var updatePackage = packageManager.GetUpdate(package);
+            var isUpdate = updatePackage != null;
+
+            return new PackageArtifact
+                {
+                    IsUpdate = isUpdate, 
+                    Manager = packageManager, 
+                    Package = isUpdate ? updatePackage : package
+                };
         }
 
         private IPackage GetPackage()
