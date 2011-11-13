@@ -20,16 +20,16 @@
         }
 
         public static ArgumentNullException CreateArgumentNullException(
-            string paramName,
+            string parameterName,
             string message,
             params object[] parameters)
         {
-            return new ArgumentNullException(paramName, FormatMessage(message, parameters));
+            return new ArgumentNullException(parameterName, FormatMessage(message, parameters));
         }
 
-        public static ArgumentNullException CreateArgumentNullException(string paramName)
+        public static ArgumentNullException CreateArgumentNullException(string parameterName)
         {
-            return new ArgumentNullException(paramName);
+            return new ArgumentNullException(parameterName);
         }
 
         private static string FormatMessage(string message, object[] parameters)

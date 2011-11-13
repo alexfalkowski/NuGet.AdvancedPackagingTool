@@ -24,6 +24,26 @@
             IProjectSystem project, 
             PackageLogger logger)
         {
+            if (sourceRepository == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException("sourceRepository");
+            }
+
+            if (localRepository == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException("localRepository");
+            }
+
+            if (project == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException("project");
+            }
+
+            if (logger == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException("logger");
+            }
+
             this.sourceRepository = sourceRepository;
             this.localRepository = localRepository;
             this.logger = logger;
@@ -41,27 +61,52 @@
 
         public IPackage GetUpdate(IPackage package)
         {
+            if (package == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException("package");
+            }
+
             return this.sourceRepository.GetUpdates(new[] { package }).SingleOrDefault();
         }
 
         public void InstallPackage(IPackage package)
         {
+            if (package == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException("package");
+            }
+
             this.ExecuteUsingLogger(() => this.projectManager.AddPackageReference(package.Id, package.Version, false));
         }
 
         public bool IsPackageInstalled(IPackage package)
         {
+            if (package == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException("package");
+            }
+
             return this.localRepository.Exists(package);
         }
 
         public void UninstallPackage(IPackage package, bool removeDependencies)
         {
+            if (package == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException("package");
+            }
+
             this.ExecuteUsingLogger(
                 () => this.projectManager.RemovePackageReference(package.Id, false, removeDependencies));
         }
 
         public void ExecutePowerShell(IPackageFile file)
         {
+            if (file == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException("file");
+            }
+
             using (var powerShell = PowerShell.Create())
             {
                 var scriptContents = file.GetStream().ReadToEnd();

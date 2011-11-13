@@ -21,6 +21,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>..\PackageManager.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +31,12 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Ninemsn.PackageManager.NuGet.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Logging">
@@ -69,6 +77,7 @@
     <Compile Include="Application\PackageInstallerFactory.cs" />
     <Compile Include="Application\Console.cs" />
     <Compile Include="ExceptionFactory.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IPackageInstaller.cs" />
     <Compile Include="IPackageManager.cs" />
     <Compile Include="NullPackageFile.cs" />
@@ -96,6 +105,7 @@
     <Compile Include="WebProjectSystem.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Ninemsn.PackageManager.NuGet.snk" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

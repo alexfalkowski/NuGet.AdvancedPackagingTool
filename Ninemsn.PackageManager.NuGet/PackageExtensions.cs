@@ -1,15 +1,18 @@
 ﻿namespace Ninemsn.PackageManager.NuGet
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
     using global::NuGet;
 
-    public static class PackageExtensions
+    internal static class PackageExtensions
     {
         public static IEnumerable<IPackageFile> GetToolsFiles(this IPackage package)
         {
-            return package.GetFiles().Where(packageFile => packageFile.Path.StartsWith("tools"));
+            return
+                package.GetFiles().Where(
+                    packageFile => packageFile.Path.StartsWith("tools", StringComparison.CurrentCultureIgnoreCase));
         }
 
         public static IPackageFile GetInitPackageFile(this IPackage package)

@@ -48,6 +48,11 @@
 
         public bool AddPackageSource(PackageSource packageSource)
         {
+            if (packageSource == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException("packageSource");
+            }
+
             return AddPackageSource(this.sourceFile, this.packageSources, packageSource);
         }
 
@@ -58,7 +63,46 @@
             return AddPackageSource(this.sourceFile, this.packageSources, packageSource);
         }
 
-        public bool AddPackageSource(
+        public PackageSource GetSource(string sourceName)
+        {
+            return GetSource(this.PackageSources, sourceName);
+        }
+
+        public void RemovePackageSource(string sourceName)
+        {
+            RemovePackageSource(this.sourceFile, this.packageSources, sourceName);
+        }
+
+        private static void RemovePackageSource(
+            IPackagesSourceFile packageSourceFile, 
+            ICollection<PackageSource> packageSourcesSet, 
+            string name)
+        {
+            var item = GetSource(packageSourcesSet, name);
+
+            if (item == null)
+            {
+                return;
+            }
+
+            packageSourcesSet.Remove(item);
+            packageSourceFile.WriteSources(packageSourcesSet);
+        }
+
+        private static PackageSource GetSource(IEnumerable<PackageSource> packageSourcesSet, string sourceName)
+        {
+            Func<PackageSource, bool> predicate =
+                source => source.Name.Equals(sourceName, StringComparison.OrdinalIgnoreCase);
+            return packageSourcesSet.Where(predicate).FirstOrDefault();
+        }
+
+        private static void InitPackageSourceFile(
+            IPackagesSourceFile packageSourceFile, out ISet<PackageSource> packageSourcesSet)
+        {
+            packageSourcesSet = new HashSet<PackageSource>(packageSourceFile.ReadSources());
+        }
+
+        private static bool AddPackageSource(
             IPackagesSourceFile packageSourceFile, 
             ISet<PackageSource> packageSourcesSet, 
             PackageSource packageSource)
@@ -72,43 +116,6 @@
             packageSourceFile.WriteSources(packageSourcesSet);
 
             return true;
-        }
-
-        public PackageSource GetSource(string sourceName)
-        {
-            return GetSource(this.PackageSources, sourceName);
-        }
-
-        public PackageSource GetSource(IEnumerable<PackageSource> packageSourcesSet, string sourceName)
-        {
-            Func<PackageSource, bool> predicate =
-                source => source.Name.Equals(sourceName, StringComparison.OrdinalIgnoreCase);
-            return packageSourcesSet.Where(predicate).FirstOrDefault();
-        }
-
-        public void RemovePackageSource(string sourceName)
-        {
-            RemovePackageSource(this.sourceFile, this.packageSources, sourceName);
-        }
-
-        public void RemovePackageSource(
-            IPackagesSourceFile packageSourceFile, 
-            ISet<PackageSource> packageSourcesSet, 
-            string name)
-        {
-            var item = GetSource(packageSourcesSet, name);
-
-            if (item != null)
-            {
-                packageSourcesSet.Remove(item);
-                packageSourceFile.WriteSources(packageSourcesSet);
-            }
-        }
-
-        private static void InitPackageSourceFile(
-            IPackagesSourceFile packageSourceFile, out ISet<PackageSource> packageSourcesSet)
-        {
-            packageSourcesSet = new HashSet<PackageSource>(packageSourceFile.ReadSources());
         }
     }
 }

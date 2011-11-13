@@ -7,6 +7,11 @@
     {
         public static IPackageInstaller CreatePackageInstaller(Arguments args)
         {
+            if (args == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException("args");
+            }
+
             if (args.IsValid)
             {
                 var packageSourceFile = PackageSourceFileFactory.CreatePackageSourceFile();
