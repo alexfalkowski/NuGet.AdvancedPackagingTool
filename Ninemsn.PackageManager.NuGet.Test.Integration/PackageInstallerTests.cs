@@ -20,6 +20,8 @@
 
         private string installationPath;
 
+        private string packagePath;
+
         [SetUp]
         public void SetUp()
         {
@@ -29,16 +31,16 @@
             var packageSourceFile = PackageSourceFileFactory.CreatePackageSourceFile();
             this.module = new PackageManagerModule(packageSourceFile);
             var localSourceUri = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase) + "/App_Data/packages";
-            var localSource = new Uri(localSourceUri).LocalPath;
-            this.installationPath = Path.Combine(localSource, "DummyNews");
+            this.packagePath = new Uri(localSourceUri).LocalPath;
+            this.installationPath = Path.Combine(this.packagePath, "DummyNews");
 
             this.installer = new PackageInstaller(
                 this.module.GetSource("LocalFeed"),
-                localSource, 
+                this.packagePath, 
                 "DummyNews", 
                 this.installationPath);
 
-            Directory.Delete(localSource, true);
+            Directory.Delete(this.packagePath, true);
         }
 
         [TearDown]
@@ -48,8 +50,10 @@
         }
 
         [Test]
-        public void ShouldInstallLocalPackageInLocalRepository()
+        public void ShouldInstallFirstVersionOfThePackage()
         {
+            this.installer.Version = new Version(1, 0, 0, 0);
+
             this.installer.IsPackageInstalled().Should().BeFalse();
             var logs = this.installer.InstallPackage().ToArray();
             logs.Count().Should().Be(3);
@@ -58,14 +62,24 @@
             logs[1].Should().Contain("added");
             logs[2].Should().Be("Install");
 
-            this.installer.IsPackageInstalled().Should().BeTrue();
-            Directory.GetFiles(this.installationPath).Length.Should().BeGreaterThan(1);
-            Directory.GetDirectories(this.installationPath, "bin").Length.Should().Be(1);
+            Directory.EnumerateDirectories(this.packagePath, "DummyNews.1.0").Any().Should().BeTrue();
+            Directory.EnumerateDirectories(this.installationPath, "bin").Any().Should().BeTrue();
         }
 
         [Test]
-        public void ShouldUninstallLocalPackageInLocalRepository()
+        public void ShouldInstallLatestPackage()
         {
+            this.installer.IsPackageInstalled().Should().BeFalse();
+            this.installer.InstallPackage();
+
+            Directory.EnumerateDirectories(this.packagePath, "DummyNews.1.1").Any().Should().BeTrue();
+            Directory.EnumerateDirectories(this.installationPath, "bin").Any().Should().BeTrue();
+        }
+
+        [Test]
+        public void ShouldUninstallFirstVersionOfThePackage()
+        {
+            this.installer.Version = new Version(1, 0, 0, 0);
             var logs = this.installer.InstallPackage().Union(this.installer.UninstallPackage()).ToArray();
 
             logs.Length.Should().Be(5);

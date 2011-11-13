@@ -1,5 +1,6 @@
 ﻿namespace Ninemsn.PackageManager.NuGet
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -21,8 +22,9 @@
         public PackageInstaller(
             PackageSource source, 
             string destinationRepositoryPath, 
-            string packageName, 
-            string installationPath)
+            string packageName,
+            string installationPath,
+            Version version = null)
         {
             if (source == null)
             {
@@ -48,7 +50,10 @@
             this.destinationRepositoryPath = destinationRepositoryPath;
             this.packageName = packageName;
             this.installationPath = installationPath;
+            this.Version = version;
         }
+
+        public Version Version { get; set; }
 
         public IEnumerable<string> InstallPackage()
         {
@@ -105,6 +110,11 @@
 
             var packageManager = new PackageManager(sourceRepository, destinationRepository, projectSystem, logger);
 
+            if (this.Version != null)
+            {
+                return new PackageArtifact { Manager = packageManager, Package = package };
+            }
+
             var updatePackage = packageManager.GetUpdate(package);
             var isUpdate = updatePackage != null;
 
@@ -126,6 +136,19 @@
             {
                 throw ExceptionFactory.CreateInvalidOperationException(
                     Resources.InvalidPackage, this.source.Source, this.packageName);
+            }
+
+            if (this.Version != null)
+            {
+                var versionSourcePackage = sourceRepository.FindPackage(sourcePackage.Id, this.Version);
+
+                if (versionSourcePackage == null)
+                {
+                    throw ExceptionFactory.CreateInvalidOperationException(
+                        Resources.InvalidPackage, this.source.Source, this.packageName);
+                }
+
+                return versionSourcePackage;
             }
 
             return sourcePackage;
