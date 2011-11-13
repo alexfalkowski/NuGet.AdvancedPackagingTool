@@ -39,43 +39,6 @@
             }
         }
 
-        public IQueryable<IPackage> GetPackages(IQueryable<IPackage> packages, string searchTerm)
-        {
-            if (!string.IsNullOrEmpty(searchTerm))
-            {
-                searchTerm = searchTerm.Trim();
-                packages = packages.Find(searchTerm.Split(new char[0])[0]);
-            }
-
-            return packages;
-        }
-
-        public IEnumerable<IPackage> GetPackagesRequiringLicenseAcceptance(IPackage package)
-        {
-            return this.GetPackageDependencies(package).Where(p => p.RequireLicenseAcceptance);
-        }
-
-        public IQueryable<IPackage> GetPackages(IPackageRepository repository, string searchTerm)
-        {
-            return this.GetPackages(repository.GetPackages(), searchTerm);
-        }
-
-        public IQueryable<IPackage> GetInstalledPackages(string searchTerms)
-        {
-            return this.GetPackages(this.localRepository, searchTerms);
-        }
-
-        public IQueryable<IPackage> GetPackagesWithUpdates(string searchTerms)
-        {
-            return this.GetPackages(
-                this.sourceRepository.GetUpdates(this.localRepository.GetPackages()).AsQueryable(), searchTerms);
-        }
-
-        public IQueryable<IPackage> GetRemotePackages(string searchTerms)
-        {
-            return this.GetPackages(this.sourceRepository, searchTerms);
-        }
-
         public IPackage GetUpdate(IPackage package)
         {
             return this.sourceRepository.GetUpdates(new[] { package }).SingleOrDefault();
@@ -99,7 +62,7 @@
 
         public void UpdatePackage(IPackage package)
         {
-            this.projectManager.UpdatePackageReference(package.Id, package.Version, true);
+            this.ExecuteUsingLogger(() => this.projectManager.UpdatePackageReference(package.Id, package.Version, true));
         }
 
         public void ExecutePowerShell(IPackageFile file)
@@ -120,18 +83,6 @@
 
                 this.logger.Log(MessageLevel.Info, executePowerShell);
             }
-        }
-
-        private IEnumerable<IPackage> GetPackageDependencies(IPackage package)
-        {
-            var instance = NullLogger.Instance;
-            var installWalker = new InstallWalker(this.localRepository, this.sourceRepository, instance, false);
-
-            var packageDependencies = from packageOperation in installWalker.ResolveOperations(package)
-                                      where packageOperation.Action == PackageAction.Install
-                                      select packageOperation.Package;
-
-            return packageDependencies;
         }
 
         private void ExecuteUsingLogger(Action actionToExecute)

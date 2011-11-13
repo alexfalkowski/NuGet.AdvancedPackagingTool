@@ -111,7 +111,8 @@
         private IPackage GetPackage()
         {
             var sourceRepository = PackageRepositoryFactory.Default.CreateRepository(this.source.Source);
-            var sourcePackage = sourceRepository.GetPackages().Find(this.packageName).FirstOrDefault();
+            var packages = sourceRepository.GetPackages();
+            var sourcePackage = packages.Find(this.packageName).FirstOrDefault();
 
             if (sourcePackage == null)
             {
