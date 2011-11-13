@@ -60,11 +60,6 @@
                 () => this.projectManager.RemovePackageReference(package.Id, false, removeDependencies));
         }
 
-        public void UpdatePackage(IPackage package)
-        {
-            this.ExecuteUsingLogger(() => this.projectManager.UpdatePackageReference(package.Id, package.Version, true));
-        }
-
         public void ExecutePowerShell(IPackageFile file)
         {
             using (var powerShell = PowerShell.Create())

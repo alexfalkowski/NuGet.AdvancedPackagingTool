@@ -54,18 +54,27 @@
         public IEnumerable<string> InstallPackage(Version version = null)
         {
             var packageArtifact = this.GetPackageArtifact(version);
+            var isPackageInstalled = packageArtifact.Manager.IsPackageInstalled(packageArtifact.Package);
 
             Directory.CreateDirectory(this.installationPath);
 
             var package = packageArtifact.Package;
-            var initPackageFile = package.GetInitPackageFile();
             var packageManager = packageArtifact.Manager;
-            packageManager.ExecutePowerShell(initPackageFile);
+
+            if (!isPackageInstalled)
+            {
+                var initPackageFile = package.GetInitPackageFile();
+                
+                packageManager.ExecutePowerShell(initPackageFile);
+            }
 
             packageManager.InstallPackage(package);
 
-            var installPackageFile = package.GetInstallPackageFile();
-            packageManager.ExecutePowerShell(installPackageFile);
+            if (!isPackageInstalled)
+            {
+                var installPackageFile = package.GetInstallPackageFile();
+                packageManager.ExecutePowerShell(installPackageFile);
+            }
 
             return packageManager.Logs;
         }
@@ -116,7 +125,6 @@
 
             return new PackageArtifact
                 {
-                    IsUpdate = isUpdate, 
                     Manager = packageManager, 
                     Package = isUpdate ? updatePackage : package
                 };

@@ -16,8 +16,6 @@
 
         void UninstallPackage(IPackage package, bool removeDependencies);
 
-        void UpdatePackage(IPackage package);
-
         void ExecutePowerShell(IPackageFile file);
     }
 }

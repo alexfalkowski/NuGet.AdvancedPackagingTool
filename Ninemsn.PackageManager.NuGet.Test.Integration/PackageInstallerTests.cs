@@ -40,7 +40,10 @@
                 "DummyNews", 
                 this.installationPath);
 
-            Directory.Delete(this.packagePath, true);
+            if (Directory.Exists(this.packagePath))
+            {
+                Directory.Delete(this.packagePath, true);
+            }
         }
 
         [TearDown]
@@ -52,7 +55,7 @@
         [Test]
         public void ShouldInstallFirstVersionOfThePackage()
         {
-            var version = new Version(1, 0, 0, 0);
+            var version = new Version(1, 0);
 
             this.installer.IsPackageInstalled(version).Should().BeFalse();
             var logs = this.installer.InstallPackage(version).ToArray();
@@ -63,7 +66,7 @@
             logs[2].Should().Be("Install");
 
             Directory.EnumerateDirectories(this.packagePath, "DummyNews.1.0").Any().Should().BeTrue();
-            Directory.EnumerateDirectories(this.installationPath, "bin").Any().Should().BeTrue();
+            Directory.EnumerateDirectories(this.installationPath, "Views").Any().Should().BeTrue();
         }
 
         [Test]
@@ -73,13 +76,41 @@
             this.installer.InstallPackage();
 
             Directory.EnumerateDirectories(this.packagePath, "DummyNews.1.1").Any().Should().BeTrue();
-            Directory.EnumerateDirectories(this.installationPath, "bin").Any().Should().BeTrue();
+            Directory.EnumerateDirectories(this.installationPath, "Account").Any().Should().BeTrue();
+        }
+
+        [Test]
+        public void ShouldUpgradeAlreadyInstalledPackage()
+        {
+            this.installer.InstallPackage(new Version(1, 0));
+            var logs = this.installer.InstallPackage(new Version(1, 1)).ToArray();
+
+            logs.Length.Should().Be(4);
+
+            logs[0].Should().Be("Init");
+            logs[1].Should().Contain("removed");
+            logs[2].Should().Contain("added");
+            logs[3].Should().Be("Install");
+
+            Directory.EnumerateDirectories(this.packagePath, "DummyNews.1.0").Any().Should().BeFalse();
+            Directory.EnumerateDirectories(this.packagePath, "DummyNews.1.1").Any().Should().BeTrue();
+            Directory.EnumerateDirectories(this.installationPath, "Account").Any().Should().BeTrue();
+        }
+
+        [Test]
+        public void ShouldNotInstallTheSameVersionOfThePackage()
+        {
+            this.installer.InstallPackage();
+            var logs = this.installer.InstallPackage().ToArray();
+
+            logs.Length.Should().Be(1);
+            logs[0].Should().Contain("already");
         }
 
         [Test]
         public void ShouldUninstallFirstVersionOfThePackage()
         {
-            var version = new Version(1, 0, 0, 0);
+            var version = new Version(1, 0);
             var logs = this.installer.InstallPackage(version).Union(this.installer.UninstallPackage(version)).ToArray();
 
             logs.Length.Should().Be(5);

@@ -7,7 +7,5 @@
         public IPackageManager Manager { get; set; }
 
         public IPackage Package { get; set; }
-
-        public bool IsUpdate { get; set; }
     }
 }
