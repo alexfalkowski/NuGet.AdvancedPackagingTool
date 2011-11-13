@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Linq;
 
     using FluentValidation.Results;
@@ -18,6 +19,7 @@
 
         public string Source { get; set; }
 
+        [TypeConverter(typeof(VersionTypeConverter))]
         public Version Version { get; set; }
 
         public IEnumerable<string> Errors

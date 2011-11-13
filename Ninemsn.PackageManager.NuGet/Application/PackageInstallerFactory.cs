@@ -17,7 +17,7 @@
                 var packagePath = ConfigurationManager.AppSettings["PackagePath"];
                 var installationPath = Path.Combine(Directory.GetCurrentDirectory(), args.Destination ?? string.Empty);
 
-                return new PackageInstaller(packageSource, packagePath, args.Package, installationPath);
+                return new PackageInstaller(packageSource, packagePath, args.Package, installationPath, args.Version);
             }
 
             return new NullPackageInstaller();

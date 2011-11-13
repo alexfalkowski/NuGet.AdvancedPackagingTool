@@ -92,6 +92,7 @@
     </Compile>
     <Compile Include="PackageSource.cs" />
     <Compile Include="PackageManager.cs" />
+    <Compile Include="VersionTypeConverter.cs" />
     <Compile Include="WebProjectSystem.cs" />
   </ItemGroup>
   <ItemGroup>
