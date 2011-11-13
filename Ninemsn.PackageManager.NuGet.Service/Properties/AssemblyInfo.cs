@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
+using System.Resources;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("Ninemsn.PackageManager.NuGet.Service")]
@@ -11,5 +13,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("9e32ec27-dba0-467c-83d8-d50baf368abe")]
+[assembly: CLSCompliant(true)]
+[assembly: NeutralResourcesLanguage("en-AU")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
