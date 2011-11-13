@@ -1,6 +1,5 @@
 ﻿namespace Ninemsn.PackageManager.NuGet
 {
-    using System;
     using System.Linq;
 
     using global::NuGet;
@@ -11,7 +10,7 @@
         {
             if (package == null)
             {
-                throw new ArgumentNullException("package");
+                throw ExceptionFactory.CreateArgumentNullException("package");
             }
 
             var packageFileQuery = package.GetContentFiles().Where(file => file.Path.Contains("Web.config"));

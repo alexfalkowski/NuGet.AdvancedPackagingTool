@@ -4,11 +4,11 @@
 
     using global::NuGet;
 
-    public abstract class PowerShellPackageFileBase : IPackageFile
+    public class PowerShellPackageFile : IPackageFile
     {
         private readonly IPackageFile file;
 
-        protected PowerShellPackageFileBase(IPackageFile file)
+        public PowerShellPackageFile(IPackageFile file)
         {
             this.file = file;
         }

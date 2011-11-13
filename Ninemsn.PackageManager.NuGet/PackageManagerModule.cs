@@ -4,6 +4,8 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Ninemsn.PackageManager.NuGet.Properties;
+
     public class PackageManagerModule
     {
         private readonly IPackagesSourceFile sourceFile;
@@ -14,14 +16,15 @@
         {
             if (sourceFile == null)
             {
-                throw new ArgumentNullException("sourceFile");
+                throw ExceptionFactory.CreateArgumentNullException("sourceFile");
             }
 
             this.sourceFile = sourceFile;
 
             if (!this.sourceFile.Exists())
             {
-                throw new InvalidOperationException();
+                throw ExceptionFactory.CreateInvalidOperationException(
+                    Resources.PackagesSourceFileDoesNotExixst, this.sourceFile.ToString());
             }
 
             InitPackageSourceFile(this.sourceFile, out this.packageSources);
@@ -56,7 +59,9 @@
         }
 
         public bool AddPackageSource(
-            IPackagesSourceFile packageSourceFile, ISet<PackageSource> packageSourcesSet, PackageSource packageSource)
+            IPackagesSourceFile packageSourceFile, 
+            ISet<PackageSource> packageSourcesSet, 
+            PackageSource packageSource)
         {
             if (GetSource(packageSourcesSet, packageSource.Name) != null)
             {
@@ -87,7 +92,9 @@
         }
 
         public void RemovePackageSource(
-            IPackagesSourceFile packageSourceFile, ISet<PackageSource> packageSourcesSet, string name)
+            IPackagesSourceFile packageSourceFile, 
+            ISet<PackageSource> packageSourcesSet, 
+            string name)
         {
             var item = GetSource(packageSourcesSet, name);
 

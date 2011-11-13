@@ -69,15 +69,13 @@
     <Compile Include="Application\PackageInstallerFactory.cs" />
     <Compile Include="Application\Console.cs" />
     <Compile Include="ExceptionFactory.cs" />
-    <Compile Include="InitPackageFile.cs" />
-    <Compile Include="InstallPackageFile.cs" />
     <Compile Include="IPackageInstaller.cs" />
     <Compile Include="NullPackageFile.cs" />
     <Compile Include="NullPackageInstaller.cs" />
     <Compile Include="PackageExtensions.cs" />
     <Compile Include="PackageInstaller.cs" />
     <Compile Include="PackageSourceFileFactory.cs" />
-    <Compile Include="PowerShellPackageFileBase.cs" />
+    <Compile Include="PowerShellPackageFile.cs" />
     <Compile Include="DefaultProjectSystem.cs" />
     <Compile Include="ProjectSystemFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -90,8 +88,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="UninstallPackageFile.cs" />
-    <Compile Include="Utils.cs" />
     <Compile Include="PackageSource.cs" />
     <Compile Include="PackageManager.cs" />
     <Compile Include="WebProjectSystem.cs" />

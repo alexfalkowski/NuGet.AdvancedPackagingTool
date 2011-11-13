@@ -115,6 +115,15 @@ namespace Ninemsn.PackageManager.NuGet.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The package source file &apos;{0}&apos; does not exist..
+        /// </summary>
+        internal static string PackagesSourceFileDoesNotExixst {
+            get {
+                return ResourceManager.GetString("PackagesSourceFileDoesNotExixst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The source was not specified..
         /// </summary>
         internal static string SourceNotSpecified {

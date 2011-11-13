@@ -2,7 +2,6 @@
 {
     using System.Configuration;
     using System.IO;
-    using System.Linq;
 
     public static class PackageInstallerFactory
     {
@@ -13,7 +12,7 @@
                 var packageSourceFile = PackageSourceFileFactory.CreatePackageSourceFile();
                 var packageManager = new PackageManagerModule(packageSourceFile);
                 var packageSource = string.IsNullOrWhiteSpace(args.Source)
-                                        ? packageManager.PackageSources.First()
+                                        ? packageManager.ActiveSource
                                         : packageManager.GetSource(args.Source);
                 var packagePath = ConfigurationManager.AppSettings["PackagePath"];
                 var installationPath = Path.Combine(Directory.GetCurrentDirectory(), args.Destination ?? string.Empty);

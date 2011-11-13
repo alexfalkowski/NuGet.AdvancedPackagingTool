@@ -31,6 +31,11 @@
             return File.Exists(this.fileName);
         }
 
+        public override string ToString()
+        {
+            return this.fileName;
+        }
+
         private static PackageSource ParsePackageSource(XElement element)
         {
             var urlAttribute = element.Attribute("url");
