@@ -1,7 +1,8 @@
 ﻿namespace Ninemsn.PackageManager.NuGet.Application
 {
-    using System.Configuration;
     using System.IO;
+
+    using Ninemsn.PackageManager.NuGet.Configuration;
 
     public static class PackageInstallerFactory
     {
@@ -19,7 +20,7 @@
                 var packageSource = string.IsNullOrWhiteSpace(args.Source)
                                         ? packageManager.ActiveSource
                                         : packageManager.GetSource(args.Source);
-                var packagePath = ConfigurationManager.AppSettings["PackagePath"];
+                var packagePath = ConfigurationManager.PackagePath;
                 var installationPath = Path.Combine(Directory.GetCurrentDirectory(), args.Destination ?? string.Empty);
 
                 return new PackageInstaller(packageSource, packagePath, args.Package, installationPath);

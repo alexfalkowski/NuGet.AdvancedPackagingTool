@@ -2,12 +2,12 @@
 {
     using System.Collections.Generic;
 
+    using global::NuGet;
+
     public interface IPackagesSourceFile
     {
         bool Exists();
 
         IEnumerable<PackageSource> ReadSources();
-
-        void WriteSources(IEnumerable<PackageSource> sources);
     }
 }

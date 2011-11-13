@@ -6,6 +6,8 @@
 
     using Ninemsn.PackageManager.NuGet.Properties;
 
+    using global::NuGet;
+
     public class PackageManagerModule
     {
         private readonly IPackagesSourceFile sourceFile;
@@ -46,47 +48,9 @@
             }
         }
 
-        public bool AddPackageSource(PackageSource packageSource)
-        {
-            if (packageSource == null)
-            {
-                throw ExceptionFactory.CreateArgumentNullException("packageSource");
-            }
-
-            return AddPackageSource(this.sourceFile, this.packageSources, packageSource);
-        }
-
-        public bool AddPackageSource(string source, string name)
-        {
-            var nameOfSource = string.IsNullOrEmpty(name) ? source : name;
-            var packageSource = new PackageSource(source, nameOfSource);
-            return AddPackageSource(this.sourceFile, this.packageSources, packageSource);
-        }
-
         public PackageSource GetSource(string sourceName)
         {
             return GetSource(this.PackageSources, sourceName);
-        }
-
-        public void RemovePackageSource(string sourceName)
-        {
-            RemovePackageSource(this.sourceFile, this.packageSources, sourceName);
-        }
-
-        private static void RemovePackageSource(
-            IPackagesSourceFile packageSourceFile, 
-            ICollection<PackageSource> packageSourcesSet, 
-            string name)
-        {
-            var item = GetSource(packageSourcesSet, name);
-
-            if (item == null)
-            {
-                return;
-            }
-
-            packageSourcesSet.Remove(item);
-            packageSourceFile.WriteSources(packageSourcesSet);
         }
 
         private static PackageSource GetSource(IEnumerable<PackageSource> packageSourcesSet, string sourceName)
@@ -100,22 +64,6 @@
             IPackagesSourceFile packageSourceFile, out ISet<PackageSource> packageSourcesSet)
         {
             packageSourcesSet = new HashSet<PackageSource>(packageSourceFile.ReadSources());
-        }
-
-        private static bool AddPackageSource(
-            IPackagesSourceFile packageSourceFile, 
-            ISet<PackageSource> packageSourcesSet, 
-            PackageSource packageSource)
-        {
-            if (GetSource(packageSourcesSet, packageSource.Name) != null)
-            {
-                return false;
-            }
-
-            packageSourcesSet.Add(packageSource);
-            packageSourceFile.WriteSources(packageSourcesSet);
-
-            return true;
         }
     }
 }

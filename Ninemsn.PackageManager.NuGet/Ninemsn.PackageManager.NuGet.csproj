@@ -76,6 +76,7 @@
     <Compile Include="Application\ArgumentsValidator.cs" />
     <Compile Include="Application\PackageInstallerFactory.cs" />
     <Compile Include="Application\Console.cs" />
+    <Compile Include="Configuration\ConfigurationManager.cs" />
     <Compile Include="ExceptionFactory.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IPackageInstaller.cs" />
@@ -99,7 +100,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="PackageSource.cs" />
     <Compile Include="PackageManager.cs" />
     <Compile Include="VersionTypeConverter.cs" />
     <Compile Include="WebProjectSystem.cs" />

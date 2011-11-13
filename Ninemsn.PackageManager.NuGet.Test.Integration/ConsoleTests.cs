@@ -1,11 +1,12 @@
 ﻿namespace Ninemsn.PackageManager.NuGet.Test.Integration
 {
-    using System.Configuration;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
 
     using FluentAssertions;
+
+    using Ninemsn.PackageManager.NuGet.Configuration;
 
     using NUnit.Framework;
 
@@ -14,23 +15,15 @@
     {
         private PackagesWebServer server;
 
-        public string PackagePath
-        {
-            get
-            {
-                return ConfigurationManager.AppSettings["PackagePath"];
-            }
-        }
-
         [SetUp]
         public void SetUp()
         {
             this.server = new PackagesWebServer();
             this.server.StartUp();
 
-            if (Directory.Exists(this.PackagePath))
+            if (Directory.Exists(ConfigurationManager.PackagePath))
             {
-                Directory.Delete(this.PackagePath, true);
+                Directory.Delete(ConfigurationManager.PackagePath, true);
             }
         }
 
@@ -45,12 +38,12 @@
         {
             RunPackageManagerProcess("/i /p DummyNews /d DummyNews /v 1.0");
 
-            Directory.EnumerateDirectories(this.PackagePath, "DummyNews.1.0").Any().Should().BeTrue(
+            Directory.EnumerateDirectories(ConfigurationManager.PackagePath, "DummyNews.1.0").Any().Should().BeTrue(
                 "The package DummyNews should be installed.");
 
             RunPackageManagerProcess("/u /p DummyNews /d DummyNews /v 1.0");
 
-            Directory.Exists(this.PackagePath).Should().BeFalse("The package DummyNews should not be installed.");
+            Directory.Exists(ConfigurationManager.PackagePath).Should().BeFalse("The package DummyNews should not be installed.");
         }
 
         [Test]
@@ -58,12 +51,12 @@
         {
             RunPackageManagerProcess("/i /p DummyNews /d DummyNews");
 
-            Directory.EnumerateDirectories(this.PackagePath, "DummyNews.1.1").Any().Should().BeTrue(
+            Directory.EnumerateDirectories(ConfigurationManager.PackagePath, "DummyNews.1.1").Any().Should().BeTrue(
                 "The package DummyNews should be installed.");
 
             RunPackageManagerProcess("/u /p DummyNews /d DummyNews");
 
-            Directory.Exists(this.PackagePath).Should().BeFalse("The package DummyNews should not be installed.");
+            Directory.Exists(ConfigurationManager.PackagePath).Should().BeFalse("The package DummyNews should not be installed.");
         }
 
         [Test]
@@ -71,17 +64,17 @@
         {
             RunPackageManagerProcess("/i /p DummyNews /d DummyNews /v 1.0");
 
-            Directory.EnumerateDirectories(this.PackagePath, "DummyNews.1.0").Any().Should().BeTrue(
+            Directory.EnumerateDirectories(ConfigurationManager.PackagePath, "DummyNews.1.0").Any().Should().BeTrue(
                 "The package DummyNews should be installed.");
 
             RunPackageManagerProcess("/i /p DummyNews /d DummyNews /v 1.1");
 
-            Directory.EnumerateDirectories(this.PackagePath, "DummyNews.1.1").Any().Should().BeTrue(
+            Directory.EnumerateDirectories(ConfigurationManager.PackagePath, "DummyNews.1.1").Any().Should().BeTrue(
                 "The package DummyNews should be installed.");
 
             RunPackageManagerProcess("/u /p DummyNews /d DummyNews");
 
-            Directory.Exists(this.PackagePath).Should().BeFalse("The package DummyNews should not be installed.");
+            Directory.Exists(ConfigurationManager.PackagePath).Should().BeFalse("The package DummyNews should not be installed.");
         }
 
         private static void RunPackageManagerProcess(string arguments)

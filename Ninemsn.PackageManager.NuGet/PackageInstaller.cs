@@ -84,8 +84,8 @@
             var packageArtifact = this.GetPackageArtifact(version);
 
             var package = packageArtifact.Package;
-            var unistallPackageFile = package.GetUninstallPackageFile();
             var packageManager = packageArtifact.Manager;
+            var unistallPackageFile = package.GetUninstallPackageFile();
             packageManager.ExecutePowerShell(unistallPackageFile);
 
             packageManager.UninstallPackage(package, true);
@@ -99,13 +99,10 @@
         {
             var sourceRepository = PackageRepositoryFactory.Default.CreateRepository(this.source.Source);
             var package = this.GetPackage(version);
-
             var destinationRepository = PackageRepositoryFactory.Default.CreateRepository(
                 this.destinationRepositoryPath);
             var projectSystem = ProjectSystemFactory.CreateProjectSystem(package, this.installationPath);
-
             var logger = new PackageLogger();
-
             var packageManager = new PackageManager(sourceRepository, destinationRepository, projectSystem, logger);
 
             if (version != null)
@@ -132,7 +129,7 @@
             if (sourcePackage == null)
             {
                 throw ExceptionFactory.CreateInvalidOperationException(
-                    Resources.InvalidPackage, this.source.Source, this.packageName);
+                    Resources.InvalidPackage, this.packageName, this.source.Source);
             }
 
             if (version != null)
@@ -142,7 +139,7 @@
                 if (versionSourcePackage == null)
                 {
                     throw ExceptionFactory.CreateInvalidOperationException(
-                        Resources.InvalidPackage, this.source.Source, this.packageName);
+                        Resources.InvalidPackageWithVersion, this.packageName, version, this.source.Source);
                 }
 
                 return versionSourcePackage;

@@ -97,11 +97,20 @@ namespace Ninemsn.PackageManager.NuGet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The package &apos;{0} cannot be found in repository &apos;{1}&apos;..
+        ///   Looks up a localized string similar to The package &apos;{0}&apos; cannot be found in repository &apos;{1}&apos;..
         /// </summary>
         internal static string InvalidPackage {
             get {
                 return ResourceManager.GetString("InvalidPackage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The package &apos;{0}&apos; with version &apos;{1}&apos; cannot be found in repository &apos;{2}&apos;..
+        /// </summary>
+        internal static string InvalidPackageWithVersion {
+            get {
+                return ResourceManager.GetString("InvalidPackageWithVersion", resourceCulture);
             }
         }
         

@@ -40,3 +40,4 @@
 [assembly:
     SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", 
         Scope = "member", Target = "Ninemsn.PackageManager.NuGet.DefaultProjectSystem.#GetPropertyValue(System.String)")]
+[assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Nu", Scope = "namespace", Target = "Ninemsn.PackageManager.NuGet.Configuration")]

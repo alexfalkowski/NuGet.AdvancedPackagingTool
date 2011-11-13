@@ -6,10 +6,15 @@
 
     using global::NuGet;
 
-    internal static class PackageExtensions
+    public static class PackageExtensions
     {
         public static IEnumerable<IPackageFile> GetToolsFiles(this IPackage package)
         {
+            if (package == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException("package");
+            }
+
             return
                 package.GetFiles().Where(
                     packageFile => packageFile.Path.StartsWith("tools", StringComparison.CurrentCultureIgnoreCase));
@@ -17,16 +22,31 @@
 
         public static IPackageFile GetInitPackageFile(this IPackage package)
         {
+            if (package == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException("package");
+            }
+
             return new PowerShellPackageFile(GetToolFile(package.GetToolsFiles(), "Init"));
         }
 
         public static IPackageFile GetInstallPackageFile(this IPackage package)
         {
+            if (package == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException("package");
+            }
+
             return new PowerShellPackageFile(GetToolFile(package.GetToolsFiles(), "Install"));
         }
 
         public static IPackageFile GetUninstallPackageFile(this IPackage package)
         {
+            if (package == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException("package");
+            }
+
             return new PowerShellPackageFile(GetToolFile(package.GetToolsFiles(), "Uninstall"));
         }
 
