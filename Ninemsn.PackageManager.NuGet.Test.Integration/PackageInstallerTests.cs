@@ -83,12 +83,13 @@
             this.installer.InstallPackage(new Version(1, 0));
             var logs = this.installer.InstallPackage(new Version(1, 1)).ToArray();
 
-            logs.Length.Should().Be(4);
+            logs.Length.Should().Be(5);
 
             logs[0].Should().Be("Init");
-            logs[1].Should().Contain("removed");
-            logs[2].Should().Contain("added");
-            logs[3].Should().Be("Install");
+            logs[1].Should().Be("Uninstall");
+            logs[2].Should().Contain("removed");
+            logs[3].Should().Contain("added");
+            logs[4].Should().Be("Install");
 
             Directory.EnumerateDirectories(this.packagePath, "DummyNews.1.0").Any().Should().BeFalse();
             Directory.EnumerateDirectories(this.packagePath, "DummyNews.1.1").Any().Should().BeTrue();

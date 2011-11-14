@@ -1,10 +1,7 @@
 ﻿namespace Ninemsn.PackageManager.NuGet
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Management.Automation;
-    using System.Text;
 
     using global::NuGet;
 
@@ -15,8 +12,6 @@
         private readonly IPackageRepository localRepository;
 
         private readonly PackageLogger logger;
-
-        private readonly IProjectManager projectManager;
 
         public PackageManager(
             IPackageRepository sourceRepository, 
@@ -48,7 +43,10 @@
             this.localRepository = localRepository;
             this.logger = logger;
             var pathResolver = new DefaultPackagePathResolver(localRepository.Source);
-            this.projectManager = new ProjectManager(sourceRepository, pathResolver, project, localRepository);
+            this.ProjectManager = new ProjectManager(sourceRepository, pathResolver, project, localRepository)
+                {
+                    Logger = logger 
+                };
         }
 
         public IEnumerable<string> Logs
@@ -58,6 +56,8 @@
                 return this.logger.Logs;
             }
         }
+
+        internal IProjectManager ProjectManager { get; private set; }
 
         public IPackage GetUpdate(IPackage package)
         {
@@ -76,7 +76,7 @@
                 throw ExceptionFactory.CreateArgumentNullException("package");
             }
 
-            this.ExecuteUsingLogger(() => this.projectManager.AddPackageReference(package.Id, package.Version, false));
+            this.ProjectManager.AddPackageReference(package.Id, package.Version, false);
         }
 
         public bool IsPackageInstalled(IPackage package)
@@ -96,8 +96,7 @@
                 throw ExceptionFactory.CreateArgumentNullException("package");
             }
 
-            this.ExecuteUsingLogger(
-                () => this.projectManager.RemovePackageReference(package.Id, false, removeDependencies));
+            this.ProjectManager.RemovePackageReference(package.Id, false, removeDependencies);
         }
 
         public void ExecutePowerShell(IPackageFile file)
@@ -107,36 +106,7 @@
                 throw ExceptionFactory.CreateArgumentNullException("file");
             }
 
-            using (var powerShell = PowerShell.Create())
-            {
-                var scriptContents = file.GetStream().ReadToEnd();
-                powerShell.AddScript(scriptContents);
-
-                var stringBuilder = new StringBuilder();
-
-                foreach (var result in powerShell.Invoke())
-                {
-                    stringBuilder.AppendLine(result.ToString());
-                }
-
-                var executePowerShell = stringBuilder.ToString().Trim();
-
-                this.logger.Log(MessageLevel.Info, executePowerShell);
-            }
-        }
-
-        private void ExecuteUsingLogger(Action actionToExecute)
-        {
-            this.projectManager.Logger = this.logger;
-
-            try
-            {
-                actionToExecute();
-            }
-            finally
-            {
-                this.projectManager.Logger = null;
-            }
+            file.ExecutePowerShell(this.logger);
         }
     }
 }

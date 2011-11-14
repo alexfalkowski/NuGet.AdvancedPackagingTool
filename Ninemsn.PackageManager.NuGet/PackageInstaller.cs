@@ -54,12 +54,11 @@
         public IEnumerable<string> InstallPackage(Version version = null)
         {
             var packageArtifact = this.GetPackageArtifact(version);
-            var isPackageInstalled = packageArtifact.Manager.IsPackageInstalled(packageArtifact.Package);
-
-            Directory.CreateDirectory(this.installationPath);
-
             var package = packageArtifact.Package;
             var packageManager = packageArtifact.Manager;
+            var isPackageInstalled = packageManager.IsPackageInstalled(package);
+
+            Directory.CreateDirectory(this.installationPath);
 
             if (!isPackageInstalled)
             {
@@ -82,17 +81,22 @@
         public IEnumerable<string> UninstallPackage(Version version = null)
         {
             var packageArtifact = this.GetPackageArtifact(version);
-
             var package = packageArtifact.Package;
             var packageManager = packageArtifact.Manager;
-            var unistallPackageFile = package.GetUninstallPackageFile();
-            packageManager.ExecutePowerShell(unistallPackageFile);
 
             packageManager.UninstallPackage(package, true);
 
             Directory.Delete(this.installationPath);
 
             return packageManager.Logs;
+        }
+
+        private static void OnProjectManagerPackageReferenceRemoving(object sender, PackageOperationEventArgs e)
+        {
+            var projectManager = (IProjectManager)sender;
+            var unistallPackageFile = e.Package.GetUninstallPackageFile();
+
+            unistallPackageFile.ExecutePowerShell(projectManager.Logger);
         }
 
         private PackageArtifact GetPackageArtifact(Version version)
@@ -104,6 +108,7 @@
             var projectSystem = ProjectSystemFactory.CreateProjectSystem(package, this.installationPath);
             var logger = new PackageLogger();
             var packageManager = new PackageManager(sourceRepository, destinationRepository, projectSystem, logger);
+            packageManager.ProjectManager.PackageReferenceRemoving += OnProjectManagerPackageReferenceRemoving;
 
             if (version != null)
             {
