@@ -6,14 +6,20 @@
 
     public class NullPackageInstaller : IPackageInstaller
     {
-        public IEnumerable<string> InstallPackage(Version version = null)
+        public IEnumerable<string> Logs
         {
-            return Enumerable.Empty<string>();
+            get
+            {
+                return Enumerable.Empty<string>();
+            }
         }
 
-        public IEnumerable<string> UninstallPackage(Version version = null)
+        public void InstallPackage(Version version = null)
         {
-            return Enumerable.Empty<string>();
+        }
+
+        public void UninstallPackage(Version version = null)
+        {
         }
     }
 }

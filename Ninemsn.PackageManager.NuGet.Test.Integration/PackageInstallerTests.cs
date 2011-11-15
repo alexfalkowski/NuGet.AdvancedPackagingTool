@@ -57,7 +57,8 @@
         {
             var version = new Version(1, 0);
 
-            var logs = this.installer.InstallPackage(version).ToArray();
+            this.installer.InstallPackage(version);
+            var logs = this.installer.Logs.ToArray();
             logs.Count().Should().Be(3);
 
             logs[0].Should().Be("Init");
@@ -81,15 +82,19 @@
         public void ShouldUpgradeAlreadyInstalledPackage()
         {
             this.installer.InstallPackage(new Version(1, 0));
-            var logs = this.installer.InstallPackage(new Version(1, 1)).ToArray();
+            this.installer.InstallPackage(new Version(1, 1));
+            var logs = this.installer.Logs.ToArray();
 
-            logs.Length.Should().Be(5);
+            logs.Length.Should().Be(8);
 
             logs[0].Should().Be("Init");
-            logs[1].Should().Be("Uninstall");
-            logs[2].Should().Contain("removed");
-            logs[3].Should().Contain("added");
-            logs[4].Should().Be("Install");
+            logs[1].Should().Contain("added");
+            logs[2].Should().Be("Install");
+            logs[3].Should().Be("Uninstall");
+            logs[4].Should().Contain("removed");
+            logs[5].Should().Be("Init");
+            logs[6].Should().Contain("added");
+            logs[7].Should().Be("Install");
 
             Directory.EnumerateDirectories(this.packagePath, "DummyNews.1.0").Any().Should().BeFalse();
             Directory.EnumerateDirectories(this.packagePath, "DummyNews.1.1").Any().Should().BeTrue();
@@ -100,20 +105,29 @@
         public void ShouldNotInstallTheSameVersionOfThePackage()
         {
             this.installer.InstallPackage();
-            var logs = this.installer.InstallPackage().ToArray();
+            this.installer.InstallPackage();
+            var logs = this.installer.Logs.ToArray();
 
-            logs.Length.Should().Be(1);
-            logs[0].Should().Contain("already");
+            logs.Length.Should().Be(4);
+            logs[0].Should().Be("Init");
+            logs[1].Should().Contain("added");
+            logs[2].Should().Be("Install");
+            logs[3].Should().Contain("already");
         }
 
         [Test]
         public void ShouldUninstallFirstVersionOfThePackage()
         {
             var version = new Version(1, 0);
-            var logs = this.installer.InstallPackage(version).Union(this.installer.UninstallPackage(version)).ToArray();
+            this.installer.InstallPackage(version);
+            this.installer.UninstallPackage(version);
+            var logs = this.installer.Logs.ToArray();
 
             logs.Length.Should().Be(5);
 
+            logs[0].Should().Be("Init");
+            logs[1].Should().Contain("added");
+            logs[2].Should().Be("Install");
             logs[3].Should().Be("Uninstall");
             logs[4].Should().Contain("removed");
             Directory.Exists(this.installationPath).Should().BeFalse("The package DummyNews should not be installed.");
@@ -122,10 +136,15 @@
         [Test]
         public void ShouldUninstallLatestVersionOfThePackage()
         {
-            var logs = this.installer.InstallPackage().Union(this.installer.UninstallPackage()).ToArray();
+            this.installer.InstallPackage();
+            this.installer.UninstallPackage();
+            var logs = this.installer.Logs.ToArray();
 
             logs.Length.Should().Be(5);
 
+            logs[0].Should().Be("Init");
+            logs[1].Should().Contain("added");
+            logs[2].Should().Be("Install");
             logs[3].Should().Be("Uninstall");
             logs[4].Should().Contain("removed");
             Directory.Exists(this.installationPath).Should().BeFalse("The package DummyNews should not be installed.");

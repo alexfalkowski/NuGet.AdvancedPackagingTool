@@ -80,7 +80,6 @@
     <Compile Include="ExceptionFactory.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IPackageInstaller.cs" />
-    <Compile Include="IPackageManager.cs" />
     <Compile Include="NullPackageFile.cs" />
     <Compile Include="NullPackageInstaller.cs" />
     <Compile Include="PackageArtifact.cs" />
@@ -89,6 +88,7 @@
     <Compile Include="PackageSourceFileFactory.cs" />
     <Compile Include="PowerShellPackageFile.cs" />
     <Compile Include="DefaultProjectSystem.cs" />
+    <Compile Include="ProjectManagerExtensions.cs" />
     <Compile Include="ProjectSystemFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PackageLogger.cs" />
@@ -100,7 +100,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="PackageManager.cs" />
     <Compile Include="VersionTypeConverter.cs" />
     <Compile Include="WebProjectSystem.cs" />
   </ItemGroup>

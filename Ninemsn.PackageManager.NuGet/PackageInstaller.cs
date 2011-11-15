@@ -13,15 +13,27 @@
     {
         private readonly PackageSource source;
 
-        private readonly string destinationRepositoryPath;
+        private readonly string localRepositoryPath;
 
         private readonly string packageName;
 
         private readonly string installationPath;
 
+        private readonly PackageLogger logger;
+
+        private readonly IPackageRepository sourceRepository;
+
+        private readonly IPackageRepository localRepository;
+
+        private IProjectSystem projectSystem;
+
+        private IProjectManager projectManager;
+
+        private bool isPackageInstalled;
+
         public PackageInstaller(
             PackageSource source, 
-            string destinationRepositoryPath, 
+            string localRepositoryPath, 
             string packageName,
             string installationPath)
         {
@@ -30,9 +42,9 @@
                 throw ExceptionFactory.CreateArgumentNullException("source");
             }
 
-            if (string.IsNullOrWhiteSpace(destinationRepositoryPath))
+            if (string.IsNullOrWhiteSpace(localRepositoryPath))
             {
-                throw ExceptionFactory.CreateArgumentNullException("destinationRepositoryPath");
+                throw ExceptionFactory.CreateArgumentNullException("localRepositoryPath");
             }
 
             if (string.IsNullOrWhiteSpace(packageName))
@@ -46,49 +58,39 @@
             }
 
             this.source = source;
-            this.destinationRepositoryPath = destinationRepositoryPath;
+            this.localRepositoryPath = localRepositoryPath;
             this.packageName = packageName;
             this.installationPath = installationPath;
+            this.logger = new PackageLogger();
+            this.sourceRepository = PackageRepositoryFactory.Default.CreateRepository(this.source.Source);
+            this.localRepository = PackageRepositoryFactory.Default.CreateRepository(this.localRepositoryPath);
         }
 
-        public IEnumerable<string> InstallPackage(Version version = null)
+        public IEnumerable<string> Logs
         {
-            var packageArtifact = this.GetPackageArtifact(version);
-            var package = packageArtifact.Package;
-            var packageManager = packageArtifact.Manager;
-            var isPackageInstalled = packageManager.IsPackageInstalled(package);
+            get
+            {
+                return this.logger.Logs;
+            }
+        }
+
+        public void InstallPackage(Version version = null)
+        {
+            var package = this.GetPackage(version);
+            this.isPackageInstalled = this.projectManager.IsPackageInstalled(package);
 
             Directory.CreateDirectory(this.installationPath);
 
-            if (!isPackageInstalled)
-            {
-                var initPackageFile = package.GetInitPackageFile();
-                
-                packageManager.ExecutePowerShell(initPackageFile);
-            }
-
-            packageManager.InstallPackage(package);
-
-            if (!isPackageInstalled)
-            {
-                var installPackageFile = package.GetInstallPackageFile();
-                packageManager.ExecutePowerShell(installPackageFile);
-            }
-
-            return packageManager.Logs;
+            this.projectManager.InstallPackage(package);
         }
 
-        public IEnumerable<string> UninstallPackage(Version version = null)
+        public void UninstallPackage(Version version = null)
         {
-            var packageArtifact = this.GetPackageArtifact(version);
-            var package = packageArtifact.Package;
-            var packageManager = packageArtifact.Manager;
+            var package = this.GetPackage(version);
 
-            packageManager.UninstallPackage(package, true);
+            this.projectManager.UninstallPackage(package, true);
 
             Directory.Delete(this.installationPath);
-
-            return packageManager.Logs;
         }
 
         private static void OnProjectManagerPackageReferenceRemoving(object sender, PackageOperationEventArgs e)
@@ -99,36 +101,59 @@
             unistallPackageFile.ExecutePowerShell(projectManager.Logger);
         }
 
-        private PackageArtifact GetPackageArtifact(Version version)
+        private void OnProjectManagerPackageReferenceAdding(object sender, PackageOperationEventArgs e)
         {
-            var sourceRepository = PackageRepositoryFactory.Default.CreateRepository(this.source.Source);
-            var package = this.GetPackage(version);
-            var destinationRepository = PackageRepositoryFactory.Default.CreateRepository(
-                this.destinationRepositoryPath);
-            var projectSystem = ProjectSystemFactory.CreateProjectSystem(package, this.installationPath);
-            var logger = new PackageLogger();
-            var packageManager = new PackageManager(sourceRepository, destinationRepository, projectSystem, logger);
-            packageManager.ProjectManager.PackageReferenceRemoving += OnProjectManagerPackageReferenceRemoving;
-
-            if (version != null)
+            if (this.isPackageInstalled)
             {
-                return new PackageArtifact { Manager = packageManager, Package = package };
+                return;
             }
 
-            var updatePackage = packageManager.GetUpdate(package);
-            var isUpdate = updatePackage != null;
+            var initPackageFile = e.Package.GetInitPackageFile();
 
-            return new PackageArtifact
-                {
-                    Manager = packageManager, 
-                    Package = isUpdate ? updatePackage : package
-                };
+            initPackageFile.ExecutePowerShell(this.projectManager.Logger);
+        }
+
+        private void OnProjectManagerPackageReferenceAdded(object sender, PackageOperationEventArgs e)
+        {
+            if (this.isPackageInstalled)
+            {
+                return;
+            }
+
+            var installPackageFile = e.Package.GetInstallPackageFile();
+
+            installPackageFile.ExecutePowerShell(this.projectManager.Logger);
         }
 
         private IPackage GetPackage(Version version)
         {
-            var sourceRepository = PackageRepositoryFactory.Default.CreateRepository(this.source.Source);
-            var packages = sourceRepository.GetPackages();
+            var package = this.FindPackage(version);
+            this.projectSystem = ProjectSystemFactory.CreateProjectSystem(package, this.installationPath);
+
+            var pathResolver = new DefaultPackagePathResolver(this.localRepository.Source);
+            this.projectManager = new ProjectManager(
+                this.sourceRepository, pathResolver, this.projectSystem, this.localRepository)
+                {
+                    Logger = this.logger
+                };
+            this.projectManager.PackageReferenceRemoving += OnProjectManagerPackageReferenceRemoving;
+            this.projectManager.PackageReferenceAdding += this.OnProjectManagerPackageReferenceAdding;
+            this.projectManager.PackageReferenceAdded += this.OnProjectManagerPackageReferenceAdded;
+
+            if (version != null)
+            {
+                return package;
+            }
+
+            var updatePackage = this.projectManager.GetUpdate(package);
+            var isUpdate = updatePackage != null;
+
+            return isUpdate ? updatePackage : package;
+        }
+
+        private IPackage FindPackage(Version version)
+        {
+            var packages = this.sourceRepository.GetPackages();
             var sourcePackage = packages.Find(this.packageName).FirstOrDefault();
 
             if (sourcePackage == null)
@@ -139,7 +164,7 @@
 
             if (version != null)
             {
-                var versionSourcePackage = sourceRepository.FindPackage(sourcePackage.Id, version);
+                var versionSourcePackage = this.sourceRepository.FindPackage(sourcePackage.Id, version);
 
                 if (versionSourcePackage == null)
                 {

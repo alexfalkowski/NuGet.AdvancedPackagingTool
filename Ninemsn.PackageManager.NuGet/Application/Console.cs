@@ -44,12 +44,14 @@
             {
                 if (this.arguments.Install)
                 {
-                    WriteInformationToConsole(this.installer.InstallPackage(this.arguments.Version));
+                    this.installer.InstallPackage(this.arguments.Version);
+                    WriteInformationToConsole(this.installer.Logs);
                 }
 
                 if (this.arguments.Uninstall)
                 {
-                    WriteInformationToConsole(this.installer.UninstallPackage(this.arguments.Version));
+                    this.installer.UninstallPackage(this.arguments.Version);
+                    WriteInformationToConsole(this.installer.Logs);
                 }
 
                 return 0;

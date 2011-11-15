@@ -5,8 +5,10 @@
 
     public interface IPackageInstaller
     {
-        IEnumerable<string> InstallPackage(Version version = null);
+        IEnumerable<string> Logs { get; }
 
-        IEnumerable<string> UninstallPackage(Version version = null);
+        void InstallPackage(Version version = null);
+
+        void UninstallPackage(Version version = null);
     }
 }
