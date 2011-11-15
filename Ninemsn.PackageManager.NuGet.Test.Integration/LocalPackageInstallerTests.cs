@@ -21,8 +21,7 @@
             this.Installer = new PackageInstaller(
                 this.Module.GetSource("LocalFolder"),
                 this.PackagePath, 
-                "DummyNews", 
-                this.InstallationPath);
+                "DummyNews");
 
             if (Directory.Exists(this.PackagePath))
             {

@@ -70,6 +70,7 @@
     <None Include="..\Ninemsn.PackageManager.NuGet.Console\PackageSources.config">
       <Link>PackageSources.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <None Include="App.config" />
     <None Include="npm.exe.config">

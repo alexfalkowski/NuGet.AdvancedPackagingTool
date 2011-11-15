@@ -1,6 +1,7 @@
 ﻿namespace Ninemsn.PackageManager.NuGet.Test.Integration
 {
     using System;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
 
@@ -31,7 +32,7 @@
             logs[1].Should().Contain("added");
             logs[2].Should().Be("Install");
             Directory.EnumerateDirectories(this.PackagePath, "DummyNews.1.0").Any().Should().BeTrue();
-            Directory.EnumerateDirectories(this.InstallationPath, "Views").Any().Should().BeTrue();
+            this.GetFileVersion().Should().Be("1.0.0.0");
         }
 
         [Test]
@@ -40,7 +41,7 @@
             this.Installer.InstallPackage();
 
             Directory.EnumerateDirectories(this.PackagePath, "DummyNews.1.1").Any().Should().BeTrue();
-            Directory.EnumerateDirectories(this.InstallationPath, "Account").Any().Should().BeTrue();
+            this.GetFileVersion().Should().Be("1.1.0.0");
         }
 
         [Test]
@@ -63,7 +64,7 @@
 
             Directory.EnumerateDirectories(this.PackagePath, "DummyNews.1.0").Any().Should().BeFalse();
             Directory.EnumerateDirectories(this.PackagePath, "DummyNews.1.1").Any().Should().BeTrue();
-            Directory.EnumerateDirectories(this.InstallationPath, "Account").Any().Should().BeTrue();
+            this.GetFileVersion().Should().Be("1.1.0.0");
         }
 
         [Test]
@@ -113,6 +114,14 @@
             logs[3].Should().Be("Uninstall");
             logs[4].Should().Contain("removed");
             Directory.Exists(this.InstallationPath).Should().BeFalse("The package DummyNews should not be installed.");
+        }
+
+        private string GetFileVersion()
+        {
+            var dllFile = Directory.EnumerateFiles(Path.Combine(this.InstallationPath, "bin")).First();
+            var info = FileVersionInfo.GetVersionInfo(dllFile);
+
+            return info.FileVersion;
         }
     }
 }

@@ -6,7 +6,7 @@
 
     public static class ProjectSystemFactory
     {
-        public static IProjectSystem CreateProjectSystem(IPackage package, string installationPath)
+        public static IProjectSystem CreateProjectSystem(IPackage package)
         {
             if (package == null)
             {
@@ -15,10 +15,11 @@
 
             var packageFileQuery = package.GetContentFiles().Where(file => file.Path.Contains("Web.config"));
             var packageFile = packageFileQuery.FirstOrDefault();
+            var localPath = package.ProjectUrl.LocalPath;
 
             return packageFile != null
-                       ? new WebProjectSystem(installationPath)
-                       : new DefaultProjectSystem(installationPath);
+                       ? new WebProjectSystem(localPath)
+                       : new DefaultProjectSystem(localPath);
         }
     }
 }

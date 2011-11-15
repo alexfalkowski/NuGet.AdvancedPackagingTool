@@ -15,8 +15,6 @@
 
         public string Package { get; set; }
 
-        public string Destination { get; set; }
-
         public string Source { get; set; }
 
         [TypeConverter(typeof(VersionTypeConverter))]

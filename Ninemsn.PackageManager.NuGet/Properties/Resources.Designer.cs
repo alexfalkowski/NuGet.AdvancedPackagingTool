@@ -88,6 +88,15 @@ namespace Ninemsn.PackageManager.NuGet.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The package &apos;{0}&apos; does not contain a projectUrl in the spec file. This is used as the destination folder..
+        /// </summary>
+        internal static string InvalidInstallationFolder {
+            get {
+                return ResourceManager.GetString("InvalidInstallationFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Install or uninstall was not specified..
         /// </summary>
         internal static string InvalidInstallUninstallFlag {

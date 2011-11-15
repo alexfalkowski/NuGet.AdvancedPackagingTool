@@ -17,8 +17,6 @@
 
         private readonly string packageName;
 
-        private readonly string installationPath;
-
         private readonly PackageLogger logger;
 
         private readonly IPackageRepository sourceRepository;
@@ -34,8 +32,7 @@
         public PackageInstaller(
             PackageSource source, 
             string localRepositoryPath, 
-            string packageName,
-            string installationPath)
+            string packageName)
         {
             if (source == null)
             {
@@ -52,15 +49,9 @@
                 throw ExceptionFactory.CreateArgumentNullException("packageName");
             }
 
-            if (string.IsNullOrWhiteSpace(installationPath))
-            {
-                throw ExceptionFactory.CreateArgumentNullException("installationPath");
-            }
-
             this.source = source;
             this.localRepositoryPath = localRepositoryPath;
             this.packageName = packageName;
-            this.installationPath = installationPath;
             this.logger = new PackageLogger();
             this.sourceRepository = PackageRepositoryFactory.Default.CreateRepository(this.source.Source);
             this.localRepository = PackageRepositoryFactory.Default.CreateRepository(this.localRepositoryPath);
@@ -79,7 +70,7 @@
             var package = this.GetPackage(version);
             this.isPackageInstalled = this.projectManager.IsPackageInstalled(package);
 
-            Directory.CreateDirectory(this.installationPath);
+            Directory.CreateDirectory(package.ProjectUrl.LocalPath);
 
             this.projectManager.InstallPackage(package);
         }
@@ -87,10 +78,9 @@
         public void UninstallPackage(Version version = null)
         {
             var package = this.GetPackage(version);
-
             this.projectManager.UninstallPackage(package, true);
 
-            Directory.Delete(this.installationPath);
+            Directory.Delete(package.ProjectUrl.LocalPath);
         }
 
         private static void OnProjectManagerPackageReferenceRemoving(object sender, PackageOperationEventArgs e)
@@ -128,7 +118,7 @@
         private IPackage GetPackage(Version version)
         {
             var package = this.FindPackage(version);
-            this.projectSystem = ProjectSystemFactory.CreateProjectSystem(package, this.installationPath);
+            this.projectSystem = ProjectSystemFactory.CreateProjectSystem(package);
 
             var pathResolver = new DefaultPackagePathResolver(this.localRepository.Source);
             this.projectManager = new ProjectManager(
@@ -142,13 +132,24 @@
 
             if (version != null)
             {
-                return package;
+                return this.ValidatePackage(package);
             }
 
             var updatePackage = this.projectManager.GetUpdate(package);
             var isUpdate = updatePackage != null;
 
-            return isUpdate ? updatePackage : package;
+            return this.ValidatePackage(isUpdate ? updatePackage : package);
+        }
+
+        private IPackage ValidatePackage(IPackage package)
+        {
+            if (package.ProjectUrl == null)
+            {
+                throw ExceptionFactory.CreateInvalidOperationException(
+                    Resources.InvalidInstallationFolder, this.packageName);
+            }
+
+            return package;
         }
 
         private IPackage FindPackage(Version version)
