@@ -59,7 +59,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConsoleTests.cs" />
-    <Compile Include="PackageInstallerTests.cs" />
+    <Compile Include="LocalPackageInstallerTests.cs" />
+    <Compile Include="FeedPackageInstallerTests.cs" />
+    <Compile Include="PackageInstallerTestsBase.cs" />
     <Compile Include="PackageManagerModuleTest.cs" />
     <Compile Include="PackagesWebServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

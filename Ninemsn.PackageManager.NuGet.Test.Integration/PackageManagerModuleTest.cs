@@ -25,7 +25,7 @@
         [Test]
         public void ShouldHavePackageSources()
         {
-            this.module.PackageSources.Should().HaveCount(3);
+            this.module.PackageSources.Should().HaveCount(4);
         }
 
         [Test]

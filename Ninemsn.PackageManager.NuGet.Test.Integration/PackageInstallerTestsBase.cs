@@ -1,57 +1,33 @@
 ﻿namespace Ninemsn.PackageManager.NuGet.Test.Integration
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
-    using System.Reflection;
 
     using FluentAssertions;
 
     using NUnit.Framework;
 
-    [TestFixture]
-    public class PackageInstallerTests
+    public abstract class PackageInstallerTestsBase
     {
-        private PackageManagerModule module;
+        // ReSharper disable InconsistentNaming
+        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate",
+            Justification = "Reviewed. Suppression is OK here.")]
+        protected PackageManagerModule module;
 
-        private PackagesWebServer server;
+        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate",
+            Justification = "Reviewed. Suppression is OK here.")]
+        protected PackageInstaller installer;
 
-        private PackageInstaller installer;
+        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate",
+            Justification = "Reviewed. Suppression is OK here.")]
+        protected string installationPath;
 
-        private string installationPath;
-
-        private string packagePath;
-
-        [SetUp]
-        public void SetUp()
-        {
-            this.server = new PackagesWebServer();
-            this.server.StartUp();
-
-            var packageSourceFile = PackageSourceFileFactory.CreatePackageSourceFile();
-            this.module = new PackageManagerModule(packageSourceFile);
-            var localSourceUri = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase) + "/App_Data/packages";
-            this.packagePath = new Uri(localSourceUri).LocalPath;
-            this.installationPath = Path.Combine(this.packagePath, "DummyNews");
-
-            this.installer = new PackageInstaller(
-                this.module.GetSource("LocalFeed"),
-                this.packagePath, 
-                "DummyNews", 
-                this.installationPath);
-
-            if (Directory.Exists(this.packagePath))
-            {
-                Directory.Delete(this.packagePath, true);
-            }
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            this.server.Stop();
-        }
-
+        [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate",
+            Justification = "Reviewed. Suppression is OK here.")]
+        protected string packagePath;
+        // ReSharper restore InconsistentNaming
         [Test]
         public void ShouldInstallFirstVersionOfThePackage()
         {
@@ -64,7 +40,6 @@
             logs[0].Should().Be("Init");
             logs[1].Should().Contain("added");
             logs[2].Should().Be("Install");
-
             Directory.EnumerateDirectories(this.packagePath, "DummyNews.1.0").Any().Should().BeTrue();
             Directory.EnumerateDirectories(this.installationPath, "Views").Any().Should().BeTrue();
         }
