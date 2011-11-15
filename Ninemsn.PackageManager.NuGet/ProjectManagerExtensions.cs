@@ -48,7 +48,7 @@
                 throw ExceptionFactory.CreateArgumentNullException("package");
             }
 
-            return manager.SourceRepository.Exists(package);
+            return manager.LocalRepository.Exists(package);
         }
 
         public static void UninstallPackage(this IProjectManager manager, IPackageMetadata package, bool removeDependencies)
