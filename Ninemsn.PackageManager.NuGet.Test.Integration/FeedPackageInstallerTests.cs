@@ -18,20 +18,20 @@
             this.server.StartUp();
 
             var packageSourceFile = PackageSourceFileFactory.CreatePackageSourceFile();
-            this.module = new PackageManagerModule(packageSourceFile);
+            this.Module = new PackageManagerModule(packageSourceFile);
             var localSourceUri = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase) + "/App_Data/packages";
-            this.packagePath = new Uri(localSourceUri).LocalPath;
-            this.installationPath = Path.Combine(this.packagePath, "DummyNews");
+            this.PackagePath = new Uri(localSourceUri).LocalPath;
+            this.InstallationPath = Path.Combine(this.PackagePath, "DummyNews");
 
-            this.installer = new PackageInstaller(
-                this.module.GetSource("LocalFeed"),
-                this.packagePath, 
+            this.Installer = new PackageInstaller(
+                this.Module.GetSource("LocalFeed"),
+                this.PackagePath, 
                 "DummyNews", 
-                this.installationPath);
+                this.InstallationPath);
 
-            if (Directory.Exists(this.packagePath))
+            if (Directory.Exists(this.PackagePath))
             {
-                Directory.Delete(this.packagePath, true);
+                Directory.Delete(this.PackagePath, true);
             }
         }
 
