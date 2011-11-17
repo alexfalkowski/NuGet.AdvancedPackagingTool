@@ -52,11 +52,16 @@
             return new PowerShellPackageFile(GetToolFile(package.GetToolsFiles(), "Uninstall"));
         }
 
-        public static void ExecutePowerShell(this IPackageFile file, ILogger logger)
+        public static void ExecutePowerShell(this IPackageFile file, Uri projectUrl, ILogger logger)
         {
             if (file == null)
             {
                 throw ExceptionFactory.CreateArgumentNullException("file");
+            }
+
+            if (projectUrl == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException("projectUrl");
             }
 
             if (logger == null)
@@ -68,6 +73,7 @@
             {
                 var scriptContents = file.GetStream().ReadToEnd();
                 powerShell.AddScript(scriptContents);
+                powerShell.AddParameter("installationFolder", projectUrl);
 
                 var stringBuilder = new StringBuilder();
 

@@ -86,9 +86,10 @@
         private static void OnProjectManagerPackageReferenceRemoving(object sender, PackageOperationEventArgs e)
         {
             var projectManager = (IProjectManager)sender;
-            var unistallPackageFile = e.Package.GetUninstallPackageFile();
+            var package = e.Package;
+            var unistallPackageFile = package.GetUninstallPackageFile();
 
-            unistallPackageFile.ExecutePowerShell(projectManager.Logger);
+            unistallPackageFile.ExecutePowerShell(package.ProjectUrl, projectManager.Logger);
         }
 
         private void OnProjectManagerPackageReferenceAdding(object sender, PackageOperationEventArgs e)
@@ -98,9 +99,10 @@
                 return;
             }
 
-            var initPackageFile = e.Package.GetInitPackageFile();
+            var package = e.Package;
+            var initPackageFile = package.GetInitPackageFile();
 
-            initPackageFile.ExecutePowerShell(this.projectManager.Logger);
+            initPackageFile.ExecutePowerShell(package.ProjectUrl, this.projectManager.Logger);
         }
 
         private void OnProjectManagerPackageReferenceAdded(object sender, PackageOperationEventArgs e)
@@ -110,9 +112,10 @@
                 return;
             }
 
+            var package = e.Package;
             var installPackageFile = e.Package.GetInstallPackageFile();
 
-            installPackageFile.ExecutePowerShell(this.projectManager.Logger);
+            installPackageFile.ExecutePowerShell(package.ProjectUrl, this.projectManager.Logger);
         }
 
         private IPackage GetPackage(Version version)

@@ -13,6 +13,11 @@
                 throw ExceptionFactory.CreateArgumentNullException("package");
             }
 
+            if (package.ProjectUrl == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException("package.ProjectUrl");
+            }
+
             var packageFileQuery = package.GetContentFiles().Where(file => file.Path.Contains("Web.config"));
             var packageFile = packageFileQuery.FirstOrDefault();
             var localPath = package.ProjectUrl.LocalPath;

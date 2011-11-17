@@ -11,13 +11,35 @@
 
     public abstract class PackageInstallerTestsBase
     {
-        public PackageManagerModule Module { get; set; }
+        private const string DummyNews10 = "DummyNews.1.0";
 
-        public PackageInstaller Installer { get; set; }
+        private const string Uninstall = @"Uninstall file://";
 
-        public string InstallationPath { get; set; }
+        private const string Removed = "removed";
 
-        public string PackagePath { get; set; }
+        private const string Init = @"Init file://";
+
+        private const string Added = "added";
+
+        private const string Install = @"Install file://";
+
+        private const string PackageShouldBeinstalled = "The package DummyNews should not be installed.";
+
+        private const string Already = "already";
+
+        private const string DummyNews11 = "DummyNews.1.1";
+
+        private const string Version10 = "1.0.0.0";
+
+        private const string Version11 = "1.1.0.0";
+
+        protected PackageManagerModule Module { get; set; }
+
+        protected PackageInstaller Installer { get; set; }
+
+        protected string InstallationPath { get; set; }
+
+        protected string PackagePath { get; set; }
 
         [Test]
         public void ShouldInstallFirstVersionOfThePackage()
@@ -28,11 +50,11 @@
             var logs = this.Installer.Logs.ToArray();
             logs.Count().Should().Be(3);
 
-            logs[0].Should().Be("Init");
-            logs[1].Should().Contain("added");
-            logs[2].Should().Be("Install");
-            Directory.EnumerateDirectories(this.PackagePath, "DummyNews.1.0").Any().Should().BeTrue();
-            this.GetFileVersion().Should().Be("1.0.0.0");
+            logs[0].Should().StartWith(Init);
+            logs[1].Should().Contain(Added);
+            logs[2].Should().StartWith(Install);
+            Directory.EnumerateDirectories(this.PackagePath, DummyNews10).Any().Should().BeTrue();
+            this.GetFileVersion().Should().Be(Version10);
         }
 
         [Test]
@@ -40,8 +62,8 @@
         {
             this.Installer.InstallPackage();
 
-            Directory.EnumerateDirectories(this.PackagePath, "DummyNews.1.1").Any().Should().BeTrue();
-            this.GetFileVersion().Should().Be("1.1.0.0");
+            Directory.EnumerateDirectories(this.PackagePath, DummyNews11).Any().Should().BeTrue();
+            this.GetFileVersion().Should().Be(Version11);
         }
 
         [Test]
@@ -53,18 +75,18 @@
 
             logs.Length.Should().Be(8);
 
-            logs[0].Should().Be("Init");
-            logs[1].Should().Contain("added");
-            logs[2].Should().Be("Install");
-            logs[3].Should().Be("Uninstall");
-            logs[4].Should().Contain("removed");
-            logs[5].Should().Be("Init");
-            logs[6].Should().Contain("added");
-            logs[7].Should().Be("Install");
+            logs[0].Should().StartWith(Init);
+            logs[1].Should().Contain(Added);
+            logs[2].Should().StartWith(Install);
+            logs[3].Should().StartWith(Uninstall);
+            logs[4].Should().Contain(Removed);
+            logs[5].Should().StartWith(Init);
+            logs[6].Should().Contain(Added);
+            logs[7].Should().StartWith(Install);
 
-            Directory.EnumerateDirectories(this.PackagePath, "DummyNews.1.0").Any().Should().BeFalse();
-            Directory.EnumerateDirectories(this.PackagePath, "DummyNews.1.1").Any().Should().BeTrue();
-            this.GetFileVersion().Should().Be("1.1.0.0");
+            Directory.EnumerateDirectories(this.PackagePath, DummyNews10).Any().Should().BeFalse();
+            Directory.EnumerateDirectories(this.PackagePath, DummyNews11).Any().Should().BeTrue();
+            this.GetFileVersion().Should().Be(Version11);
         }
 
         [Test]
@@ -75,10 +97,10 @@
             var logs = this.Installer.Logs.ToArray();
 
             logs.Length.Should().Be(4);
-            logs[0].Should().Be("Init");
-            logs[1].Should().Contain("added");
-            logs[2].Should().Be("Install");
-            logs[3].Should().Contain("already");
+            logs[0].Should().StartWith(Init);
+            logs[1].Should().Contain(Added);
+            logs[2].Should().StartWith(Install);
+            logs[3].Should().Contain(Already);
         }
 
         [Test]
@@ -91,12 +113,12 @@
 
             logs.Length.Should().Be(5);
 
-            logs[0].Should().Be("Init");
-            logs[1].Should().Contain("added");
-            logs[2].Should().Be("Install");
-            logs[3].Should().Be("Uninstall");
-            logs[4].Should().Contain("removed");
-            Directory.Exists(this.InstallationPath).Should().BeFalse("The package DummyNews should not be installed.");
+            logs[0].Should().StartWith(Init);
+            logs[1].Should().Contain(Added);
+            logs[2].Should().StartWith(Install);
+            logs[3].Should().StartWith(Uninstall);
+            logs[4].Should().Contain(Removed);
+            Directory.Exists(this.InstallationPath).Should().BeFalse(PackageShouldBeinstalled);
         }
 
         [Test]
@@ -108,12 +130,12 @@
 
             logs.Length.Should().Be(5);
 
-            logs[0].Should().Be("Init");
-            logs[1].Should().Contain("added");
-            logs[2].Should().Be("Install");
-            logs[3].Should().Be("Uninstall");
-            logs[4].Should().Contain("removed");
-            Directory.Exists(this.InstallationPath).Should().BeFalse("The package DummyNews should not be installed.");
+            logs[0].Should().StartWith(Init);
+            logs[1].Should().Contain(Added);
+            logs[2].Should().StartWith(Install);
+            logs[3].Should().StartWith(Uninstall);
+            logs[4].Should().Contain(Removed);
+            Directory.Exists(this.InstallationPath).Should().BeFalse(PackageShouldBeinstalled);
         }
 
         private string GetFileVersion()
