@@ -67,7 +67,7 @@
 
         public void InstallPackage(Version version = null)
         {
-            var package = this.GetPackage(version);
+            var package = this.GetValidPackage(version);
             this.isPackageInstalled = this.projectManager.IsPackageInstalled(package);
 
             Directory.CreateDirectory(package.ProjectUrl.LocalPath);
@@ -77,7 +77,7 @@
 
         public void UninstallPackage(Version version = null)
         {
-            var package = this.GetPackage(version);
+            var package = this.GetValidPackage(version);
             this.projectManager.UninstallPackage(package, true);
 
             Directory.Delete(package.ProjectUrl.LocalPath);
@@ -113,9 +113,22 @@
             }
 
             var package = e.Package;
-            var installPackageFile = e.Package.GetInstallPackageFile();
+            var installPackageFile = package.GetInstallPackageFile();
 
             installPackageFile.ExecutePowerShell(package.ProjectUrl, this.projectManager.Logger);
+        }
+
+        private IPackage GetValidPackage(Version version)
+        {
+            var package = this.GetPackage(version);
+
+            if (!package.IsValid())
+            {
+                throw ExceptionFactory.CreateInvalidOperationException(
+                    Resources.InvalidInstallationFolder, this.packageName);
+            }
+
+            return package;
         }
 
         private IPackage GetPackage(Version version)
@@ -135,24 +148,13 @@
 
             if (version != null)
             {
-                return this.ValidatePackage(package);
+                return package;
             }
 
             var updatePackage = this.projectManager.GetUpdate(package);
             var isUpdate = updatePackage != null;
 
-            return this.ValidatePackage(isUpdate ? updatePackage : package);
-        }
-
-        private IPackage ValidatePackage(IPackage package)
-        {
-            if (package.ProjectUrl == null)
-            {
-                throw ExceptionFactory.CreateInvalidOperationException(
-                    Resources.InvalidInstallationFolder, this.packageName);
-            }
-
-            return package;
+            return isUpdate ? updatePackage : package;
         }
 
         private IPackage FindPackage(Version version)

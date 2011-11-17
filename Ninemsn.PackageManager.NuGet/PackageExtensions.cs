@@ -10,11 +10,13 @@
 
     public static class PackageExtensions
     {
+        private const string PackageParameterName = "package";
+
         public static IEnumerable<IPackageFile> GetToolsFiles(this IPackage package)
         {
             if (package == null)
             {
-                throw ExceptionFactory.CreateArgumentNullException("package");
+                throw ExceptionFactory.CreateArgumentNullException(PackageParameterName);
             }
 
             return
@@ -26,7 +28,7 @@
         {
             if (package == null)
             {
-                throw ExceptionFactory.CreateArgumentNullException("package");
+                throw ExceptionFactory.CreateArgumentNullException(PackageParameterName);
             }
 
             return new PowerShellPackageFile(GetToolFile(package.GetToolsFiles(), "Init"));
@@ -36,7 +38,7 @@
         {
             if (package == null)
             {
-                throw ExceptionFactory.CreateArgumentNullException("package");
+                throw ExceptionFactory.CreateArgumentNullException(PackageParameterName);
             }
 
             return new PowerShellPackageFile(GetToolFile(package.GetToolsFiles(), "Install"));
@@ -46,10 +48,20 @@
         {
             if (package == null)
             {
-                throw ExceptionFactory.CreateArgumentNullException("package");
+                throw ExceptionFactory.CreateArgumentNullException(PackageParameterName);
             }
 
             return new PowerShellPackageFile(GetToolFile(package.GetToolsFiles(), "Uninstall"));
+        }
+
+        public static bool IsValid(this IPackageMetadata package)
+        {
+            if (package == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException(PackageParameterName);
+            }
+
+            return package.ProjectUrl != null;
         }
 
         public static void ExecutePowerShell(this IPackageFile file, Uri projectUrl, ILogger logger)

@@ -13,9 +13,9 @@
                 throw ExceptionFactory.CreateArgumentNullException("package");
             }
 
-            if (package.ProjectUrl == null)
+            if (!package.IsValid())
             {
-                throw ExceptionFactory.CreateArgumentNullException("package.ProjectUrl");
+                return new NullProjectSystem();
             }
 
             var packageFileQuery = package.GetContentFiles().Where(file => file.Path.Contains("Web.config"));
