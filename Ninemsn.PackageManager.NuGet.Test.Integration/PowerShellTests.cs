@@ -1,9 +1,7 @@
 ﻿namespace Ninemsn.PackageManager.NuGet.Test.Integration
 {
     using System;
-    using System.DirectoryServices;
     using System.IO;
-    using System.Linq;
 
     using FluentAssertions;
 
@@ -16,36 +14,37 @@
     [TestFixture]
     public class PowerShellTests
     {
+        private Uri projectUrl;
+
+        private PackageLogger logger;
+
+        private IPackageFile packageFile;
+
+        [SetUp]
+        public void SetUp()
+        {
+            this.projectUrl =
+                new Uri(
+                    "file:///C:/Ninemsn/PackageManager/Ninemsn.PackageManager.NuGet.Test.Integration/bin/Debug/App_Data/packages/DummyNews/");
+
+            this.logger = new PackageLogger();
+            this.packageFile = Substitute.For<IPackageFile>();
+        }
+
         [Test]
         public void ShouldExecuteWebInstall()
         {
-            var uri =
-                new Uri(
-                    "file:///C:/Ninemsn/PackageManager/Ninemsn.PackageManager.NuGet.Test.Integration/bin/Debug/App_Data/packages/DummyNews/");
-            var logger = new PackageLogger();
-            var packageFile = Substitute.For<IPackageFile>();
-
-            packageFile.GetStream().Returns(new FileStream(@"Scripts/Web/Install.ps1", FileMode.Open));
-
-            packageFile.ExecutePowerShell(uri, logger);
-            logger.Logs.Should().Contain("Created site www.dummynews.com.au");
-
-            DoesWebsiteExist(Environment.MachineName, "DummyNews").Should().BeTrue();
+            this.packageFile.GetStream().Returns(new FileStream(@"Scripts/Web/Install.ps1", FileMode.Open));
+            this.packageFile.ExecutePowerShell(this.projectUrl, this.logger);
+            this.logger.Logs.Should().Contain("Installed site www.dummynews.com.au");
         }
 
-        private static bool DoesWebsiteExist(string serverName, string websiteName)
+        [Test]
+        public void ShouldExecuteWebUninstall()
         {
-            var webServer = new DirectoryEntry(string.Format("IIS://{0}/w3svc", serverName));
-
-            var query = from DirectoryEntry site in webServer.Children
-                        select site.Properties["ServerComment"]
-                        into serverComponent 
-                        where serverComponent != null 
-                        where serverComponent.Value != null
-                        where string.Compare(serverComponent.Value.ToString(), websiteName, false) == 0
-                        select serverComponent;
-
-            return query.Any();
+            this.packageFile.GetStream().Returns(new FileStream(@"Scripts/Web/Uninstall.ps1", FileMode.Open));
+            this.packageFile.ExecutePowerShell(this.projectUrl, this.logger);
+            this.logger.Logs.Should().Contain("Uninstalled site www.dummynews.com.au");
         }
     }
 }
