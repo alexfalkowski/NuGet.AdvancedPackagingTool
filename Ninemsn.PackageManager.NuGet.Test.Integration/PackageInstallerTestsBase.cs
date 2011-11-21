@@ -17,7 +17,9 @@
 
         private const string Removed = "removed";
 
-        private const string Init = @"Init file://";
+        private const string Setup = @"Setup file://";
+
+        private const string Teardown = @"Teardown file://";
 
         private const string Added = "added";
 
@@ -50,7 +52,7 @@
             var logs = this.Installer.Logs.ToArray();
             logs.Count().Should().Be(3);
 
-            logs[0].Should().StartWith(Init);
+            logs[0].Should().StartWith(Setup);
             logs[1].Should().Contain(Added);
             logs[2].Should().StartWith(Install);
             Directory.EnumerateDirectories(this.PackagePath, DummyNews10).Any().Should().BeTrue();
@@ -73,16 +75,17 @@
             this.Installer.InstallPackage(new Version(1, 1));
             var logs = this.Installer.Logs.ToArray();
 
-            logs.Length.Should().Be(8);
+            logs.Length.Should().Be(9);
 
-            logs[0].Should().StartWith(Init);
+            logs[0].Should().StartWith(Setup);
             logs[1].Should().Contain(Added);
             logs[2].Should().StartWith(Install);
             logs[3].Should().StartWith(Uninstall);
             logs[4].Should().Contain(Removed);
-            logs[5].Should().StartWith(Init);
-            logs[6].Should().Contain(Added);
-            logs[7].Should().StartWith(Install);
+            logs[5].Should().StartWith(Teardown);
+            logs[6].Should().StartWith(Setup);
+            logs[7].Should().Contain(Added);
+            logs[8].Should().StartWith(Install);
 
             Directory.EnumerateDirectories(this.PackagePath, DummyNews10).Any().Should().BeFalse();
             Directory.EnumerateDirectories(this.PackagePath, DummyNews11).Any().Should().BeTrue();
@@ -97,7 +100,7 @@
             var logs = this.Installer.Logs.ToArray();
 
             logs.Length.Should().Be(4);
-            logs[0].Should().StartWith(Init);
+            logs[0].Should().StartWith(Setup);
             logs[1].Should().Contain(Added);
             logs[2].Should().StartWith(Install);
             logs[3].Should().Contain(Already);
@@ -111,13 +114,14 @@
             this.Installer.UninstallPackage(version);
             var logs = this.Installer.Logs.ToArray();
 
-            logs.Length.Should().Be(5);
+            logs.Length.Should().Be(6);
 
-            logs[0].Should().StartWith(Init);
+            logs[0].Should().StartWith(Setup);
             logs[1].Should().Contain(Added);
             logs[2].Should().StartWith(Install);
             logs[3].Should().StartWith(Uninstall);
             logs[4].Should().Contain(Removed);
+            logs[5].Should().StartWith(Teardown);
             Directory.Exists(this.InstallationPath).Should().BeFalse(PackageShouldBeinstalled);
         }
 
@@ -128,13 +132,14 @@
             this.Installer.UninstallPackage();
             var logs = this.Installer.Logs.ToArray();
 
-            logs.Length.Should().Be(5);
+            logs.Length.Should().Be(6);
 
-            logs[0].Should().StartWith(Init);
+            logs[0].Should().StartWith(Setup);
             logs[1].Should().Contain(Added);
             logs[2].Should().StartWith(Install);
             logs[3].Should().StartWith(Uninstall);
             logs[4].Should().Contain(Removed);
+            logs[5].Should().StartWith(Teardown);
             Directory.Exists(this.InstallationPath).Should().BeFalse(PackageShouldBeinstalled);
         }
 

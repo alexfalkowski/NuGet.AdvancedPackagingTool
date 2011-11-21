@@ -24,14 +24,14 @@
                     packageFile => packageFile.Path.StartsWith("tools", StringComparison.CurrentCultureIgnoreCase));
         }
 
-        public static IPackageFile GetInitPackageFile(this IPackage package)
+        public static IPackageFile GetSetupPackageFile(this IPackage package)
         {
             if (package == null)
             {
                 throw ExceptionFactory.CreateArgumentNullException(PackageParameterName);
             }
 
-            return new PowerShellPackageFile(GetToolFile(package.GetToolsFiles(), "Init"));
+            return new PowerShellPackageFile(GetToolFile(package.GetToolsFiles(), "Setup"));
         }
 
         public static IPackageFile GetInstallPackageFile(this IPackage package)
@@ -52,6 +52,16 @@
             }
 
             return new PowerShellPackageFile(GetToolFile(package.GetToolsFiles(), "Uninstall"));
+        }
+
+        public static IPackageFile GetTeardownPackageFile(this IPackage package)
+        {
+            if (package == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException(PackageParameterName);
+            }
+
+            return new PowerShellPackageFile(GetToolFile(package.GetToolsFiles(), "Teardown"));
         }
 
         public static bool IsValid(this IPackageMetadata package)
