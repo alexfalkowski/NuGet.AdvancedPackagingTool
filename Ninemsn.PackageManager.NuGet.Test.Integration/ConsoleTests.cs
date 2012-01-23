@@ -49,12 +49,12 @@
         [Test]
         public void ShouldInstallAndUninstallLatestVersionPackage()
         {
-            RunPackageManagerProcess("/i /p DummyNews");
+            RunPackageManagerProcess("/i /p DummyNews /v 1.1");
 
             Directory.EnumerateDirectories(ConfigurationManager.PackagePath, "DummyNews.1.1").Any().Should().BeTrue(
                 "The package DummyNews should be installed.");
 
-            RunPackageManagerProcess("/u /p DummyNews");
+            RunPackageManagerProcess("/u /p DummyNews /v 1.1");
 
             Directory.Exists(ConfigurationManager.PackagePath).Should().BeFalse("The package DummyNews should not be installed.");
         }
@@ -72,7 +72,7 @@
             Directory.EnumerateDirectories(ConfigurationManager.PackagePath, "DummyNews.1.1").Any().Should().BeTrue(
                 "The package DummyNews should be installed.");
 
-            RunPackageManagerProcess("/u /p DummyNews");
+            RunPackageManagerProcess("/u /p DummyNews /v 1.1");
 
             Directory.Exists(ConfigurationManager.PackagePath).Should().BeFalse("The package DummyNews should not be installed.");
         }

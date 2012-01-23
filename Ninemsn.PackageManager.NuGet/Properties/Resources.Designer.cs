@@ -142,6 +142,15 @@ namespace Ninemsn.PackageManager.NuGet.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The package version was not specified..
+        /// </summary>
+        internal static string PackageVersionNotSpecified {
+            get {
+                return ResourceManager.GetString("PackageVersionNotSpecified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The source was not specified..
         /// </summary>
         internal static string SourceNotSpecified {

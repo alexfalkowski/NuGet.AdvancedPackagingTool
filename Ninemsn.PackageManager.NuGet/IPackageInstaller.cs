@@ -1,14 +1,15 @@
 ﻿namespace Ninemsn.PackageManager.NuGet
 {
-    using System;
     using System.Collections.Generic;
+
+    using global::NuGet;
 
     public interface IPackageInstaller
     {
         IEnumerable<string> Logs { get; }
 
-        void InstallPackage(Version version = null);
+        void InstallPackage(SemanticVersion version);
 
-        void UninstallPackage(Version version = null);
+        void UninstallPackage(SemanticVersion version);
     }
 }

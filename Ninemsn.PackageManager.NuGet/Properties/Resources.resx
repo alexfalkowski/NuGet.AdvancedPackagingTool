@@ -147,4 +147,7 @@
   <data name="InvalidInstallationFolder" xml:space="preserve">
     <value>The package '{0}' does not contain a projectUrl in the spec file. This is used as the destination folder.</value>
   </data>
+  <data name="PackageVersionNotSpecified" xml:space="preserve">
+    <value>The package version was not specified.</value>
+  </data>
 </root>

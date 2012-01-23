@@ -1,6 +1,5 @@
 ﻿namespace Ninemsn.PackageManager.NuGet
 {
-    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -65,7 +64,7 @@
             }
         }
 
-        public void InstallPackage(Version version = null)
+        public void InstallPackage(SemanticVersion version)
         {
             var package = this.GetValidPackage(version);
             this.isPackageInstalled = this.projectManager.IsPackageInstalled(package);
@@ -75,7 +74,7 @@
             this.projectManager.InstallPackage(package);
         }
 
-        public void UninstallPackage(Version version = null)
+        public void UninstallPackage(SemanticVersion version)
         {
             var package = this.GetValidPackage(version);
             this.projectManager.UninstallPackage(package, true);
@@ -127,7 +126,7 @@
             installPackageFile.ExecutePowerShell(package.ProjectUrl, this.projectManager.Logger);
         }
 
-        private IPackage GetValidPackage(Version version)
+        private IPackage GetValidPackage(SemanticVersion version)
         {
             var package = this.GetPackage(version);
 
@@ -140,7 +139,7 @@
             return package;
         }
 
-        private IPackage GetPackage(Version version)
+        private IPackage GetPackage(SemanticVersion version)
         {
             var package = this.FindPackage(version);
             this.projectSystem = ProjectSystemFactory.CreateProjectSystem(package);
@@ -167,7 +166,7 @@
             return isUpdate ? updatePackage : package;
         }
 
-        private IPackage FindPackage(Version version)
+        private IPackage FindPackage(SemanticVersion version)
         {
             var packages = this.sourceRepository.GetPackages();
             var sourcePackage = packages.Find(this.packageName).FirstOrDefault();

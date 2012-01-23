@@ -1,8 +1,9 @@
 ﻿namespace Ninemsn.PackageManager.NuGet
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
+
+    using global::NuGet;
 
     public class NullPackageInstaller : IPackageInstaller
     {
@@ -14,11 +15,11 @@
             }
         }
 
-        public void InstallPackage(Version version = null)
+        public void InstallPackage(SemanticVersion version)
         {
         }
 
-        public void UninstallPackage(Version version = null)
+        public void UninstallPackage(SemanticVersion version)
         {
         }
     }

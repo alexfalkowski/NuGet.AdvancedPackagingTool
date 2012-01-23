@@ -1,11 +1,12 @@
 ﻿namespace Ninemsn.PackageManager.NuGet.Application
 {
-    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
 
     using FluentValidation.Results;
+
+    using global::NuGet;
 
     public class Arguments
     {
@@ -18,7 +19,7 @@
         public string Source { get; set; }
 
         [TypeConverter(typeof(VersionTypeConverter))]
-        public Version Version { get; set; }
+        public SemanticVersion Version { get; set; }
 
         public IEnumerable<string> Errors
         {

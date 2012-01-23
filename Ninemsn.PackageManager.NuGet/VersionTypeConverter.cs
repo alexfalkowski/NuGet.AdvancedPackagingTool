@@ -4,6 +4,8 @@
     using System.ComponentModel;
     using System.Globalization;
 
+    using global::NuGet;
+
     public class VersionTypeConverter : TypeConverter
     {
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
@@ -17,9 +19,9 @@
 
             if (versionAsString != null)
             {
-                Version version;
+                SemanticVersion version;
 
-                if (Version.TryParse(versionAsString, out version))
+                if (SemanticVersion.TryParse(versionAsString, out version))
                 {
                     return version;
                 }
@@ -33,20 +35,9 @@
         {
             if (destinationType == typeof(string) && value != null)
             {
-                var parts = 4;
-                var version = (Version)value;
+                var version = (SemanticVersion)value;
 
-                if (version.Revision == -1)
-                {
-                    parts--;
-                }
-
-                if (version.Build == -1)
-                {
-                    parts--;
-                }
-
-                return version.ToString(parts);
+                return version.ToString();
             }
 
             return base.ConvertTo(context, culture, value, destinationType);

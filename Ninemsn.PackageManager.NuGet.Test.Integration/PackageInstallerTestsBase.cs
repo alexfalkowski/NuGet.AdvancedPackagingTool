@@ -7,6 +7,8 @@
 
     using FluentAssertions;
 
+    using global::NuGet;
+
     using NUnit.Framework;
 
     public abstract class PackageInstallerTestsBase
@@ -46,7 +48,7 @@
         [Test]
         public void ShouldInstallFirstVersionOfThePackage()
         {
-            var version = new Version(1, 0);
+            var version = new SemanticVersion("1.0");
 
             this.Installer.InstallPackage(version);
             var logs = this.Installer.Logs.ToArray();
@@ -62,7 +64,7 @@
         [Test]
         public void ShouldInstallLatestPackage()
         {
-            this.Installer.InstallPackage();
+            this.Installer.InstallPackage(new SemanticVersion("1.1"));
 
             Directory.EnumerateDirectories(this.PackagePath, DummyNews11).Any().Should().BeTrue();
             this.GetFileVersion().Should().Be(Version11);
@@ -71,8 +73,8 @@
         [Test]
         public void ShouldUpgradeAlreadyInstalledPackage()
         {
-            this.Installer.InstallPackage(new Version(1, 0));
-            this.Installer.InstallPackage(new Version(1, 1));
+            this.Installer.InstallPackage(new SemanticVersion("1.0"));
+            this.Installer.InstallPackage(new SemanticVersion("1.1"));
             var logs = this.Installer.Logs.ToArray();
 
             logs.Length.Should().Be(9);
@@ -95,8 +97,9 @@
         [Test]
         public void ShouldNotInstallTheSameVersionOfThePackage()
         {
-            this.Installer.InstallPackage();
-            this.Installer.InstallPackage();
+            var version = new SemanticVersion("1.0");
+            this.Installer.InstallPackage(version);
+            this.Installer.InstallPackage(version);
             var logs = this.Installer.Logs.ToArray();
 
             logs.Length.Should().Be(4);
@@ -109,7 +112,7 @@
         [Test]
         public void ShouldUninstallFirstVersionOfThePackage()
         {
-            var version = new Version(1, 0);
+            var version = new SemanticVersion("1.0");
             this.Installer.InstallPackage(version);
             this.Installer.UninstallPackage(version);
             var logs = this.Installer.Logs.ToArray();
@@ -128,8 +131,9 @@
         [Test]
         public void ShouldUninstallLatestVersionOfThePackage()
         {
-            this.Installer.InstallPackage();
-            this.Installer.UninstallPackage();
+            var version = new SemanticVersion("1.1");
+            this.Installer.InstallPackage(version);
+            this.Installer.UninstallPackage(version);
             var logs = this.Installer.Logs.ToArray();
 
             logs.Length.Should().Be(6);

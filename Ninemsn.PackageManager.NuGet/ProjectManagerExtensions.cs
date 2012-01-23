@@ -18,7 +18,7 @@
                 throw ExceptionFactory.CreateArgumentNullException("package");
             }
 
-            return manager.SourceRepository.GetUpdates(new[] { package }).SingleOrDefault();
+            return manager.SourceRepository.GetUpdates(new[] { package }, false).SingleOrDefault();
         }
 
         public static void InstallPackage(this IProjectManager manager, IPackageMetadata package)
@@ -33,7 +33,7 @@
                 throw ExceptionFactory.CreateArgumentNullException("package");
             }
 
-            manager.AddPackageReference(package.Id, package.Version, false);
+            manager.AddPackageReference(package.Id, package.Version, false, false);
         }
 
         public static bool IsPackageInstalled(this IProjectManager manager, IPackageMetadata package)
