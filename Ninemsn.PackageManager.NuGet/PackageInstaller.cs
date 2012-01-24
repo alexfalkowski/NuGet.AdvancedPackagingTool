@@ -88,7 +88,7 @@
             var package = e.Package;
             var unistallPackageFile = package.GetUninstallPackageFile();
 
-            unistallPackageFile.ExecutePowerShell(package.ProjectUrl, projectManager.Logger);
+            unistallPackageFile.ExecutePowerShell(package, projectManager.Logger);
         }
 
         private static void OnProjectManagerPackageReferenceRemoved(object sender, PackageOperationEventArgs e)
@@ -97,7 +97,7 @@
             var package = e.Package;
             var teardownPackageFile = package.GetTeardownPackageFile();
 
-            teardownPackageFile.ExecutePowerShell(package.ProjectUrl, projectManager.Logger);
+            teardownPackageFile.ExecutePowerShell(package, projectManager.Logger);
         }
 
         private void OnProjectManagerPackageReferenceAdding(object sender, PackageOperationEventArgs e)
@@ -110,7 +110,7 @@
             var package = e.Package;
             var initPackageFile = package.GetSetupPackageFile();
 
-            initPackageFile.ExecutePowerShell(package.ProjectUrl, this.projectManager.Logger);
+            initPackageFile.ExecutePowerShell(package, this.projectManager.Logger);
         }
 
         private void OnProjectManagerPackageReferenceAdded(object sender, PackageOperationEventArgs e)
@@ -123,7 +123,7 @@
             var package = e.Package;
             var installPackageFile = package.GetInstallPackageFile();
 
-            installPackageFile.ExecutePowerShell(package.ProjectUrl, this.projectManager.Logger);
+            installPackageFile.ExecutePowerShell(package, this.projectManager.Logger);
         }
 
         private IPackage GetValidPackage(SemanticVersion version)

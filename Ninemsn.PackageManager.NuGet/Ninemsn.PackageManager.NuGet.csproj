@@ -60,7 +60,6 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Services" />
-    <Reference Include="System.Management.Automation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Activation" />
     <Reference Include="System.ServiceModel.Web" />
@@ -90,6 +89,8 @@
     <Compile Include="PackageSourceFileFactory.cs" />
     <Compile Include="PowerShellPackageFile.cs" />
     <Compile Include="DefaultProjectSystem.cs" />
+    <Compile Include="PowerShellConsole.cs" />
+    <Compile Include="ProcessExitInfo.cs" />
     <Compile Include="ProjectManagerExtensions.cs" />
     <Compile Include="ProjectSystemFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -102,12 +103,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="StringExtensions.cs" />
     <Compile Include="VersionTypeConverter.cs" />
     <Compile Include="WebProjectSystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Ninemsn.PackageManager.NuGet.snk" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

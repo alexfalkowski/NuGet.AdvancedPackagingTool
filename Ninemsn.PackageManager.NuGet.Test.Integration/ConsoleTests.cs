@@ -77,14 +77,24 @@
             Directory.Exists(ConfigurationManager.PackagePath).Should().BeFalse("The package DummyNews should not be installed.");
         }
 
+        [Test]
+        public void ShouldInstallDatabasePackage()
+        {
+            RunPackageManagerProcess("/i /p Ninemsn.Portal.News.Database.Test /v 1.0");
+
+            Directory.EnumerateDirectories(ConfigurationManager.PackagePath, "Ninemsn.Portal.News.Database.Test.1.0").Any().Should().BeTrue(
+                "The package DummyNews should be installed.");
+
+            RunPackageManagerProcess("/u /p Ninemsn.Portal.News.Database.Test /v 1.0");
+
+            Directory.Exists(ConfigurationManager.PackagePath).Should().BeFalse("The package Ninemsn.Portal.News.Database.Test should not be installed.");
+        }
+
         private static void RunPackageManagerProcess(string arguments)
         {
-            var process = Process.Start("npm.exe", arguments);
-
-            if (process == null)
-            {
-                return;
-            }
+            var processInfo = new ProcessStartInfo("npm.exe", arguments);
+           
+            var process = Process.Start(processInfo);
 
             process.WaitForExit();
         }

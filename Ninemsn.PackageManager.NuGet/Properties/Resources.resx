@@ -150,4 +150,7 @@
   <data name="PackageVersionNotSpecified" xml:space="preserve">
     <value>The package version was not specified.</value>
   </data>
+  <data name="PowershellErrorMessage" xml:space="preserve">
+    <value>The script '{0}' contained the following errors '{1}'.</value>
+  </data>
 </root>

@@ -1,9 +1,10 @@
 ﻿namespace Ninemsn.PackageManager.NuGet.Test.Integration
 {
-    using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Text;
 
     using FluentAssertions;
 
@@ -15,17 +16,17 @@
     {
         private const string DummyNews10 = "DummyNews.1.0";
 
-        private const string Uninstall = @"Uninstall file://";
+        private const string Uninstall = "Uninstall";
 
         private const string Removed = "removed";
 
-        private const string Setup = @"Setup file://";
+        private const string Setup = "Setup";
 
-        private const string Teardown = @"Teardown file://";
+        private const string Teardown = "Teardown";
 
         private const string Added = "added";
 
-        private const string Install = @"Install file://";
+        private const string Install = "Install";
 
         private const string PackageShouldBeinstalled = "The package DummyNews should not be installed.";
 
@@ -51,12 +52,12 @@
             var version = new SemanticVersion("1.0");
 
             this.Installer.InstallPackage(version);
-            var logs = this.Installer.Logs.ToArray();
-            logs.Count().Should().Be(3);
 
-            logs[0].Should().StartWith(Setup);
-            logs[1].Should().Contain(Added);
-            logs[2].Should().StartWith(Install);
+            var log = GetLog(this.Installer.Logs);
+
+            log.Should().Contain(Setup);
+            log.Should().Contain(Added);
+            log.Should().Contain(Install);
             Directory.EnumerateDirectories(this.PackagePath, DummyNews10).Any().Should().BeTrue();
             this.GetFileVersion().Should().Be(Version10);
         }
@@ -75,19 +76,17 @@
         {
             this.Installer.InstallPackage(new SemanticVersion("1.0"));
             this.Installer.InstallPackage(new SemanticVersion("1.1"));
-            var logs = this.Installer.Logs.ToArray();
+            var log = GetLog(this.Installer.Logs);
 
-            logs.Length.Should().Be(9);
-
-            logs[0].Should().StartWith(Setup);
-            logs[1].Should().Contain(Added);
-            logs[2].Should().StartWith(Install);
-            logs[3].Should().StartWith(Uninstall);
-            logs[4].Should().Contain(Removed);
-            logs[5].Should().StartWith(Teardown);
-            logs[6].Should().StartWith(Setup);
-            logs[7].Should().Contain(Added);
-            logs[8].Should().StartWith(Install);
+            log.Should().Contain(Setup);
+            log.Should().Contain(Added);
+            log.Should().Contain(Install);
+            log.Should().Contain(Uninstall);
+            log.Should().Contain(Removed);
+            log.Should().Contain(Teardown);
+            log.Should().Contain(Setup);
+            log.Should().Contain(Added);
+            log.Should().Contain(Install);
 
             Directory.EnumerateDirectories(this.PackagePath, DummyNews10).Any().Should().BeFalse();
             Directory.EnumerateDirectories(this.PackagePath, DummyNews11).Any().Should().BeTrue();
@@ -100,13 +99,12 @@
             var version = new SemanticVersion("1.0");
             this.Installer.InstallPackage(version);
             this.Installer.InstallPackage(version);
-            var logs = this.Installer.Logs.ToArray();
+            var log = GetLog(this.Installer.Logs);
 
-            logs.Length.Should().Be(4);
-            logs[0].Should().StartWith(Setup);
-            logs[1].Should().Contain(Added);
-            logs[2].Should().StartWith(Install);
-            logs[3].Should().Contain(Already);
+            log.Should().Contain(Setup);
+            log.Should().Contain(Added);
+            log.Should().Contain(Install);
+            log.Should().Contain(Already);
         }
 
         [Test]
@@ -115,16 +113,14 @@
             var version = new SemanticVersion("1.0");
             this.Installer.InstallPackage(version);
             this.Installer.UninstallPackage(version);
-            var logs = this.Installer.Logs.ToArray();
+            var log = GetLog(this.Installer.Logs);
 
-            logs.Length.Should().Be(6);
-
-            logs[0].Should().StartWith(Setup);
-            logs[1].Should().Contain(Added);
-            logs[2].Should().StartWith(Install);
-            logs[3].Should().StartWith(Uninstall);
-            logs[4].Should().Contain(Removed);
-            logs[5].Should().StartWith(Teardown);
+            log.Should().Contain(Setup);
+            log.Should().Contain(Added);
+            log.Should().Contain(Install);
+            log.Should().Contain(Uninstall);
+            log.Should().Contain(Removed);
+            log.Should().Contain(Teardown);
             Directory.Exists(this.InstallationPath).Should().BeFalse(PackageShouldBeinstalled);
         }
 
@@ -134,17 +130,27 @@
             var version = new SemanticVersion("1.1");
             this.Installer.InstallPackage(version);
             this.Installer.UninstallPackage(version);
-            var logs = this.Installer.Logs.ToArray();
+            var log = GetLog(this.Installer.Logs);
 
-            logs.Length.Should().Be(6);
-
-            logs[0].Should().StartWith(Setup);
-            logs[1].Should().Contain(Added);
-            logs[2].Should().StartWith(Install);
-            logs[3].Should().StartWith(Uninstall);
-            logs[4].Should().Contain(Removed);
-            logs[5].Should().StartWith(Teardown);
+            log.Should().Contain(Setup);
+            log.Should().Contain(Added);
+            log.Should().Contain(Install);
+            log.Should().Contain(Uninstall);
+            log.Should().Contain(Removed);
+            log.Should().Contain(Teardown);
             Directory.Exists(this.InstallationPath).Should().BeFalse(PackageShouldBeinstalled);
+        }
+
+        private static string GetLog(IEnumerable<string> logs)
+        {
+            var builder = new StringBuilder();
+
+            foreach (var log in logs)
+            {
+                builder.AppendLine(log);
+            }
+
+            return builder.ToString();
         }
 
         private string GetFileVersion()

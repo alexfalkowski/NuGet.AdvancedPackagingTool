@@ -2,9 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
     using System.Linq;
-    using System.Management.Automation;
-    using System.Text;
+
+    using Ninemsn.PackageManager.NuGet.Properties;
 
     using global::NuGet;
 
@@ -22,6 +24,18 @@
             return
                 package.GetFiles().Where(
                     packageFile => packageFile.Path.StartsWith("tools", StringComparison.CurrentCultureIgnoreCase));
+        }
+
+        public static IEnumerable<IPackageFile> GetModuleFiles(this IPackage package)
+        {
+            var toolFiles = package.GetToolsFiles();
+
+            return toolFiles.Where(packageFile =>
+                {
+                    var extension = Path.GetExtension(packageFile.Path);
+
+                    return extension != null && extension.Equals(".psm1", StringComparison.CurrentCultureIgnoreCase);
+                });
         }
 
         public static IPackageFile GetSetupPackageFile(this IPackage package)
@@ -74,16 +88,16 @@
             return package.ProjectUrl != null;
         }
 
-        public static void ExecutePowerShell(this IPackageFile file, Uri projectUrl, ILogger logger)
+        public static void ExecutePowerShell(this IPackageFile file, IPackage package, ILogger logger)
         {
             if (file == null)
             {
                 throw ExceptionFactory.CreateArgumentNullException("file");
             }
 
-            if (projectUrl == null)
+            if (package == null)
             {
-                throw ExceptionFactory.CreateArgumentNullException("projectUrl");
+                throw ExceptionFactory.CreateArgumentNullException("package");
             }
 
             if (logger == null)
@@ -91,28 +105,28 @@
                 throw ExceptionFactory.CreateArgumentNullException("logger");
             }
 
-            using (var powerShell = PowerShell.Create())
+            var console = new PowerShellConsole(package, file.GetStream().ReadToEnd());
+            var processExitInfo = console.Start();
+
+            if (processExitInfo.ExitCode > 0)
             {
-                var scriptContents = file.GetStream().ReadToEnd();
-                powerShell.AddScript(scriptContents);
-                powerShell.AddParameter("installationFolder", projectUrl);
+                throw new InvalidOperationException(
+                    string.Format(
+                        CultureInfo.CurrentCulture,
+                        Resources.PowershellErrorMessage,
+                        file.Path,
+                        processExitInfo.ErrorMessage));
+            }
 
-                var stringBuilder = new StringBuilder();
-
-                foreach (var result in powerShell.Invoke())
-                {
-                    stringBuilder.AppendLine(result.ToString());
-                }
-
-                var executePowerShell = stringBuilder.ToString().Trim();
-
-                logger.Log(MessageLevel.Info, executePowerShell);
+            foreach (var message in processExitInfo.OutputMessage.Split('\n'))
+            {
+                logger.Log(MessageLevel.Info, message);
             }
         }
 
         private static IPackageFile GetToolFile(IEnumerable<IPackageFile> toolsFiles, string fileName)
         {
-            var powershellFilesQuery = toolsFiles.Where(packgeFile => packgeFile.Path.Contains(fileName));
+            var powershellFilesQuery = toolsFiles.Where(packgeFile => packgeFile.Path.Contains(fileName, StringComparison.CurrentCultureIgnoreCase));
             var powershellFile = powershellFilesQuery.FirstOrDefault();
 
             return powershellFile ?? new NullPackageFile();
