@@ -4,8 +4,6 @@
 
     using FluentAssertions;
 
-    using Ninemsn.PackageManager.NuGet.Application;
-
     using NSubstitute;
 
     using global::NuGet;

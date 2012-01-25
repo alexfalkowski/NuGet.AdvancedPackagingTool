@@ -72,12 +72,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Application\Arguments.cs" />
-    <Compile Include="Application\ArgumentsValidator.cs" />
-    <Compile Include="Application\PackageInstallerFactory.cs" />
-    <Compile Include="Application\Console.cs" />
+    <Compile Include="Arguments.cs" />
+    <Compile Include="ArgumentsValidator.cs" />
     <Compile Include="Configuration\ConfigurationManager.cs" />
+    <Compile Include="Console.cs" />
     <Compile Include="ExceptionFactory.cs" />
+    <Compile Include="PackageInstallerFactory.cs" />
     <Compile Include="PathHelper.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IPackageInstaller.cs" />

@@ -61,7 +61,7 @@
             this.AddFile(fullPath, stream);
         }
 
-        public object GetPropertyValue(string propertyName)
+        public dynamic GetPropertyValue(string propertyName)
         {
             if ((propertyName != null) && propertyName.Equals("RootNamespace", StringComparison.OrdinalIgnoreCase))
             {

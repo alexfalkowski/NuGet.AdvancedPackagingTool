@@ -2,34 +2,34 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 	<Product Id="847aa46a-018f-4d89-9ff1-c96064b7d714" Name="Ninemsn.PackageManager" Language="1033" Version="1.0.0.0" Manufacturer="Ninemsn.PackageManager" UpgradeCode="0486c48d-5ef0-40e5-93c9-7d0ee19ad391">
 
-    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" InstallPrivileges="elevated"  />
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" InstallPrivileges="elevated"  />
 
 		<Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="ProgramFiles64Folder">
 				<Directory Id="INSTALLLOCATION" Name="Ninemsn.PackageManager">
-				    <Component Id="ProductComponent" Guid="ee09c39e-e912-49cc-9806-aaf88b9ea695">
-              <File Id="npm" Name="$(var.Ninemsn.PackageManager.NuGet.Console.TargetFileName)" Source="$(var.Ninemsn.PackageManager.NuGet.Console.TargetPath)"
-              DiskId="1" KeyPath="yes" />
-              <File Id="Args" Name="Args.dll" Source="$(var.Ninemsn.PackageManager.NuGet.Console.TargetDir)\Args.dll" DiskId="1" />
-              <File Id="Common.Logging" Name="Common.Logging.dll" Source="$(var.Ninemsn.PackageManager.NuGet.Console.TargetDir)\Common.Logging.dll" DiskId="1"  />
-              <File Id="Common.Logging.NLog" Name="Common.Logging.NLog.dll" Source="$(var.Ninemsn.PackageManager.NuGet.Console.TargetDir)\Common.Logging.NLog.dll" DiskId="1"  />
-              <File Id="FluentValidation" Name="FluentValidation.dll" Source="$(var.Ninemsn.PackageManager.NuGet.Console.TargetDir)\FluentValidation.dll" DiskId="1"  />
-              <File Id="Ninemsn.PackageManager.NuGet" Name="Ninemsn.PackageManager.NuGet.dll" Source="$(var.Ninemsn.PackageManager.NuGet.Console.TargetDir)\Ninemsn.PackageManager.NuGet.dll" DiskId="1"  />
-              <File Id="NLog" Name="NLog.dll" Source="$(var.Ninemsn.PackageManager.NuGet.Console.TargetDir)\NLog.dll" DiskId="1"  />
-              <File Id="npm.exe.config" Name="npm.exe.config" Source="$(var.Ninemsn.PackageManager.NuGet.Console.TargetDir)\npm.exe.config" DiskId="1"  />
-              <File Id="NuGet.Core" Name="NuGet.Core.dll" Source="$(var.Ninemsn.PackageManager.NuGet.Console.TargetDir)\NuGet.Core.dll" DiskId="1"  />
-              <File Id="PackageSources.config" Name="PackageSources.config" Source="$(var.Ninemsn.PackageManager.NuGet.Console.TargetDir)\PackageSources.config" DiskId="1"  />
-              <Environment Id="Path" Name="Path" Value="[INSTALLDIR]" Separator=";" Permanent="no" Part="last" Action="set" System="yes" />
-            </Component>
+						<Component Id="ProductComponent" Guid="ee09c39e-e912-49cc-9806-aaf88b9ea695">
+							<File Id="npm" Name="$(var.Ninemsn.PackageManager.NuGet.Command.TargetFileName)" Source="$(var.Ninemsn.PackageManager.NuGet.Command.TargetPath)"
+							DiskId="1" KeyPath="yes" />
+							<File Id="Args" Name="Args.dll" Source="$(var.Ninemsn.PackageManager.NuGet.Command.TargetDir)\Args.dll" DiskId="1" />
+							<File Id="Common.Logging" Name="Common.Logging.dll" Source="$(var.Ninemsn.PackageManager.NuGet.Command.TargetDir)\Common.Logging.dll" DiskId="1"  />
+							<File Id="Common.Logging.NLog" Name="Common.Logging.NLog.dll" Source="$(var.Ninemsn.PackageManager.NuGet.Command.TargetDir)\Common.Logging.NLog.dll" DiskId="1"  />
+							<File Id="FluentValidation" Name="FluentValidation.dll" Source="$(var.Ninemsn.PackageManager.NuGet.Command.TargetDir)\FluentValidation.dll" DiskId="1"  />
+							<File Id="Ninemsn.PackageManager.NuGet" Name="Ninemsn.PackageManager.NuGet.dll" Source="$(var.Ninemsn.PackageManager.NuGet.Command.TargetDir)\Ninemsn.PackageManager.NuGet.dll" DiskId="1"  />
+							<File Id="NLog" Name="NLog.dll" Source="$(var.Ninemsn.PackageManager.NuGet.Command.TargetDir)\NLog.dll" DiskId="1"  />
+							<File Id="npm.exe.config" Name="npm.exe.config" Source="$(var.Ninemsn.PackageManager.NuGet.Command.TargetDir)\npm.exe.config" DiskId="1"  />
+							<File Id="NuGet.Core" Name="NuGet.Core.dll" Source="$(var.Ninemsn.PackageManager.NuGet.Command.TargetDir)\NuGet.Core.dll" DiskId="1"  />
+							<File Id="PackageSources.config" Name="PackageSources.config" Source="$(var.Ninemsn.PackageManager.NuGet.Command.TargetDir)\PackageSources.config" DiskId="1"  />
+							<Environment Id="Path" Name="Path" Value="[INSTALLDIR]" Separator=";" Permanent="no" Part="last" Action="set" System="yes" />
+						</Component>
 				</Directory>
 			</Directory>
 		</Directory>
-    
+		
 		<Feature Id="ProductFeature" Title="Ninemsn.PackageManager" Level="1">
 			<ComponentRef Id="ProductComponent" />
 			<ComponentGroupRef Id="Product.Generated" />
-      
+			
 		</Feature>
 	</Product>
 </Wix>

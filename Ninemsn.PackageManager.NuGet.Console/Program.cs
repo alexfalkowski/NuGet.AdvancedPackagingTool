@@ -1,8 +1,6 @@
-﻿namespace Ninemsn.PackageManager.NuGet.Console
+﻿namespace Ninemsn.PackageManager.NuGet.Command
 {
     using Args;
-
-    using Ninemsn.PackageManager.NuGet.Application;
 
     public static class Program
     {

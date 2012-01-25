@@ -96,9 +96,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Ninemsn.PackageManager.NuGet.Console\Ninemsn.PackageManager.NuGet.Console.csproj">
+    <ProjectReference Include="..\Ninemsn.PackageManager.NuGet.Console\Ninemsn.PackageManager.NuGet.Command.csproj">
       <Project>{D811E049-216D-473F-A66E-DD4D659ACA08}</Project>
-      <Name>Ninemsn.PackageManager.NuGet.Console</Name>
+      <Name>Ninemsn.PackageManager.NuGet.Command</Name>
     </ProjectReference>
     <ProjectReference Include="..\Ninemsn.PackageManager.NuGet\Ninemsn.PackageManager.NuGet.csproj">
       <Project>{B5FB8812-1B24-4791-8C54-ABF2E64215B8}</Project>

@@ -1,4 +1,4 @@
-﻿namespace Ninemsn.PackageManager.NuGet.Application
+namespace Ninemsn.PackageManager.NuGet
 {
     using Ninemsn.PackageManager.NuGet.Configuration;
 

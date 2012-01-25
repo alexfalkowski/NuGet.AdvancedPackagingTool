@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Ninemsn.PackageManager.NuGet.Console.Properties {
+namespace Ninemsn.PackageManager.NuGet.Command.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Ninemsn.PackageManager.NuGet.Console.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Ninemsn.PackageManager.NuGet.Console.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Ninemsn.PackageManager.NuGet.Command.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

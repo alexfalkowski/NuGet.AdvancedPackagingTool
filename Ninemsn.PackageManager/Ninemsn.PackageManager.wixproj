@@ -32,8 +32,8 @@
     <Compile Include="Product.wxs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Ninemsn.PackageManager.NuGet.Console\Ninemsn.PackageManager.NuGet.Console.csproj">
-      <Name>Ninemsn.PackageManager.NuGet.Console</Name>
+    <ProjectReference Include="..\Ninemsn.PackageManager.NuGet.Console\Ninemsn.PackageManager.NuGet.Command.csproj">
+      <Name>Ninemsn.PackageManager.NuGet.Command</Name>
       <Project>{d811e049-216d-473f-a66e-dd4d659aca08}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>

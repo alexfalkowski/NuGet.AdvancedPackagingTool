@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ninemsn.PackageManager.NuGe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ninemsn.PackageManager.NuGet.Test.Integration", "Ninemsn.PackageManager.NuGet.Test.Integration\Ninemsn.PackageManager.NuGet.Test.Integration.csproj", "{E5EA40D4-6130-4773-97E1-D1128D357E19}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ninemsn.PackageManager.NuGet.Console", "Ninemsn.PackageManager.NuGet.Console\Ninemsn.PackageManager.NuGet.Console.csproj", "{D811E049-216D-473F-A66E-DD4D659ACA08}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ninemsn.PackageManager.NuGet.Command", "Ninemsn.PackageManager.NuGet.Console\Ninemsn.PackageManager.NuGet.Command.csproj", "{D811E049-216D-473F-A66E-DD4D659ACA08}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ninemsn.PackageManager.NuGet.Test.Unit", "Ninemsn.PackageManager.NuGet.Test.Unit\Ninemsn.PackageManager.NuGet.Test.Unit.csproj", "{4C3B52E6-1753-48F2-AAD2-EB2FE6306908}"
 EndProject

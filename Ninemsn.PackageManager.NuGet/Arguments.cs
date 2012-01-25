@@ -1,4 +1,4 @@
-﻿namespace Ninemsn.PackageManager.NuGet.Application
+namespace Ninemsn.PackageManager.NuGet
 {
     using System.Collections.Generic;
     using System.ComponentModel;
