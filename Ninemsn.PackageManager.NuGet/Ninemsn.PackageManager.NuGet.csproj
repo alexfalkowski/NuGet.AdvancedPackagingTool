@@ -78,6 +78,7 @@
     <Compile Include="Application\Console.cs" />
     <Compile Include="Configuration\ConfigurationManager.cs" />
     <Compile Include="ExceptionFactory.cs" />
+    <Compile Include="PathHelper.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IPackageInstaller.cs" />
     <Compile Include="NullPackageFile.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="DefaultProjectSystem.cs" />
     <Compile Include="PowerShellConsole.cs" />
     <Compile Include="ProcessExitInfo.cs" />
+    <Compile Include="ProcessHelper.cs" />
     <Compile Include="ProjectManagerExtensions.cs" />
     <Compile Include="ProjectSystemFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,6 +1,5 @@
 ﻿namespace Ninemsn.PackageManager.NuGet.Test.Integration
 {
-    using System.Diagnostics;
     using System.IO;
     using System.Linq;
 
@@ -92,11 +91,9 @@
 
         private static void RunPackageManagerProcess(string arguments)
         {
-            var processInfo = new ProcessStartInfo("npm.exe", arguments);
-           
-            var process = Process.Start(processInfo);
+            var info = ProcessHelper.ExecuteBackgroundProcess("npm.exe", arguments);
 
-            process.WaitForExit();
+            info.ExitCode.Should().Be(0);
         }
     }
 }

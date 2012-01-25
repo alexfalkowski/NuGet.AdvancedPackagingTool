@@ -44,7 +44,7 @@
             var path = Path.GetFullPath(Path.Combine(currentPath, @"..\..\..\Ninemsn.PackageManager.NuGet.Service"));
             var arguments = string.Format(CultureInfo.CurrentCulture, @"/path:""{0}"" /port:1544", path);
 
-            this.process = Process.Start(FileName, arguments);
+            this.process = ProcessHelper.CreateBackgroundProcess(FileName, arguments);
             Thread.Sleep(3000);
         }
 

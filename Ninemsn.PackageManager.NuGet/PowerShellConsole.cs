@@ -1,7 +1,6 @@
 ﻿namespace Ninemsn.PackageManager.NuGet
 {
     using System;
-    using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using System.Text;
@@ -59,28 +58,10 @@
             const string Format = "-inputformat none -NoProfile -ExecutionPolicy unrestricted -Command \" & '{0}' '{1}' '{2}' \" ";
             var parameters = string.Format(CultureInfo.CurrentCulture, Format, tempFile, this.package.ProjectUrl.AbsolutePath, "$null");
 
-            var processInfo = new ProcessStartInfo("powershell.exe", parameters)
-                {
-                    RedirectStandardError = true,
-                    RedirectStandardOutput = true,
-                    UseShellExecute = false,
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    CreateNoWindow = true
-                };
+            var info = ProcessHelper.ExecuteBackgroundProcess("powershell.exe", parameters);
+            PathHelper.SafeDelete(tempFile);
 
-            using (var process = Process.Start(processInfo))
-            {
-                process.WaitForExit();
-
-                File.Delete(tempFile);
-
-                return new ProcessExitInfo
-                    {
-                        ExitCode = process.ExitCode,
-                        OutputMessage = process.StandardOutput.ReadToEnd(),
-                        ErrorMessage = process.StandardError.ReadToEnd()
-                    };
-            }
+            return info;
         }
     }
 }

@@ -79,7 +79,9 @@
             var package = this.GetValidPackage(version);
             this.projectManager.UninstallPackage(package, true);
 
-            Directory.Delete(package.ProjectUrl.LocalPath);
+            var localPath = package.ProjectUrl.LocalPath;
+
+            PathHelper.SafeDelete(localPath);
         }
 
         private static void OnProjectManagerPackageReferenceRemoving(object sender, PackageOperationEventArgs e)
