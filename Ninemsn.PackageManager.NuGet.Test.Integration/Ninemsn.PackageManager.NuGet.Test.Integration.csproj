@@ -74,10 +74,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Ninemsn.PackageManager.NuGet.Console\PackageSources.config">
+    <None Include="..\Ninemsn.PackageManager.NuGet.Command\PackageSources.config">
       <Link>PackageSources.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
     </None>
     <None Include="App.config">
       <SubType>Designer</SubType>
@@ -96,7 +95,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Ninemsn.PackageManager.NuGet.Console\Ninemsn.PackageManager.NuGet.Command.csproj">
+    <ProjectReference Include="..\Ninemsn.PackageManager.NuGet.Command\Ninemsn.PackageManager.NuGet.Command.csproj">
       <Project>{D811E049-216D-473F-A66E-DD4D659ACA08}</Project>
       <Name>Ninemsn.PackageManager.NuGet.Command</Name>
     </ProjectReference>
