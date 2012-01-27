@@ -78,6 +78,16 @@
             return new PowerShellPackageFile(GetToolFile(package.GetToolsFiles(), "Teardown"));
         }
 
+        public static IPackageFile GetConfigurationPackageFile(this IPackage package)
+        {
+            if (package == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException(PackageParameterName);
+            }
+
+            return new PowerShellPackageFile(GetToolFile(package.GetToolsFiles(), "Configuration"));
+        }
+
         public static bool IsValid(this IPackageMetadata package)
         {
             if (package == null)

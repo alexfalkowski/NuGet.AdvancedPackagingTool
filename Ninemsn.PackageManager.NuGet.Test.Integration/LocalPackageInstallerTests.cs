@@ -19,7 +19,7 @@
             this.InstallationPath = Path.Combine(this.PackagePath, "DummyNews");
 
             this.Installer = new PackageInstaller(
-                this.Module.GetSource("LocalFolder"),
+                this.Module.GetSource("TestLocalFeed"),
                 this.PackagePath, 
                 "DummyNews");
 

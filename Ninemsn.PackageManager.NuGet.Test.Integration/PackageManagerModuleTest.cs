@@ -9,7 +9,7 @@
     [TestFixture]
     public class PackageManagerModuleTest
     {
-        private const string FirstSourceName = "LocalFeed";
+        private const string FirstSourceName = "TestRemoteFeed";
 
         private const string FirstFeedUrl = "http://localhost:1544/DataServices/Packages.svc";
 
@@ -25,7 +25,7 @@
         [Test]
         public void ShouldHavePackageSources()
         {
-            this.module.PackageSources.Should().HaveCount(5);
+            this.module.PackageSources.Should().HaveCount(4);
         }
 
         [Test]

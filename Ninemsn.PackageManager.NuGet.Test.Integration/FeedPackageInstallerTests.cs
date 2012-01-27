@@ -24,7 +24,7 @@
             this.InstallationPath = Path.Combine(this.PackagePath, "DummyNews");
 
             this.Installer = new PackageInstaller(
-                this.Module.GetSource("LocalFeed"),
+                this.Module.GetSource("TestRemoteFeed"),
                 this.PackagePath, 
                 "DummyNews");
 

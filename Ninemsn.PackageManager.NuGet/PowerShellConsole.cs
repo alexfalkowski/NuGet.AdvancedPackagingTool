@@ -47,19 +47,31 @@
 
         public ProcessExitInfo Start()
         {
+            var configurationFile = this.package.GetConfigurationPackageFile();
+            var configurationFileContent = configurationFile.GetStream().ReadToEnd();
             var firstLineFromScript = this.script.Substring(0, this.script.IndexOf(Environment.NewLine, StringComparison.CurrentCulture));
             var restOfScript = this.script.Replace(firstLineFromScript, string.Empty);
             var completeScript = string.Concat(
                 firstLineFromScript, Environment.NewLine, this.ModulesScript, Environment.NewLine, restOfScript);
-            var tempFile = Path.GetTempPath() + @"\" + Guid.NewGuid() + ".ps1";
+            var scriptTempFile = Path.GetTempPath() + @"\" + Guid.NewGuid() + ".ps1";
+            var configurationTempFile = Path.GetTempPath() + @"\" + Guid.NewGuid() + ".xml";
 
-            File.WriteAllText(tempFile, completeScript);
+            File.WriteAllText(scriptTempFile, completeScript);
+            File.WriteAllText(configurationTempFile, configurationFileContent);
 
-            const string Format = "-inputformat none -NoProfile -ExecutionPolicy unrestricted -Command \" & '{0}' '{1}' '{2}' \" ";
-            var parameters = string.Format(CultureInfo.CurrentCulture, Format, tempFile, this.package.ProjectUrl.AbsolutePath, "$null");
+            const string ScriptTemplateFormat = @"$environment = import-clixml {0}; & '{1}' '{2}' $environment";
+            const string ParameterFormat = "-inputformat none -NoProfile -ExecutionPolicy unrestricted -Command \"{0} \"";
+            var executableScript = string.Format(
+                CultureInfo.CurrentCulture,
+                ScriptTemplateFormat,
+                configurationTempFile,
+                scriptTempFile,
+                this.package.ProjectUrl.AbsolutePath);
+            var parameters = string.Format(CultureInfo.CurrentCulture, ParameterFormat, executableScript);
 
             var info = ProcessHelper.ExecuteBackgroundProcess("powershell.exe", parameters);
-            PathHelper.SafeDelete(tempFile);
+            PathHelper.SafeDelete(scriptTempFile);
+            PathHelper.SafeDelete(configurationTempFile);
 
             return info;
         }

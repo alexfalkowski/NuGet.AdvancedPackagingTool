@@ -47,7 +47,7 @@
         protected string PackagePath { get; set; }
 
         [Test]
-        public void ShouldInstallFirstVersionOfThePackage()
+        public void ShouldInstallVersion10Package()
         {
             var version = new SemanticVersion("1.0");
 
@@ -63,7 +63,7 @@
         }
 
         [Test]
-        public void ShouldInstallLatestPackage()
+        public void ShouldInstallVersion11Package()
         {
             this.Installer.InstallPackage(new SemanticVersion("1.1"));
 
@@ -108,7 +108,7 @@
         }
 
         [Test]
-        public void ShouldUninstallFirstVersionOfThePackage()
+        public void ShouldUninstallVersion10Package()
         {
             var version = new SemanticVersion("1.0");
             this.Installer.InstallPackage(version);
@@ -125,7 +125,7 @@
         }
 
         [Test]
-        public void ShouldUninstallLatestVersionOfThePackage()
+        public void ShouldUninstallVersion11Package()
         {
             var version = new SemanticVersion("1.1");
             this.Installer.InstallPackage(version);
