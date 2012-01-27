@@ -77,6 +77,7 @@
     <None Include="..\Ninemsn.PackageManager.NuGet.Command\PackageSources.config">
       <Link>PackageSources.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <None Include="App.config">
       <SubType>Designer</SubType>

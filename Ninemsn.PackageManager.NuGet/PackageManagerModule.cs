@@ -4,8 +4,6 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using Ninemsn.PackageManager.NuGet.Properties;
-
     using global::NuGet;
 
     public class PackageManagerModule
@@ -22,12 +20,6 @@
             }
 
             this.sourceFile = sourceFile;
-
-            if (!this.sourceFile.Exists())
-            {
-                throw ExceptionFactory.CreateInvalidOperationException(
-                    Resources.PackagesSourceFileDoesNotExixst, this.sourceFile.ToString());
-            }
 
             InitPackageSourceFile(this.sourceFile, out this.packageSources);
         }

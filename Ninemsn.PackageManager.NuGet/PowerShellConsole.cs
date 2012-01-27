@@ -73,6 +73,12 @@
             PathHelper.SafeDelete(scriptTempFile);
             PathHelper.SafeDelete(configurationTempFile);
 
+            // For some reason powershell if it throws a compilation error the executable returns 0.
+            if (!string.IsNullOrWhiteSpace(info.ErrorMessage) && info.ExitCode == 0)
+            {
+                info.ExitCode = 1;
+            }
+
             return info;
         }
     }
