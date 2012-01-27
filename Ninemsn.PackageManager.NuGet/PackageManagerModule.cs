@@ -21,7 +21,7 @@
 
             this.sourceFile = sourceFile;
 
-            InitPackageSourceFile(this.sourceFile, out this.packageSources);
+            this.packageSources = InitPackageSourceFile(this.sourceFile);
         }
 
         public PackageSource ActiveSource
@@ -52,10 +52,9 @@
             return packageSourcesSet.Where(predicate).FirstOrDefault();
         }
 
-        private static void InitPackageSourceFile(
-            IPackagesSourceFile packageSourceFile, out ISet<PackageSource> packageSourcesSet)
+        private static ISet<PackageSource> InitPackageSourceFile(IPackagesSourceFile packageSourceFile)
         {
-            packageSourcesSet = new HashSet<PackageSource>(packageSourceFile.ReadSources());
+            return new HashSet<PackageSource>(packageSourceFile.ReadSources());
         }
     }
 }
