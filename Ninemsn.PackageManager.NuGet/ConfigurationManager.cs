@@ -1,4 +1,4 @@
-﻿namespace Ninemsn.PackageManager.NuGet.Configuration
+namespace Ninemsn.PackageManager.NuGet
 {
     public static class ConfigurationManager
     {

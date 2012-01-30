@@ -70,7 +70,6 @@
     <Compile Include="PackageInstallerTestsBase.cs" />
     <Compile Include="PackageManagerModuleTest.cs" />
     <Compile Include="PackagesWebServer.cs" />
-    <Compile Include="PowerShellTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

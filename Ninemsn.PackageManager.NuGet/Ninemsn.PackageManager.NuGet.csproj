@@ -74,7 +74,7 @@
   <ItemGroup>
     <Compile Include="Arguments.cs" />
     <Compile Include="ArgumentsValidator.cs" />
-    <Compile Include="Configuration\ConfigurationManager.cs" />
+    <Compile Include="ConfigurationManager.cs" />
     <Compile Include="Console.cs" />
     <Compile Include="ExceptionFactory.cs" />
     <Compile Include="PackageInstallerFactory.cs" />

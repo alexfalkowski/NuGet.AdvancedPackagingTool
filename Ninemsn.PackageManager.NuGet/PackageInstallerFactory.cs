@@ -1,7 +1,5 @@
 namespace Ninemsn.PackageManager.NuGet
 {
-    using Ninemsn.PackageManager.NuGet.Configuration;
-
     public static class PackageInstallerFactory
     {
         public static IPackageInstaller CreatePackageInstaller(Arguments args)

@@ -89,16 +89,9 @@
             var projectManager = (IProjectManager)sender;
             var package = e.Package;
             var unistallPackageFile = package.GetUninstallPackageFile();
-
-            unistallPackageFile.ExecutePowerShell(package, projectManager.Logger);
-        }
-
-        private static void OnProjectManagerPackageReferenceRemoved(object sender, PackageOperationEventArgs e)
-        {
-            var projectManager = (IProjectManager)sender;
-            var package = e.Package;
             var teardownPackageFile = package.GetTeardownPackageFile();
 
+            unistallPackageFile.ExecutePowerShell(package, projectManager.Logger);
             teardownPackageFile.ExecutePowerShell(package, projectManager.Logger);
         }
 
@@ -153,7 +146,6 @@
                     Logger = this.logger
                 };
             this.projectManager.PackageReferenceRemoving += OnProjectManagerPackageReferenceRemoving;
-            this.projectManager.PackageReferenceRemoved += OnProjectManagerPackageReferenceRemoved;
             this.projectManager.PackageReferenceAdding += this.OnProjectManagerPackageReferenceAdding;
             this.projectManager.PackageReferenceAdded += this.OnProjectManagerPackageReferenceAdded;
 

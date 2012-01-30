@@ -5,8 +5,6 @@
 
     using FluentAssertions;
 
-    using Ninemsn.PackageManager.NuGet.Configuration;
-
     using NUnit.Framework;
 
     [TestFixture]
@@ -33,7 +31,7 @@
         }
 
         [Test]
-        public void ShouldInstallAndUninstallFirstVersionPackage()
+        public void ShouldInstallAndUninstallVersion10Package()
         {
             RunPackageManagerProcess("/i /p DummyNews /v 1.0");
 
@@ -46,7 +44,7 @@
         }
 
         [Test]
-        public void ShouldInstallAndUninstallLatestVersionPackage()
+        public void ShouldInstallAndUninstallVersion11Package()
         {
             RunPackageManagerProcess("/i /p DummyNews /v 1.1");
 
@@ -59,7 +57,7 @@
         }
 
         [Test]
-        public void ShouldUpgradeAlreadyInstalledPackageAndUninstall()
+        public void ShouldUpgradeAlreadyInstalledPackage()
         {
             RunPackageManagerProcess("/i /p DummyNews /v 1.0");
 
@@ -70,10 +68,6 @@
 
             Directory.EnumerateDirectories(ConfigurationManager.PackagePath, "DummyNews.1.1").Any().Should().BeTrue(
                 "The package DummyNews should be installed.");
-
-            RunPackageManagerProcess("/u /p DummyNews /v 1.1");
-
-            Directory.Exists(ConfigurationManager.PackagePath).Should().BeFalse("The package DummyNews should not be installed.");
         }
 
         private static void RunPackageManagerProcess(string arguments)

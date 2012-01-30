@@ -49,8 +49,7 @@
                 throw new FormatException();
             }
 
-            var source = new PackageSource(uri.OriginalString, displayNameAttribute.Value);
-            return source;
+            return new PackageSource(uri.OriginalString, displayNameAttribute.Value);
         }
 
         private static IEnumerable<PackageSource> ReadFeeds(Func<Stream> getStream)
