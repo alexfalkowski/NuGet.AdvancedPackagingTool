@@ -12,8 +12,6 @@
     {
         private readonly PackageSource source;
 
-        private readonly string localRepositoryPath;
-
         private readonly string packageName;
 
         private readonly PackageLogger logger;
@@ -49,11 +47,10 @@
             }
 
             this.source = source;
-            this.localRepositoryPath = localRepositoryPath;
             this.packageName = packageName;
             this.logger = new PackageLogger();
             this.sourceRepository = PackageRepositoryFactory.Default.CreateRepository(this.source.Source);
-            this.localRepository = PackageRepositoryFactory.Default.CreateRepository(this.localRepositoryPath);
+            this.localRepository = PackageRepositoryFactory.Default.CreateRepository(localRepositoryPath);
         }
 
         public IEnumerable<string> Logs
