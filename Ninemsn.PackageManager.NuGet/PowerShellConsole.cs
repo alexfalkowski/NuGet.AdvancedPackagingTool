@@ -13,6 +13,8 @@
 
         private readonly string script;
 
+        private const string ScriptSignature = "param ([string]$installationFolder, $configuration)";
+
         public PowerShellConsole(IPackage package, string script)
         {
             if (package == null)
@@ -49,10 +51,9 @@
         {
             var configurationFile = this.package.GetConfigurationPackageFile();
             var configurationFileContent = configurationFile.GetStream().ReadToEnd();
-            var firstLineFromScript = this.script.Substring(0, this.script.IndexOf(Environment.NewLine, StringComparison.CurrentCulture));
-            var restOfScript = this.script.Replace(firstLineFromScript, string.Empty);
+            var restOfScript = this.script.Replace(ScriptSignature, string.Empty);
             var completeScript = string.Concat(
-                firstLineFromScript, Environment.NewLine, this.ModulesScript, Environment.NewLine, restOfScript);
+                ScriptSignature, Environment.NewLine, this.ModulesScript, Environment.NewLine, restOfScript);
             var scriptTempFile = Path.GetTempPath() + @"\" + Guid.NewGuid() + ".ps1";
             var configurationTempFile = Path.GetTempPath() + @"\" + Guid.NewGuid() + ".xml";
 
