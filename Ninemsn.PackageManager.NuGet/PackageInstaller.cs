@@ -26,6 +26,8 @@
 
         private bool isPackageInstalled;
 
+        private bool installCalled;
+
         public PackageInstaller(
             PackageSource source, 
             string localRepositoryPath, 
@@ -63,12 +65,21 @@
 
         public void InstallPackage(SemanticVersion version)
         {
-            var package = this.GetValidPackage(version);
-            this.isPackageInstalled = this.projectManager.IsPackageInstalled(package);
+            this.installCalled = true;
 
-            Directory.CreateDirectory(package.ProjectUrl.LocalPath);
+            try
+            {
+                var package = this.GetValidPackage(version);
+                this.isPackageInstalled = this.projectManager.IsPackageInstalled(package);
 
-            this.projectManager.InstallPackage(package);
+                Directory.CreateDirectory(package.ProjectUrl.LocalPath);
+
+                this.projectManager.InstallPackage(package);
+            }
+            finally
+            {
+                this.installCalled = false;
+            }
         }
 
         public void UninstallPackage(SemanticVersion version)
@@ -81,15 +92,18 @@
             PathHelper.SafeDelete(localPath);
         }
 
-        private static void OnProjectManagerPackageReferenceRemoving(object sender, PackageOperationEventArgs e)
+        private void OnProjectManagerPackageReferenceRemoving(object sender, PackageOperationEventArgs e)
         {
-            var projectManager = (IProjectManager)sender;
             var package = e.Package;
             var unistallPackageFile = package.GetUninstallPackageFile();
             var teardownPackageFile = package.GetTeardownPackageFile();
 
-            unistallPackageFile.ExecutePowerShell(package, projectManager.Logger);
-            teardownPackageFile.ExecutePowerShell(package, projectManager.Logger);
+            unistallPackageFile.ExecutePowerShell(package, this.projectManager.Logger);
+
+            if (!this.installCalled)
+            {
+                teardownPackageFile.ExecutePowerShell(package, this.projectManager.Logger);
+            }
         }
 
         private void OnProjectManagerPackageReferenceAdding(object sender, PackageOperationEventArgs e)
@@ -142,7 +156,7 @@
                 {
                     Logger = this.logger
                 };
-            this.projectManager.PackageReferenceRemoving += OnProjectManagerPackageReferenceRemoving;
+            this.projectManager.PackageReferenceRemoving += this.OnProjectManagerPackageReferenceRemoving;
             this.projectManager.PackageReferenceAdding += this.OnProjectManagerPackageReferenceAdding;
             this.projectManager.PackageReferenceAdded += this.OnProjectManagerPackageReferenceAdded;
 

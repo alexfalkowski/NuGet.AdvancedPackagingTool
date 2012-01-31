@@ -83,7 +83,6 @@
             log.Should().Contain(Install);
             log.Should().Contain(Uninstall);
             log.Should().Contain(Removed);
-            log.Should().Contain(Teardown);
             log.Should().Contain(Setup);
             log.Should().Contain(Added);
             log.Should().Contain(Install);
