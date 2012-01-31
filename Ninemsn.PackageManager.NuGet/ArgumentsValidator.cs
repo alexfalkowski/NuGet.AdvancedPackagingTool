@@ -11,7 +11,6 @@ namespace Ninemsn.PackageManager.NuGet
              this.RuleFor(argument => argument.Install).Must((argument, install) => install != argument.Uninstall)
                  .WithMessage(Resources.InvalidInstallUninstallFlag);
              this.RuleFor(argument => argument.Package).NotEmpty().WithMessage(Resources.PackageNotSpecified);
-             this.RuleFor(argument => argument.Version).NotNull().WithMessage(Resources.PackageVersionNotSpecified);
          }
     }
 }

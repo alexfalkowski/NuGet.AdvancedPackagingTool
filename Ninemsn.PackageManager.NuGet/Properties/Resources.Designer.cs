@@ -142,15 +142,6 @@ namespace Ninemsn.PackageManager.NuGet.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The package version was not specified..
-        /// </summary>
-        internal static string PackageVersionNotSpecified {
-            get {
-                return ResourceManager.GetString("PackageVersionNotSpecified", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The script &apos;{0}&apos; contained the following errors &apos;{1}&apos;..
         /// </summary>
         internal static string PowershellErrorMessage {

@@ -57,6 +57,19 @@
         }
 
         [Test]
+        public void ShouldInstallAndUninstallLatestVersionOfPackage()
+        {
+            RunPackageManagerProcess("/i /p DummyNews");
+
+            Directory.EnumerateDirectories(ConfigurationManager.PackagePath, "DummyNews.1.1").Any().Should().BeTrue(
+                "The package DummyNews should be installed.");
+
+            RunPackageManagerProcess("/u /p DummyNews");
+
+            Directory.Exists(ConfigurationManager.PackagePath).Should().BeFalse("The package DummyNews should not be installed.");
+        }
+
+        [Test]
         public void ShouldUpgradeAlreadyInstalledPackage()
         {
             RunPackageManagerProcess("/i /p DummyNews /v 1.0");
