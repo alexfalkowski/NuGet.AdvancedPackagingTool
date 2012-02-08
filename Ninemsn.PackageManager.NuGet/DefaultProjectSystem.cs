@@ -10,9 +10,12 @@
 
     public class DefaultProjectSystem : PhysicalFileSystem, IProjectSystem
     {
-        public DefaultProjectSystem(string installationPath)
+        private readonly bool install;
+
+        public DefaultProjectSystem(string installationPath, bool install)
             : base(installationPath)
         {
+            this.install = install;
         }
 
         public string ProjectName
@@ -37,6 +40,11 @@
             {
                 return this.Root;
             }
+        }
+
+        public override bool FileExists(string path)
+        {
+            return !this.install && base.FileExists(path);
         }
 
         public override IEnumerable<string> GetFiles(string path, string filter)

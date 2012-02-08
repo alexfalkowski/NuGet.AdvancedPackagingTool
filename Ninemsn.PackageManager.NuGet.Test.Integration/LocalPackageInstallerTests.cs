@@ -2,7 +2,6 @@
 {
     using System;
     using System.IO;
-    using System.Reflection;
 
     using NUnit.Framework;
 
@@ -14,14 +13,18 @@
         {
             var packageSourceFile = PackageSourceFileFactory.CreatePackageSourceFile();
             this.Module = new PackageManagerModule(packageSourceFile);
-            var localSourceUri = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase) + "/App_Data/packages";
-            this.PackagePath = new Uri(localSourceUri).LocalPath;
+            this.PackagePath = new Uri("file:///C:/Ninemsn/TestInstallPackage/").LocalPath;
             this.InstallationPath = Path.Combine(this.PackagePath, "DummyNews");
 
-            this.Installer = new PackageInstaller(
+            this.NewsInstaller = new PackageInstaller(
                 this.Module.GetSource("TestLocalFeed"),
                 this.PackagePath, 
                 "DummyNews");
+
+            this.SitecoreInstaller = new PackageInstaller(
+                this.Module.GetSource("TestLocalFeed"),
+                this.PackagePath,
+                "DummySitecore");
 
             if (Directory.Exists(this.PackagePath))
             {

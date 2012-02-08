@@ -14,6 +14,8 @@
 
     public abstract class PackageInstallerTestsBase
     {
+        private const string ShortVersion10 = "1.0";
+
         private const string DummyNews10 = "DummyNews.1.0";
 
         private const string Uninstall = "Uninstall";
@@ -38,9 +40,13 @@
 
         private const string Version11 = "1.1.0.0";
 
+        private const string ShortVersion11 = "1.1";
+
         protected PackageManagerModule Module { get; set; }
 
-        protected PackageInstaller Installer { get; set; }
+        protected PackageInstaller NewsInstaller { get; set; }
+
+        protected PackageInstaller SitecoreInstaller { get; set; }
 
         protected string InstallationPath { get; set; }
 
@@ -49,34 +55,36 @@
         [Test]
         public void ShouldInstallVersion10Package()
         {
-            var version = new SemanticVersion("1.0");
+            var version = new SemanticVersion(ShortVersion10);
 
-            this.Installer.InstallPackage(version);
+            this.NewsInstaller.InstallPackage(version);
 
-            var log = GetLog(this.Installer.Logs);
+            var log = GetLog(this.NewsInstaller.Logs);
 
             log.Should().Contain(Setup);
             log.Should().Contain(Added);
             log.Should().Contain(Install);
             Directory.EnumerateDirectories(this.PackagePath, DummyNews10).Any().Should().BeTrue();
             this.GetFileVersion().Should().Be(Version10);
+            this.GetWebsiteVersion().Should().Be(Version10);
         }
 
         [Test]
         public void ShouldInstallVersion11Package()
         {
-            this.Installer.InstallPackage(new SemanticVersion("1.1"));
+            this.NewsInstaller.InstallPackage(new SemanticVersion(ShortVersion11));
 
             Directory.EnumerateDirectories(this.PackagePath, DummyNews11).Any().Should().BeTrue();
             this.GetFileVersion().Should().Be(Version11);
+            this.GetWebsiteVersion().Should().Be(Version11);
         }
 
         [Test]
         public void ShouldUpgradeAlreadyInstalledPackage()
         {
-            this.Installer.InstallPackage(new SemanticVersion("1.0"));
-            this.Installer.InstallPackage(new SemanticVersion("1.1"));
-            var log = GetLog(this.Installer.Logs);
+            this.NewsInstaller.InstallPackage(new SemanticVersion(ShortVersion10));
+            this.NewsInstaller.InstallPackage(new SemanticVersion(ShortVersion11));
+            var log = GetLog(this.NewsInstaller.Logs);
 
             log.Should().Contain(Setup);
             log.Should().Contain(Added);
@@ -90,15 +98,33 @@
             Directory.EnumerateDirectories(this.PackagePath, DummyNews10).Any().Should().BeFalse();
             Directory.EnumerateDirectories(this.PackagePath, DummyNews11).Any().Should().BeTrue();
             this.GetFileVersion().Should().Be(Version11);
+            this.GetWebsiteVersion().Should().Be(Version11);
+        }
+
+        [Test]
+        public void ShouldInstallSitecoreVersion10ThenNewsVersion10AndShouldOverwriteFiles()
+        {
+            this.SitecoreInstaller.InstallPackage(new SemanticVersion(ShortVersion10));
+            this.NewsInstaller.InstallPackage(new SemanticVersion(ShortVersion10));
+            
+            var log = GetLog(this.NewsInstaller.Logs);
+
+            log.Should().Contain(Setup);
+            log.Should().Contain(Added);
+            log.Should().Contain(Install);
+
+            Directory.EnumerateDirectories(this.PackagePath, DummyNews10).Any().Should().BeTrue();
+            this.GetFileVersion().Should().Be(Version10);
+            this.GetWebsiteVersion().Should().Be(Version10);
         }
 
         [Test]
         public void ShouldNotInstallTheSameVersionOfThePackage()
         {
-            var version = new SemanticVersion("1.0");
-            this.Installer.InstallPackage(version);
-            this.Installer.InstallPackage(version);
-            var log = GetLog(this.Installer.Logs);
+            var version = new SemanticVersion(ShortVersion10);
+            this.NewsInstaller.InstallPackage(version);
+            this.NewsInstaller.InstallPackage(version);
+            var log = GetLog(this.NewsInstaller.Logs);
 
             log.Should().Contain(Setup);
             log.Should().Contain(Added);
@@ -109,10 +135,10 @@
         [Test]
         public void ShouldUninstallVersion10Package()
         {
-            var version = new SemanticVersion("1.0");
-            this.Installer.InstallPackage(version);
-            this.Installer.UninstallPackage(version);
-            var log = GetLog(this.Installer.Logs);
+            var version = new SemanticVersion(ShortVersion10);
+            this.NewsInstaller.InstallPackage(version);
+            this.NewsInstaller.UninstallPackage(version);
+            var log = GetLog(this.NewsInstaller.Logs);
 
             log.Should().Contain(Setup);
             log.Should().Contain(Added);
@@ -126,10 +152,10 @@
         [Test]
         public void ShouldUninstallVersion11Package()
         {
-            var version = new SemanticVersion("1.1");
-            this.Installer.InstallPackage(version);
-            this.Installer.UninstallPackage(version);
-            var log = GetLog(this.Installer.Logs);
+            var version = new SemanticVersion(ShortVersion11);
+            this.NewsInstaller.InstallPackage(version);
+            this.NewsInstaller.UninstallPackage(version);
+            var log = GetLog(this.NewsInstaller.Logs);
 
             log.Should().Contain(Setup);
             log.Should().Contain(Added);
@@ -158,6 +184,12 @@
             var info = FileVersionInfo.GetVersionInfo(dllFile);
 
             return info.FileVersion;
+        }
+
+        private string GetWebsiteVersion()
+        {
+            var versionFile = Directory.EnumerateFiles(this.InstallationPath).Where(x => x.EndsWith("WebsiteVersion.txt")).First();
+            return File.ReadAllText(versionFile);
         }
     }
 }

@@ -148,7 +148,7 @@
         private IPackage GetPackage(SemanticVersion version)
         {
             var package = this.FindPackage(version);
-            this.projectSystem = ProjectSystemFactory.CreateProjectSystem(package);
+            this.projectSystem = ProjectSystemFactory.CreateProjectSystem(package, this.installCalled);
 
             var pathResolver = new DefaultPackagePathResolver(this.localRepository.Source);
             this.projectManager = new ProjectManager(

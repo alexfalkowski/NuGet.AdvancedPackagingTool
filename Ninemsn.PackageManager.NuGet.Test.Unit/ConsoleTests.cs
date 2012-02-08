@@ -54,23 +54,23 @@
         }
 
         [Test]
-        public void ShouldNotAllowInstallIfPackageVersionIsNotSpecified()
+        public void ShouldAllowInstallIfPackageVersionIsNotSpecified()
         {
             var arguments = new Arguments { Install = true, Package = "DummyNews" };
 
-            arguments.IsValid.Should().BeFalse(
-                "The program should not allow the install if the package version is not provided.");
-            arguments.Errors.Count().Should().BeGreaterOrEqualTo(1);
+            arguments.IsValid.Should().BeTrue(
+                "The program should allow the install if the package version is not provided.");
+            arguments.Errors.Count().Should().Be(0);
         }
 
         [Test]
-        public void ShouldNotAllowUninstallIfPackageVersionIsNotSpecified()
+        public void ShouldAllowUninstallIfPackageVersionIsNotSpecified()
         {
             var arguments = new Arguments { Uninstall = true, Package = "DummyNews" };
 
-            arguments.IsValid.Should().BeFalse(
-                "The program should not allow the uninstall if the package version is not provided.");
-            arguments.Errors.Count().Should().BeGreaterOrEqualTo(1);
+            arguments.IsValid.Should().BeTrue(
+                "The program should allow the uninstall if the package version is not provided.");
+            arguments.Errors.Count().Should().Be(0);
         }
 
         [Test]

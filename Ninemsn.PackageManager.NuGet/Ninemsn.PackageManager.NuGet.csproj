@@ -107,7 +107,6 @@
     </Compile>
     <Compile Include="StringExtensions.cs" />
     <Compile Include="VersionTypeConverter.cs" />
-    <Compile Include="WebProjectSystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Ninemsn.PackageManager.NuGet.snk" />
