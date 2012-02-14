@@ -1,5 +1,6 @@
 ﻿namespace NuGet.Enterprise.Test.Integration
 {
+    using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
@@ -104,7 +105,7 @@
         }
 
         [Test]
-        public void ShouldInstallSitecoreVersion10ThenNewsVersion10AndShouldOverwriteFiles()
+        public void ShouldInstallOnePackageThenAnotherPackageShouldOverwriteFiles()
         {
             this.SitecoreInstaller.InstallPackage(new SemanticVersion(ShortVersion10));
             this.NewsInstaller.InstallPackage(new SemanticVersion(ShortVersion10));
@@ -190,7 +191,7 @@
 
         private string GetWebsiteVersion()
         {
-            var versionFile = Directory.EnumerateFiles(this.InstallationPath).Where(x => x.EndsWith("WebsiteVersion.txt")).First();
+            var versionFile = Directory.EnumerateFiles(this.InstallationPath).Where(x => x.EndsWith("WebsiteVersion.txt", StringComparison.CurrentCultureIgnoreCase)).First();
             return File.ReadAllText(versionFile);
         }
     }

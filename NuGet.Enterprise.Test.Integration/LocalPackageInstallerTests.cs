@@ -11,7 +11,7 @@
     public class LocalPackageInstallerTests : PackageInstallerTestsBase
     {
         [SetUp]
-        public void SetUp()
+        public void Setup()
         {
             var packageSourceFile = PackageSourceFileFactory.CreatePackageSourceFile();
             this.Module = new PackageManagerModule(packageSourceFile);

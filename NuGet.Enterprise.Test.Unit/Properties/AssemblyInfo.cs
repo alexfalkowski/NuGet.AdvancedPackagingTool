@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
+using System.Resources;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("Ninemsn.PackageManager.NuGet.Test.Unit")]
@@ -11,5 +13,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("872dd7a9-15ae-4163-babf-7c4137a12fda")]
+[assembly: CLSCompliant(true)]
+[assembly: NeutralResourcesLanguage("en-AU")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]

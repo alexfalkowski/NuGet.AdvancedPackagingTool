@@ -13,10 +13,10 @@
     using NuGet.Enterprise.Core;
 
     [TestFixture]
-    public class ConsoleTests
+    public static class ConsoleTests
     {
         [Test]
-        public void ShouldNotAllowInstallIfInstallAndUninstallOptionsAreNotSelected()
+        public static void ShouldNotAllowInstallIfInstallAndUninstallOptionsAreNotSelected()
         {
             var arguments = new Arguments();
 
@@ -26,7 +26,7 @@
         }
 
         [Test]
-        public void ShouldNotAllowInstallIfInstallAndUninstallOptionsAreSelected()
+        public static void ShouldNotAllowInstallIfInstallAndUninstallOptionsAreSelected()
         {
             var arguments = new Arguments { Install = true, Uninstall = true };
 
@@ -36,7 +36,7 @@
         }
 
         [Test]
-        public void ShouldNotAllowInstallIfPackageNameIsNotSpecified()
+        public static void ShouldNotAllowInstallIfPackageNameIsNotSpecified()
         {
             var arguments = new Arguments { Install = true };
 
@@ -46,7 +46,7 @@
         }
 
         [Test]
-        public void ShouldNotAllowUninstallIfPackageNameIsNotSpecified()
+        public static void ShouldNotAllowUninstallIfPackageNameIsNotSpecified()
         {
             var arguments = new Arguments { Uninstall = true };
 
@@ -56,7 +56,7 @@
         }
 
         [Test]
-        public void ShouldAllowInstallIfPackageVersionIsNotSpecified()
+        public static void ShouldAllowInstallIfPackageVersionIsNotSpecified()
         {
             var arguments = new Arguments { Install = true, Package = "DummyNews" };
 
@@ -66,7 +66,7 @@
         }
 
         [Test]
-        public void ShouldAllowUninstallIfPackageVersionIsNotSpecified()
+        public static void ShouldAllowUninstallIfPackageVersionIsNotSpecified()
         {
             var arguments = new Arguments { Uninstall = true, Package = "DummyNews" };
 
@@ -76,7 +76,7 @@
         }
 
         [Test]
-        public void ShouldInstallPackage()
+        public static void ShouldInstallPackage()
         {
             var version = new SemanticVersion(1, 1, 0, 0);
             var arguments = new Arguments { Install = true, Package = "DummyNews", Version = version };
@@ -89,7 +89,7 @@
         }
 
         [Test]
-        public void ShouldUninstallPackage()
+        public static void ShouldUninstallPackage()
         {
             var version = new SemanticVersion(1, 1, 0, 0);
             var arguments = new Arguments { Uninstall = true, Package = "DummyNews", Version = version };

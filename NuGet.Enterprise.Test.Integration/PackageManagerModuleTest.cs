@@ -18,7 +18,7 @@
         private PackageManagerModule module;
 
         [SetUp]
-        public void SetUp()
+        public void Setup()
         {
             var packageSourceFile = PackageSourceFileFactory.CreatePackageSourceFile();
             this.module = new PackageManagerModule(packageSourceFile);

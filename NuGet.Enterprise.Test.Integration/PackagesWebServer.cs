@@ -13,7 +13,7 @@
     {
         private Process process;
 
-        public void StartUp()
+        public void Startup()
         {
             if (Debugger.IsAttached)
             {

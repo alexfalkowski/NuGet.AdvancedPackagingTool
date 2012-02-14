@@ -13,10 +13,10 @@
         private PackagesWebServer server;
 
         [SetUp]
-        public void SetUp()
+        public void Setup()
         {
             this.server = new PackagesWebServer();
-            this.server.StartUp();
+            this.server.Startup();
 
             var packageSourceFile = PackageSourceFileFactory.CreatePackageSourceFile();
             this.Module = new PackageManagerModule(packageSourceFile);
@@ -40,7 +40,7 @@
         }
 
         [TearDown]
-        public void TearDown()
+        public void Teardown()
         {
             this.server.Stop();
         }

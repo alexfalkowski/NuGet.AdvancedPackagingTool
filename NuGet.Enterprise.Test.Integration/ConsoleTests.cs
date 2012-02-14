@@ -15,10 +15,10 @@
         private PackagesWebServer server;
 
         [SetUp]
-        public void SetUp()
+        public void Setup()
         {
             this.server = new PackagesWebServer();
-            this.server.StartUp();
+            this.server.Startup();
 
             if (Directory.Exists(ConfigurationManager.PackagePath))
             {
@@ -27,13 +27,13 @@
         }
 
         [TearDown]
-        public void TearDown()
+        public void Teardown()
         {
             this.server.Stop();
         }
 
         [Test]
-        public void ShouldInstallAndUninstallVersion10Package()
+        public static void ShouldInstallAndUninstallVersion10Package()
         {
             RunPackageManagerProcess("/i /p DummyNews /v 1.0");
 
@@ -46,7 +46,7 @@
         }
 
         [Test]
-        public void ShouldInstallAndUninstallVersion11Package()
+        public static void ShouldInstallAndUninstallVersion11Package()
         {
             RunPackageManagerProcess("/i /p DummyNews /v 1.1");
 
@@ -59,7 +59,7 @@
         }
 
         [Test]
-        public void ShouldInstallAndUninstallLatestVersionOfPackage()
+        public static void ShouldInstallAndUninstallLatestVersionOfPackage()
         {
             RunPackageManagerProcess("/i /p DummyNews");
 
@@ -72,7 +72,7 @@
         }
 
         [Test]
-        public void ShouldUpgradeAlreadyInstalledPackage()
+        public static void ShouldUpgradeAlreadyInstalledPackage()
         {
             RunPackageManagerProcess("/i /p DummyNews /v 1.0");
 
