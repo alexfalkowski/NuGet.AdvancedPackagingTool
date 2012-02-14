@@ -8,8 +8,8 @@
     <ProjectGuid>{4C3B52E6-1753-48F2-AAD2-EB2FE6306908}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ninemsn.PackageManager.NuGet.Test.Unit</RootNamespace>
-    <AssemblyName>Ninemsn.PackageManager.NuGet.Test.Unit</AssemblyName>
+    <RootNamespace>NuGet.Enterprise.Test.Unit</RootNamespace>
+    <AssemblyName>NuGet.Enterprise.Test.Unit</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -67,7 +67,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Ninemsn.PackageManager.NuGet\Ninemsn.PackageManager.NuGet.csproj">
+    <ProjectReference Include="..\NuGet.Enterprise.Core\NuGet.Enterprise.Core.csproj">
       <Project>{B5FB8812-1B24-4791-8C54-ABF2E64215B8}</Project>
       <Name>Ninemsn.PackageManager.NuGet</Name>
     </ProjectReference>

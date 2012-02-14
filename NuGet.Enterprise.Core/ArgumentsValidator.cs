@@ -2,7 +2,7 @@ namespace Ninemsn.PackageManager.NuGet
 {
     using FluentValidation;
 
-    using Ninemsn.PackageManager.NuGet.Properties;
+    using global::NuGet.Enterprise.Core.Properties;
 
     public class ArgumentsValidator : AbstractValidator<Arguments>
     {

@@ -5,7 +5,7 @@ namespace Ninemsn.PackageManager.NuGet
 
     using Common.Logging;
 
-    using Ninemsn.PackageManager.NuGet.Properties;
+    using global::NuGet.Enterprise.Core.Properties;
 
     public class Console
     {

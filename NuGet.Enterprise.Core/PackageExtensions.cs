@@ -6,9 +6,8 @@
     using System.IO;
     using System.Linq;
 
-    using Ninemsn.PackageManager.NuGet.Properties;
-
     using global::NuGet;
+    using global::NuGet.Enterprise.Core.Properties;
 
     public static class PackageExtensions
     {
