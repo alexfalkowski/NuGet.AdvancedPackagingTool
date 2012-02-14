@@ -150,4 +150,13 @@
   <data name="PowershellErrorMessage" xml:space="preserve">
     <value>The script '{0}' contained the following errors '{1}'.</value>
   </data>
+  <data name="DirectoryNameErrorMessage" xml:space="preserve">
+    <value>Could not get directory name from path '{0}'.</value>
+  </data>
+  <data name="SpecFileNotFound" xml:space="preserve">
+    <value>The spec file does not exist.</value>
+  </data>
+  <data name="TargetFrameworkErrorMessage" xml:space="preserve">
+    <value>Could not get target framework from path '{0}'.</value>
+  </data>
 </root>

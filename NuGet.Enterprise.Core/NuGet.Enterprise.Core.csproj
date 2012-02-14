@@ -111,6 +111,7 @@
     <Compile Include="StringExtensions.cs" />
     <Compile Include="VersionTypeConverter.cs" />
     <Compile Include="ZipPackage.cs" />
+    <Compile Include="ZipPackageAssemblyReference.cs" />
     <Compile Include="ZipPackageFile.cs" />
   </ItemGroup>
   <ItemGroup>

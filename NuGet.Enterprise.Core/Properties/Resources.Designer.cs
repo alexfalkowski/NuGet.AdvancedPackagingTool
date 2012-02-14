@@ -61,6 +61,15 @@ namespace NuGet.Enterprise.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not get directory name from path &apos;{0}&apos;..
+        /// </summary>
+        internal static string DirectoryNameErrorMessage {
+            get {
+                return ResourceManager.GetString("DirectoryNameErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not find &apos;{0}&apos; in the tools folder of the package..
         /// </summary>
         internal static string FileNameDoesNotExistInToolsFolder {
@@ -156,6 +165,24 @@ namespace NuGet.Enterprise.Core.Properties {
         internal static string SourceNotSpecified {
             get {
                 return ResourceManager.GetString("SourceNotSpecified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The spec file does not exist..
+        /// </summary>
+        internal static string SpecFileNotFound {
+            get {
+                return ResourceManager.GetString("SpecFileNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not get target framework from path &apos;{0}&apos;..
+        /// </summary>
+        internal static string TargetFrameworkErrorMessage {
+            get {
+                return ResourceManager.GetString("TargetFrameworkErrorMessage", resourceCulture);
             }
         }
     }

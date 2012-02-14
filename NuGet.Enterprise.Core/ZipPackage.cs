@@ -6,6 +6,7 @@
     using System.Linq;
 
     using Ionic.Zip;
+    using NuGet.Enterprise.Core.Properties;
 
     public class ZipPackage : IPackage, IDisposable
     {
@@ -17,31 +18,8 @@
         {
             this.fileName = fileName;
             this.file = ZipFile.Read(fileName);
-            this.Id = null;
-            this.Version = null;
-            this.Title = null;
-            this.Authors = null;
-            this.Owners = null;
-            this.IconUrl = null;
-            this.LicenseUrl = null;
-            this.ProjectUrl = null;
-            this.RequireLicenseAcceptance = false;
-            this.Description = null;
-            this.Summary = null;
-            this.ReleaseNotes = null;
-            this.Language = null;
-            this.Tags = null;
-            this.Copyright = null;
-            this.FrameworkAssemblies = null;
-            this.Dependencies = null;
-            this.ReportAbuseUrl = null;
-            this.DownloadCount = 0;
-            this.IsAbsoluteLatestVersion = false;
-            this.IsLatestVersion = false;
-            this.Listed = false;
-            this.Published = null;
-            this.AssemblyReferences = null;
-        }
+            this.ParseManifest();
+        }        
 
         public string Id { get; private set; }
 
@@ -89,7 +67,17 @@
 
         public DateTimeOffset? Published { get; private set; }
 
-        public IEnumerable<IPackageAssemblyReference> AssemblyReferences { get; private set; }
+        public IEnumerable<IPackageAssemblyReference> AssemblyReferences
+        {
+            get
+            {
+                return from entry in this.file.EntriesSorted
+                       let startsWithLib = entry.FileName.StartsWith("lib/", StringComparison.CurrentCultureIgnoreCase)
+                       let endsWithDll = entry.FileName.StartsWith("dll", StringComparison.CurrentCultureIgnoreCase)
+                       where startsWithLib && endsWithDll
+                       select new ZipPackageAssemblyReference(entry);
+            }
+        }
 
         public IEnumerable<IPackageFile> GetFiles()
         {
@@ -118,6 +106,45 @@
             {
                 this.file.Dispose();
             }
+        }
+
+        private void ParseManifest()
+        {
+            var specFile =
+                this.file.EntriesSorted.Where(
+                    entry => entry.FileName.EndsWith(".nuspec", StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+
+            if (specFile == null)
+            {
+                throw ExceptionFactory.CreateInvalidOperationException(Resources.SpecFileNotFound);
+            }
+
+            var manifest = Manifest.ReadFrom(specFile.OpenReader());
+            IPackageMetadata metadata = manifest.Metadata;
+
+            this.Id = metadata.Id;
+            this.Version = metadata.Version;
+            this.Title = metadata.Title;
+            this.Authors = metadata.Authors;
+            this.Owners = metadata.Owners;
+            this.IconUrl = metadata.IconUrl;
+            this.LicenseUrl = metadata.LicenseUrl;
+            this.ProjectUrl = metadata.ProjectUrl;
+            this.RequireLicenseAcceptance = metadata.RequireLicenseAcceptance;
+            this.Description = metadata.Description;
+            this.Summary = metadata.Summary;
+            this.ReleaseNotes = metadata.ReleaseNotes;
+            this.Language = metadata.Language;
+            this.Tags = metadata.Tags;
+            this.Copyright = metadata.Copyright;
+            this.FrameworkAssemblies = metadata.FrameworkAssemblies;
+            this.Dependencies = metadata.Dependencies;
+            this.ReportAbuseUrl = null;
+            this.DownloadCount = 0;
+            this.IsAbsoluteLatestVersion = true;
+            this.IsLatestVersion = metadata.IsReleaseVersion();
+            this.Listed = true;
+            this.Published = null;
         }
     }
 }

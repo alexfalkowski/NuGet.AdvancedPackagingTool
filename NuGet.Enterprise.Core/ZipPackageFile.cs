@@ -14,11 +14,6 @@
             this.entry = entry;
         }
 
-        public Stream GetStream()
-        {
-            return this.entry.OpenReader();
-        }
-
         public string Path
         {
             get
@@ -27,6 +22,19 @@
                 var escapedFileName = Uri.UnescapeDataString(replacedFileName);
                 return escapedFileName;
             }
+        }
+
+        protected ZipEntry Entry
+        {
+            get
+            {
+                return this.entry;
+            }
+        }
+
+        public Stream GetStream()
+        {
+            return this.entry.OpenReader();
         }
     }
 }

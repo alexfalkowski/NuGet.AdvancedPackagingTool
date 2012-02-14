@@ -1,12 +1,13 @@
 ﻿namespace NuGet.Enterprise.Test.Unit
 {
+    using System;
     using System.Linq;
 
     using FluentAssertions;
 
-    using NUnit.Framework;
-
     using NuGet.Enterprise.Core;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public static class ZipPackageTests
@@ -46,30 +47,10 @@
         {
             using (var package = new ZipPackage("DummyNews.1.0.nupkg"))
             {
-                package.Id.Should().NotBeNull();
-                package.Version.Should().NotBeNull();
-                package.Title.Should().NotBeNull();
-                package.Authors.Should().NotBeNull();
-                package.Owners.Should().NotBeNull();
-                package.Should().NotBeNull();
-                package.LicenseUrl.Should().NotBeNull();
-                package.ProjectUrl.Should().NotBeNull();
-                package.RequireLicenseAcceptance.Should().BeTrue();
-                package.Description.Should().NotBeNull();
-                package.Summary.Should().NotBeNull();
-                package.ReleaseNotes.Should().NotBeNull();
-                package.Language.Should().NotBeNull();
-                package.Tags.Should().NotBeNull();
-                package.Copyright.Should().NotBeNull();
-                package.FrameworkAssemblies.Should().NotBeNull();
-                package.Dependencies.Should().NotBeNull();
-                package.ReportAbuseUrl.Should().NotBeNull();
-                package.DownloadCount.Should().Be(1);
-                package.IsAbsoluteLatestVersion.Should().BeTrue();
-                package.IsLatestVersion.Should().BeTrue();
-                package.Listed.Should().BeTrue();
-                package.Published.Should().NotBeNull();
-                package.AssemblyReferences.Should().NotBeNull();
+                package.Id.Should().Be("DummyNews");
+                package.Version.Should().Be(new SemanticVersion("1.0"));
+                package.ProjectUrl.Should().Be(new Uri("file:///C:/Ninemsn/TestInstallPackage/DummyNews/"));
+                package.AssemblyReferences.Count().Should().Be(0);
             }
         }
     }
