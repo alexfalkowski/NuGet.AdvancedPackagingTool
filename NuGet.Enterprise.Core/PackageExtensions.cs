@@ -13,11 +13,9 @@
     {
         private const string PackageParameterName = "package";
 
-        private static readonly IDictionary<string, IList<IPackageFile>> Cache = new Dictionary<string, IList<IPackageFile>>();
-
         public static IEnumerable<IPackageFile> GetModuleFiles(this IPackage package)
         {
-            var toolFiles = GetCachedToolFiles(package);
+            var toolFiles = package.GetFiles(Constants.ToolsDirectory);
 
             return toolFiles.Where(packageFile =>
                 {
@@ -34,9 +32,9 @@
                 throw ExceptionFactory.CreateArgumentNullException(PackageParameterName);
             }
 
-            var toolFiles = GetCachedToolFiles(package);
+            var toolFiles = package.GetFiles(Constants.ToolsDirectory);
 
-            return new PowerShellPackageFile(GetToolFile(toolFiles, "Setup"));
+            return GetToolFile(toolFiles, "Setup");
         }
 
         public static IPackageFile GetInstallPackageFile(this IPackage package)
@@ -46,9 +44,9 @@
                 throw ExceptionFactory.CreateArgumentNullException(PackageParameterName);
             }
 
-            var toolFiles = GetCachedToolFiles(package);
+            var toolFiles = package.GetFiles(Constants.ToolsDirectory);
 
-            return new PowerShellPackageFile(GetToolFile(toolFiles, "Install"));
+            return GetToolFile(toolFiles, "Install");
         }
 
         public static IPackageFile GetUninstallPackageFile(this IPackage package)
@@ -58,9 +56,9 @@
                 throw ExceptionFactory.CreateArgumentNullException(PackageParameterName);
             }
 
-            var toolFiles = GetCachedToolFiles(package);
+            var toolFiles = package.GetFiles(Constants.ToolsDirectory);
 
-            return new PowerShellPackageFile(GetToolFile(toolFiles, "Uninstall"));
+            return GetToolFile(toolFiles, "Uninstall");
         }
 
         public static IPackageFile GetTeardownPackageFile(this IPackage package)
@@ -70,9 +68,9 @@
                 throw ExceptionFactory.CreateArgumentNullException(PackageParameterName);
             }
 
-            var toolFiles = GetCachedToolFiles(package);
+            var toolFiles = package.GetFiles(Constants.ToolsDirectory);
 
-            return new PowerShellPackageFile(GetToolFile(toolFiles, "Teardown"));
+            return GetToolFile(toolFiles, "Teardown");
         }
 
         public static IPackageFile GetConfigurationPackageFile(this IPackage package)
@@ -82,9 +80,9 @@
                 throw ExceptionFactory.CreateArgumentNullException(PackageParameterName);
             }
 
-            var toolFiles = GetCachedToolFiles(package);
+            var toolFiles = package.GetFiles(Constants.ToolsDirectory);
 
-            return new PowerShellPackageFile(GetToolFile(toolFiles, "Configuration"));
+            return GetToolFile(toolFiles, "Configuration");
         }
 
         public static bool IsValid(this IPackageMetadata package)
@@ -139,20 +137,6 @@
             var powershellFile = powershellFilesQuery.FirstOrDefault();
 
             return powershellFile ?? new NullPackageFile();
-        }
-
-        private static IEnumerable<IPackageFile> GetCachedToolFiles(IPackage package)
-        {
-            IList<IPackageFile> toolFiles;
-            var fullName = package.GetFullName();
-
-            if (!Cache.TryGetValue(fullName, out toolFiles))
-            {
-                toolFiles = package.GetFiles(Constants.ToolsDirectory).ToList();
-                Cache.Add(fullName, toolFiles);
-            }
-
-            return toolFiles;
         }
     }
 }
