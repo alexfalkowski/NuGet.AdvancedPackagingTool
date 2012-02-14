@@ -1,10 +1,12 @@
-﻿namespace Ninemsn.PackageManager.NuGet.Test.Integration
+﻿namespace NuGet.Enterprise.Test.Integration
 {
     using FluentAssertions;
 
-    using global::NuGet;
+    using NuGet;
 
     using NUnit.Framework;
+
+    using NuGet.Enterprise.Core;
 
     [TestFixture]
     public class PackageManagerModuleTest

@@ -1,8 +1,8 @@
-﻿namespace Ninemsn.PackageManager.NuGet
+﻿namespace NuGet.Enterprise.Core
 {
     using System.IO;
 
-    using global::NuGet;
+    using NuGet;
 
     public class NullPackageFile : IPackageFile
     {

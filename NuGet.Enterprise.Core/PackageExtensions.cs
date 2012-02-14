@@ -1,4 +1,4 @@
-﻿namespace Ninemsn.PackageManager.NuGet
+﻿namespace NuGet.Enterprise.Core
 {
     using System;
     using System.Collections.Generic;
@@ -6,8 +6,8 @@
     using System.IO;
     using System.Linq;
 
-    using global::NuGet;
-    using global::NuGet.Enterprise.Core.Properties;
+    using NuGet;
+    using NuGet.Enterprise.Core.Properties;
 
     public static class PackageExtensions
     {

@@ -1,10 +1,10 @@
-﻿namespace Ninemsn.PackageManager.NuGet
+﻿namespace NuGet.Enterprise.Core
 {
     using System;
     using System.ComponentModel;
     using System.Globalization;
 
-    using global::NuGet;
+    using NuGet;
 
     public class VersionTypeConverter : TypeConverter
     {

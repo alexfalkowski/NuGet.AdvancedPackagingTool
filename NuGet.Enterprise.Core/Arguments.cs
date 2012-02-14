@@ -1,4 +1,4 @@
-namespace Ninemsn.PackageManager.NuGet
+namespace NuGet.Enterprise.Core
 {
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -6,7 +6,7 @@ namespace Ninemsn.PackageManager.NuGet
 
     using FluentValidation.Results;
 
-    using global::NuGet;
+    using NuGet;
 
     public class Arguments
     {

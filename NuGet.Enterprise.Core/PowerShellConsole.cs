@@ -1,11 +1,11 @@
-﻿namespace Ninemsn.PackageManager.NuGet
+﻿namespace NuGet.Enterprise.Core
 {
     using System;
     using System.Globalization;
     using System.IO;
     using System.Text;
 
-    using global::NuGet;
+    using NuGet;
 
     public class PowerShellConsole
     {

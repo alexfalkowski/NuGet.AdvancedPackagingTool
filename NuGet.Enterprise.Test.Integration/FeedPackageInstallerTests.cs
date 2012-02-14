@@ -1,9 +1,11 @@
-﻿namespace Ninemsn.PackageManager.NuGet.Test.Integration
+﻿namespace NuGet.Enterprise.Test.Integration
 {
     using System;
     using System.IO;
 
     using NUnit.Framework;
+
+    using NuGet.Enterprise.Core;
 
     [TestFixture]
     public class FeedPackageInstallerTests : PackageInstallerTestsBase

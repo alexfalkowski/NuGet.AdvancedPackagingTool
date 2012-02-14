@@ -1,4 +1,4 @@
-﻿namespace Ninemsn.PackageManager.NuGet.Test.Integration
+﻿namespace NuGet.Enterprise.Test.Integration
 {
     using System.IO;
     using System.Linq;
@@ -6,6 +6,8 @@
     using FluentAssertions;
 
     using NUnit.Framework;
+
+    using NuGet.Enterprise.Core;
 
     [TestFixture]
     public class ConsoleTests

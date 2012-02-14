@@ -1,4 +1,4 @@
-﻿namespace Ninemsn.PackageManager.NuGet.Test.Unit
+﻿namespace NuGet.Enterprise.Test.Unit
 {
     using System.Linq;
 
@@ -6,9 +6,11 @@
 
     using NSubstitute;
 
-    using global::NuGet;
+    using NuGet;
 
     using NUnit.Framework;
+
+    using NuGet.Enterprise.Core;
 
     [TestFixture]
     public class ConsoleTests

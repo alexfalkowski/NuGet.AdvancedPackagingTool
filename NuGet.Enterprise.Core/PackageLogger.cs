@@ -1,9 +1,9 @@
-namespace Ninemsn.PackageManager.NuGet
+namespace NuGet.Enterprise.Core
 {
     using System.Collections.Generic;
     using System.Globalization;
 
-    using global::NuGet;
+    using NuGet;
 
     public class PackageLogger : ILogger
     {

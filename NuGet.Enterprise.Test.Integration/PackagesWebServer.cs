@@ -1,4 +1,4 @@
-﻿namespace Ninemsn.PackageManager.NuGet.Test.Integration
+﻿namespace NuGet.Enterprise.Test.Integration
 {
     using System;
     using System.Diagnostics;
@@ -6,6 +6,8 @@
     using System.IO;
     using System.Reflection;
     using System.Threading;
+
+    using NuGet.Enterprise.Core;
 
     public class PackagesWebServer
     {
@@ -41,7 +43,7 @@
 
             const string FileName = @"C:\Program Files (x86)\IIS Express\iisexpress.exe";
             var currentPath = new Uri(currentExecutingDirectoryName).LocalPath;
-            var path = Path.GetFullPath(Path.Combine(currentPath, @"..\..\..\Ninemsn.PackageManager.NuGet.Service"));
+            var path = Path.GetFullPath(Path.Combine(currentPath, @"..\..\..\NuGet.Enterprise.Service"));
             var arguments = string.Format(CultureInfo.CurrentCulture, @"/path:""{0}"" /port:1544", path);
 
             this.process = ProcessHelper.CreateBackgroundProcess(FileName, arguments);

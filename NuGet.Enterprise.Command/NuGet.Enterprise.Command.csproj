@@ -40,7 +40,7 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>Ninemsn.PackageManager.NuGet.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>NuGet.Enterprise.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <PlatformTarget>x64</PlatformTarget>
@@ -92,7 +92,7 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Ninemsn.PackageManager.NuGet.snk" />
+    <None Include="NuGet.Enterprise.snk" />
     <None Include="packages.config" />
     <None Include="PackageSources.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

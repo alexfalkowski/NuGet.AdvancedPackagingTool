@@ -36,7 +36,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>Ninemsn.PackageManager.NuGet.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>NuGet.Enterprise.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Logging">
@@ -110,7 +110,7 @@
     <Compile Include="VersionTypeConverter.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Ninemsn.PackageManager.NuGet.snk" />
+    <None Include="NuGet.Enterprise.snk" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

@@ -1,4 +1,4 @@
-namespace Ninemsn.PackageManager.NuGet
+namespace NuGet.Enterprise.Core
 {
     public static class PackageInstallerFactory
     {

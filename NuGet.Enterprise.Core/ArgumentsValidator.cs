@@ -1,8 +1,8 @@
-namespace Ninemsn.PackageManager.NuGet
+namespace NuGet.Enterprise.Core
 {
     using FluentValidation;
 
-    using global::NuGet.Enterprise.Core.Properties;
+    using NuGet.Enterprise.Core.Properties;
 
     public class ArgumentsValidator : AbstractValidator<Arguments>
     {

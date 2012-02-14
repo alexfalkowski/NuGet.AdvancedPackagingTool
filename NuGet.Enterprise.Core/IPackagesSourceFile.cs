@@ -1,8 +1,8 @@
-﻿namespace Ninemsn.PackageManager.NuGet
+﻿namespace NuGet.Enterprise.Core
 {
     using System.Collections.Generic;
 
-    using global::NuGet;
+    using NuGet;
 
     public interface IPackagesSourceFile
     {

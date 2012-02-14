@@ -1,6 +1,6 @@
-﻿namespace Ninemsn.PackageManager.NuGet
+﻿namespace NuGet.Enterprise.Core
 {
-    using global::NuGet;
+    using NuGet;
 
     public static class ProjectSystemFactory
     {

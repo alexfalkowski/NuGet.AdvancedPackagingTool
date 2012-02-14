@@ -1,4 +1,4 @@
-﻿namespace Ninemsn.PackageManager.NuGet
+﻿namespace NuGet.Enterprise.Core
 {
     using System;
     using System.Collections.Generic;
@@ -6,7 +6,7 @@
     using System.Linq;
     using System.Xml.Linq;
 
-    using global::NuGet;
+    using NuGet;
 
     public class PackageSourceFile : IPackagesSourceFile
     {

@@ -1,4 +1,4 @@
-﻿namespace Ninemsn.PackageManager.NuGet.Test.Integration
+﻿namespace NuGet.Enterprise.Test.Integration
 {
     using System.Collections.Generic;
     using System.Diagnostics;
@@ -8,9 +8,11 @@
 
     using FluentAssertions;
 
-    using global::NuGet;
+    using NuGet;
 
     using NUnit.Framework;
+
+    using NuGet.Enterprise.Core;
 
     public abstract class PackageInstallerTestsBase
     {

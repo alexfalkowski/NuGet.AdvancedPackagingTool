@@ -1,14 +1,14 @@
-using Ninemsn.PackageManager.NuGet.Service.DataServices;
+using NuGet.Enterprise.Service.DataServices;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(NuGetRoutes), "Start")]
 
-namespace Ninemsn.PackageManager.NuGet.Service.DataServices 
+namespace NuGet.Enterprise.Service.DataServices 
 {
     using System.Data.Services;
     using System.ServiceModel.Activation;
     using System.Web.Routing;
 
-    using global::NuGet.Server.DataServices;
+    using NuGet.Server.DataServices;
 
     public static class NuGetRoutes 
     {

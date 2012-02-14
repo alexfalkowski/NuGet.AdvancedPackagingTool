@@ -1,11 +1,11 @@
-namespace Ninemsn.PackageManager.NuGet
+namespace NuGet.Enterprise.Core
 {
     using System;
     using System.Collections.Generic;
 
     using Common.Logging;
 
-    using global::NuGet.Enterprise.Core.Properties;
+    using NuGet.Enterprise.Core.Properties;
 
     public class Console
     {
