@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
 
@@ -10,14 +11,16 @@
 
     public class ZipPackage : IPackage, IDisposable
     {
-        private readonly string fileName;
+        private readonly string filePath;
 
         private readonly ZipFile file;
 
-        public ZipPackage(string fileName)
+        private bool markForDeletion;
+
+        public ZipPackage(string filePath)
         {
-            this.fileName = fileName;
-            this.file = ZipFile.Read(fileName);
+            this.filePath = filePath;
+            this.file = ZipFile.Read(filePath);
             this.ParseManifest();
         }        
 
@@ -71,33 +74,82 @@
         {
             get
             {
-                return from entry in this.file.EntriesSorted
-                       let startsWithLib = entry.FileName.StartsWith("lib/", StringComparison.CurrentCultureIgnoreCase)
-                       let endsWithDll = entry.FileName.StartsWith("dll", StringComparison.CurrentCultureIgnoreCase)
-                       where startsWithLib && endsWithDll
-                       select new ZipPackageAssemblyReference(entry);
+                var query = from entry in this.file.EntriesSorted
+                            let startsWithLib =
+                                entry.FileName.StartsWith(
+                                    Constants.LibDirectory, StringComparison.CurrentCultureIgnoreCase)
+                            where startsWithLib && IsAssembly(entry.FileName)
+                            select new ZipPackageAssemblyReference(entry);
+                return query;
             }
         }
 
         public IEnumerable<IPackageFile> GetFiles()
         {
-            return from entry in this.file.EntriesSorted
-                   let startsWithContent =
-                       entry.FileName.StartsWith("content/", StringComparison.CurrentCultureIgnoreCase)
-                   let startsWithTools = entry.FileName.StartsWith("tools/", StringComparison.CurrentCultureIgnoreCase)
-                   where startsWithContent || startsWithTools
-                   select new ZipPackageFile(entry);
+            var query = from entry in this.file.EntriesSorted
+                        let startsWithContent =
+                            entry.FileName.StartsWith(
+                                Constants.ContentDirectory, StringComparison.CurrentCultureIgnoreCase)
+                        let startsWithTools =
+                            entry.FileName.StartsWith(
+                                Constants.ToolsDirectory, StringComparison.CurrentCultureIgnoreCase)
+                        where startsWithContent || startsWithTools
+                        select new ZipPackageFile(entry);
+
+            return query;
         }
 
         public Stream GetStream()
         {
-            return File.OpenRead(this.fileName);
+            return File.OpenRead(this.filePath);
+        }
+
+        public void CopyTo(string path)
+        {
+            var fileName = Path.GetFileName(this.filePath);
+
+            if (string.IsNullOrWhiteSpace(fileName))
+            {
+                throw ExceptionFactory.CreateInvalidOperationException(
+                    string.Format(CultureInfo.CurrentCulture, Resources.FileNameErrorMessage, this.filePath));
+            }
+
+            var destinationFilePath = Path.Combine(path, fileName);
+            File.Copy(this.filePath, destinationFilePath);
+        }
+
+        public void ExtractContentsTo(string path)
+        {
+            var fileName = Path.GetFileNameWithoutExtension(this.filePath);
+
+            if (string.IsNullOrWhiteSpace(fileName))
+            {
+                throw ExceptionFactory.CreateInvalidOperationException(
+                    string.Format(CultureInfo.CurrentCulture, Resources.FileNameErrorMessage, this.filePath));
+            }
+
+            var tempPath = Path.Combine(Path.GetTempPath(), fileName);
+            Directory.CreateDirectory(tempPath);
+            this.file.ExtractAll(tempPath,  ExtractExistingFileAction.OverwriteSilently);
+
+            var directory = new DirectoryInfo(Path.Combine(tempPath, "content"));
+            directory.Copy(new DirectoryInfo(path));
         }
 
         public void Dispose()
         {
             this.Dispose(true);
             GC.SuppressFinalize(this);
+
+            if (this.markForDeletion)
+            {
+                File.Delete(this.filePath);
+            }
+        }
+
+        public void Delete()
+        {
+            this.markForDeletion = true;
         }
 
         protected virtual void Dispose(bool disposable)
@@ -106,6 +158,13 @@
             {
                 this.file.Dispose();
             }
+        }
+
+        private static bool IsAssembly(string path)
+        {
+            return path.EndsWith(".dll", StringComparison.OrdinalIgnoreCase) ||
+                   path.EndsWith(".winmd", StringComparison.OrdinalIgnoreCase) ||
+                   path.EndsWith(".exe", StringComparison.OrdinalIgnoreCase);
         }
 
         private void ParseManifest()

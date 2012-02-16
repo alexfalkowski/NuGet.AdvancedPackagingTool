@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConsoleTests.cs" />
+    <Compile Include="DiskPackageRepositoryTests.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="LocalPackageInstallerTests.cs" />
     <Compile Include="FeedPackageInstallerTests.cs" />
@@ -82,10 +83,16 @@
     <Compile Include="PackageManagerModuleTest.cs" />
     <Compile Include="PackagesWebServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ZipPackageManagerTests.cs" />
+    <Compile Include="ZipPackageTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\NuGet.Enterprise.Command\PackageSources.config">
       <Link>PackageSources.config</Link>
+    </None>
+    <None Include="..\NuGet.Enterprise.Service\Packages\DummyNews.1.0.nupkg">
+      <Link>DummyNews.1.0.nupkg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="App.config">
       <SubType>Designer</SubType>

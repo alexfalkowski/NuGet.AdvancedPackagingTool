@@ -80,10 +80,14 @@
     <Compile Include="ArgumentsValidator.cs" />
     <Compile Include="ConfigurationManager.cs" />
     <Compile Include="Console.cs" />
+    <Compile Include="DefaultFileSystem.cs" />
+    <Compile Include="DiskPackageRepository.cs" />
     <Compile Include="ExceptionFactory.cs" />
-    <Compile Include="PackageInstallerFactory.cs" />
-    <Compile Include="PathHelper.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="PackageInstallerFactory.cs" />
+    <Compile Include="PackageRepositoryFactory.cs" />
+    <Compile Include="PathExtensions.cs" />
+    <Compile Include="PathHelper.cs" />
     <Compile Include="IPackageInstaller.cs" />
     <Compile Include="NullPackageFile.cs" />
     <Compile Include="NullPackageInstaller.cs" />
@@ -96,6 +100,7 @@
     <Compile Include="PowerShellConsole.cs" />
     <Compile Include="ProcessExitInfo.cs" />
     <Compile Include="ProcessHelper.cs" />
+    <Compile Include="ProjectManager.cs" />
     <Compile Include="ProjectManagerExtensions.cs" />
     <Compile Include="ProjectSystemFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -113,6 +118,8 @@
     <Compile Include="ZipPackage.cs" />
     <Compile Include="ZipPackageAssemblyReference.cs" />
     <Compile Include="ZipPackageFile.cs" />
+    <Compile Include="ZipPackageManager.cs" />
+    <Compile Include="ZipPackagePathResolver.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NuGet.Enterprise.snk" />

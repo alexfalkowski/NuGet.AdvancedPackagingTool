@@ -10,16 +10,17 @@
     using FluentAssertions;
 
     using NuGet;
+    using NuGet.Enterprise.Core;
 
     using NUnit.Framework;
-
-    using NuGet.Enterprise.Core;
 
     public abstract class PackageInstallerTestsBase
     {
         private const string ShortVersion10 = "1.0";
 
-        private const string DummyNews10 = "DummyNews.1.0";
+        private const string DummyNews10 = "DummyNews.1.0.nupkg";
+
+        private const string DummyNews11 = "DummyNews.1.1.nupkg";
 
         private const string Uninstall = "Uninstall";
 
@@ -36,8 +37,6 @@
         private const string PackageShouldBeinstalled = "The package DummyNews should not be installed.";
 
         private const string Already = "already";
-
-        private const string DummyNews11 = "DummyNews.1.1";
 
         private const string Version10 = "1.0.0.0";
 
@@ -67,7 +66,7 @@
             log.Should().Contain(Setup);
             log.Should().Contain(Added);
             log.Should().Contain(Install);
-            Directory.EnumerateDirectories(this.PackagePath, DummyNews10).Any().Should().BeTrue();
+            File.Exists(Path.Combine(this.PackagePath, DummyNews10)).Should().BeTrue();
             this.GetFileVersion().Should().Be(Version10);
             this.GetWebsiteVersion().Should().Be(Version10);
         }
@@ -77,7 +76,7 @@
         {
             this.NewsInstaller.InstallPackage(new SemanticVersion(ShortVersion11));
 
-            Directory.EnumerateDirectories(this.PackagePath, DummyNews11).Any().Should().BeTrue();
+            File.Exists(Path.Combine(this.PackagePath, DummyNews11)).Should().BeTrue();
             this.GetFileVersion().Should().Be(Version11);
             this.GetWebsiteVersion().Should().Be(Version11);
         }
@@ -98,8 +97,8 @@
             log.Should().Contain(Added);
             log.Should().Contain(Install);
 
-            Directory.EnumerateDirectories(this.PackagePath, DummyNews10).Any().Should().BeFalse();
-            Directory.EnumerateDirectories(this.PackagePath, DummyNews11).Any().Should().BeTrue();
+            File.Exists(Path.Combine(this.PackagePath, DummyNews10)).Should().BeFalse();
+            File.Exists(Path.Combine(this.PackagePath, DummyNews11)).Should().BeTrue();
             this.GetFileVersion().Should().Be(Version11);
             this.GetWebsiteVersion().Should().Be(Version11);
         }
@@ -116,7 +115,7 @@
             log.Should().Contain(Added);
             log.Should().Contain(Install);
 
-            Directory.EnumerateDirectories(this.PackagePath, DummyNews10).Any().Should().BeTrue();
+            File.Exists(Path.Combine(this.PackagePath, DummyNews10)).Should().BeTrue();
             this.GetFileVersion().Should().Be(Version10);
             this.GetWebsiteVersion().Should().Be(Version10);
         }

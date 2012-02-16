@@ -62,6 +62,16 @@
             throw new NotSupportedException();
         }
 
+        public override void AddFile(string path, Stream stream)
+        {
+            var fileName = Path.GetFileName(path);
+
+            if (!string.IsNullOrWhiteSpace(fileName))
+            {
+                base.AddFile(path, stream);
+            }
+        }
+
         public void AddReference(string referencePath, Stream stream)
         {
             var fileName = Path.GetFileName(referencePath);

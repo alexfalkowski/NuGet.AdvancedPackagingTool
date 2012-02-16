@@ -1,9 +1,12 @@
 namespace NuGet.Enterprise.Core
 {
+    using System.Diagnostics.CodeAnalysis;
+
     using FluentValidation;
 
     using NuGet.Enterprise.Core.Properties;
 
+    [SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "This is not a collection.")]
     public class ArgumentsValidator : AbstractValidator<Arguments>
     {
          public ArgumentsValidator()

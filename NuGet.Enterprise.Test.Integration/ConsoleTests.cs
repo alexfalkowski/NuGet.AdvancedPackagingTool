@@ -5,32 +5,14 @@
 
     using FluentAssertions;
 
-    using NUnit.Framework;
-
     using NuGet.Enterprise.Core;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class ConsoleTests
     {
         private PackagesWebServer server;
-
-        [SetUp]
-        public void Setup()
-        {
-            this.server = new PackagesWebServer();
-            this.server.Startup();
-
-            if (Directory.Exists(ConfigurationManager.PackagePath))
-            {
-                Directory.Delete(ConfigurationManager.PackagePath, true);
-            }
-        }
-
-        [TearDown]
-        public void Teardown()
-        {
-            this.server.Stop();
-        }
 
         [Test]
         public static void ShouldInstallAndUninstallVersion10Package()
@@ -85,9 +67,30 @@
                 "The package DummyNews should be installed.");
         }
 
+        [SetUp]
+        public void Setup()
+        {
+            this.server = new PackagesWebServer();
+            this.server.Startup();
+
+            if (Directory.Exists(ConfigurationManager.PackagePath))
+            {
+                Directory.Delete(ConfigurationManager.PackagePath, true);
+            }
+        }
+
+        [TearDown]
+        public void Teardown()
+        {
+            this.server.Stop();
+        }
+
         private static void RunPackageManagerProcess(string arguments)
         {
             var info = ProcessHelper.ExecuteBackgroundProcess("npm.exe", arguments);
+
+            System.Console.WriteLine(info.OutputMessage);
+            System.Console.WriteLine(info.ErrorMessage);
 
             info.ExitCode.Should().Be(0);
         }

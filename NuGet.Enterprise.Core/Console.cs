@@ -2,6 +2,7 @@ namespace NuGet.Enterprise.Core
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
 
     using Common.Logging;
 
@@ -31,6 +32,7 @@ namespace NuGet.Enterprise.Core
             this.installer = installer;
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "We are logging the exception.")]
         public int Start()
         {
             if (!this.arguments.IsValid)

@@ -3,11 +3,12 @@
     using System;
     using System.IO;
 
-    using NUnit.Framework;
-
     using NuGet.Enterprise.Core;
 
+    using NUnit.Framework;
+
     [TestFixture]
+    [Ignore("Don't know if we want to support remote packages. Git is a better solution.")]
     public class FeedPackageInstallerTests : PackageInstallerTestsBase
     {
         private PackagesWebServer server;

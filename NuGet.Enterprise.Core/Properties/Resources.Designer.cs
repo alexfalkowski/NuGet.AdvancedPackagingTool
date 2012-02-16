@@ -79,6 +79,15 @@ namespace NuGet.Enterprise.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not get file name name from path &apos;{0}&apos;..
+        /// </summary>
+        internal static string FileNameErrorMessage {
+            get {
+                return ResourceManager.GetString("FileNameErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid execution of the package manager..
         /// </summary>
         internal static string InvalidExecutionErrorMessage {

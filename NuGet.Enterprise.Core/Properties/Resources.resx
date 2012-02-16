@@ -159,4 +159,7 @@
   <data name="TargetFrameworkErrorMessage" xml:space="preserve">
     <value>Could not get target framework from path '{0}'.</value>
   </data>
+  <data name="FileNameErrorMessage" xml:space="preserve">
+    <value>Could not get file name name from path '{0}'.</value>
+  </data>
 </root>

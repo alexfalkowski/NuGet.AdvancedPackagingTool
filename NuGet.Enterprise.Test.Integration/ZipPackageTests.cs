@@ -1,4 +1,4 @@
-﻿namespace NuGet.Enterprise.Test.Unit
+namespace NuGet.Enterprise.Test.Integration
 {
     using System;
     using System.Linq;

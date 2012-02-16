@@ -1,5 +1,6 @@
 ﻿namespace NuGet.Enterprise.Core
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -50,8 +51,8 @@
             this.source = source;
             this.packageName = packageName;
             this.logger = new PackageLogger();
-            this.sourceRepository = PackageRepositoryFactory.Default.CreateRepository(this.source.Source);
-            this.localRepository = PackageRepositoryFactory.Default.CreateRepository(localRepositoryPath);
+            this.sourceRepository = PackageRepositoryFactory.CreatePackageRepository(this.source.Source);
+            this.localRepository = PackageRepositoryFactory.CreatePackageRepository(localRepositoryPath);
         }
 
         public IEnumerable<string> Logs
@@ -69,11 +70,14 @@
             try
             {
                 var package = this.GetValidPackage(version);
-                this.isPackageInstalled = this.projectManager.IsPackageInstalled(package);
+                using (package as IDisposable)
+                {
+                    this.isPackageInstalled = this.projectManager.IsPackageInstalled(package);
 
-                Directory.CreateDirectory(package.ProjectUrl.LocalPath);
+                    Directory.CreateDirectory(package.ProjectUrl.LocalPath);
 
-                this.projectManager.InstallPackage(package);
+                    this.projectManager.InstallPackage(package);
+                }
             }
             finally
             {
@@ -84,11 +88,14 @@
         public void UninstallPackage(SemanticVersion version)
         {
             var package = this.GetValidPackage(version);
-            this.projectManager.UninstallPackage(package, true);
+            using (package as IDisposable)
+            {
+                this.projectManager.UninstallPackage(package, true);
 
-            var localPath = package.ProjectUrl.LocalPath;
+                var localPath = package.ProjectUrl.LocalPath;
 
-            PathHelper.SafeDelete(localPath);
+                PathHelper.SafeDelete(localPath);
+            }
         }
 
         private void OnProjectManagerPackageReferenceRemoving(object sender, PackageOperationEventArgs e)

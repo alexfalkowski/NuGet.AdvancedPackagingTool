@@ -3,9 +3,9 @@
     using System;
     using System.IO;
 
-    using NUnit.Framework;
-
     using NuGet.Enterprise.Core;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class LocalPackageInstallerTests : PackageInstallerTestsBase
