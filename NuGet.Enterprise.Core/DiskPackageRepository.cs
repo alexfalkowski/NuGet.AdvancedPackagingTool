@@ -1,5 +1,6 @@
 ﻿namespace NuGet.Enterprise.Core
 {
+    using System;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
@@ -13,7 +14,7 @@
                 throw ExceptionFactory.CreateArgumentNullException("source");
             }
 
-            this.Source = source;
+            this.Source = new Uri(source).LocalPath;
         }
 
         public string Source { get; private set; }

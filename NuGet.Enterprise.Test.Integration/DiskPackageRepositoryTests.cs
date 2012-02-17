@@ -1,13 +1,12 @@
 namespace NuGet.Enterprise.Test.Integration
 {
-    using System.Collections.Generic;
     using System.Linq;
 
     using FluentAssertions;
 
-    using NUnit.Framework;
-
     using NuGet.Enterprise.Core;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public static class DiskPackageRepositoryTests
@@ -17,18 +16,26 @@ namespace NuGet.Enterprise.Test.Integration
         {
             var repository = new DiskPackageRepository(".");
 
-            var packages = repository.GetPackages();
-            packages.Count().Should().Be(1);
-
-            DisposePackages(packages);
+            repository.GetPackages(packages => packages.Count().Should().Be(1));
         }
 
-        private static void DisposePackages(IEnumerable<IPackage> packages)
+        [Test]
+        public static void ShouldGetSpecificVersionFromSource()
         {
-            foreach (ZipPackage package in packages)
-            {
-                package.Dispose();
-            }
+            var repository = new DiskPackageRepository(".");
+
+            const string PackageId = "DummyNews";
+            var semanticVersion = new SemanticVersion("1.0");
+
+            repository.FindPackage(
+                PackageId,
+                semanticVersion,
+                package =>
+                    {
+                        package.Should().NotBeNull();
+                        package.Id.Should().Be(PackageId);
+                        package.Version.Should().Be(semanticVersion);
+                    });
         }
     }
 }

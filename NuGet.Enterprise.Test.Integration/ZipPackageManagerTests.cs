@@ -38,7 +38,7 @@ namespace NuGet.Enterprise.Test.Integration
         }
  
         [Test]
-        public void ShouldInstallPackage()
+        public void ShouldInstallExistingPackage()
         {
             using (var package = new ZipPackage("DummyNews.1.0.nupkg"))
             {
@@ -57,6 +57,25 @@ namespace NuGet.Enterprise.Test.Integration
                 AssertInstallEventsWereCalled(collection);
                 Directory.EnumerateFiles(this.installationPath, "*.*", SearchOption.AllDirectories).Count().Should().Be(16);
             }
+        }
+
+        [Test]
+        public void ShouldInstallSpecificVersionPackage()
+        {
+            var collection = new Collection<string>();
+            var sourceRepository = new DiskPackageRepository(this.source.Source);
+            var localRepository =
+                new DiskPackageRepository(this.packagePath);
+            var manager = new ZipPackageManager(
+                localRepository,
+                sourceRepository,
+                new DefaultFileSystem(this.installationPath, true),
+                new ZipPackagePathResolver());
+
+            SetupAllEvents(manager, collection);
+            manager.InstallPackage("DummyNews", new SemanticVersion("1.0"), true, true);
+            AssertInstallEventsWereCalled(collection);
+            Directory.EnumerateFiles(this.installationPath, "*.*", SearchOption.AllDirectories).Count().Should().Be(16);
         }
 
         private static void SetupAllEvents(IPackageManager manager, ICollection<string> list)

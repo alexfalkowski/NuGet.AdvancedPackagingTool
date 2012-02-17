@@ -56,6 +56,11 @@
 
         public void InstallPackage(IPackage package, bool ignoreDependencies, bool allowPrereleaseVersions)
         {
+            if (package == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException("package");
+            }
+
             var packageOperationEventArgs = new PackageOperationEventArgs(package, this.FileSystem, this.LocalRepository.Source, this.FileSystem.Root);
             this.OnPackageInstalling(packageOperationEventArgs);
             this.OnPackageInstalled(packageOperationEventArgs);
@@ -67,7 +72,18 @@
 
         public void InstallPackage(string packageId, SemanticVersion version, bool ignoreDependencies, bool allowPrereleaseVersions)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(packageId))
+            {
+                throw ExceptionFactory.CreateArgumentNullException("packageId");
+            }
+
+            if (version == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException("version");
+            }
+
+            this.SourceRepository.FindPackage(
+                packageId, version, package => this.InstallPackage(package, ignoreDependencies, allowPrereleaseVersions));
         }
 
         public void UpdatePackage(IPackage newPackage, bool updateDependencies, bool allowPrereleaseVersions)

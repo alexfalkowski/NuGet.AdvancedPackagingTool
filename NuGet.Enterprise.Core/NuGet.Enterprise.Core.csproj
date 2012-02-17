@@ -85,6 +85,7 @@
     <Compile Include="ExceptionFactory.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="PackageInstallerFactory.cs" />
+    <Compile Include="PackageRepositoryExtensions.cs" />
     <Compile Include="PackageRepositoryFactory.cs" />
     <Compile Include="PathExtensions.cs" />
     <Compile Include="PathHelper.cs" />
