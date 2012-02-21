@@ -1,6 +1,9 @@
 namespace NuGet.Enterprise.Test.Integration
 {
+    using System;
+    using System.IO;
     using System.Linq;
+    using System.Reflection;
 
     using FluentAssertions;
 
@@ -11,10 +14,25 @@ namespace NuGet.Enterprise.Test.Integration
     [TestFixture]
     public static class DiskPackageRepositoryTests
     {
+        private static string CurrentDirectoryPath
+        {
+            get
+            {
+                var currentDirectoryPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase);
+
+                if (currentDirectoryPath == null)
+                {
+                    throw ExceptionFactory.CreateInvalidOperationException(string.Empty);
+                }
+
+                return new Uri(currentDirectoryPath).LocalPath;
+            }
+        }
+
         [Test]
         public static void ShouldGetPackagesFromSource()
         {
-            var repository = new DiskPackageRepository(".");
+            var repository = new DiskPackageRepository(CurrentDirectoryPath);
 
             repository.GetPackages(packages => packages.Count().Should().Be(1));
         }
@@ -22,7 +40,7 @@ namespace NuGet.Enterprise.Test.Integration
         [Test]
         public static void ShouldGetSpecificVersionFromSource()
         {
-            var repository = new DiskPackageRepository(".");
+            var repository = new DiskPackageRepository(CurrentDirectoryPath);
 
             const string PackageId = "DummyNews";
             var semanticVersion = new SemanticVersion("1.0");

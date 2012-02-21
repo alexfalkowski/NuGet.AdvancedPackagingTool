@@ -84,7 +84,9 @@
     <Compile Include="DiskPackageRepository.cs" />
     <Compile Include="ExceptionFactory.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="IFileSystem.cs" />
     <Compile Include="PackageInstallerFactory.cs" />
+    <Compile Include="PackagePathResolverExtensions.cs" />
     <Compile Include="PackageRepositoryExtensions.cs" />
     <Compile Include="PackageRepositoryFactory.cs" />
     <Compile Include="PathExtensions.cs" />
@@ -120,7 +122,6 @@
     <Compile Include="ZipPackageAssemblyReference.cs" />
     <Compile Include="ZipPackageFile.cs" />
     <Compile Include="ZipPackageManager.cs" />
-    <Compile Include="ZipPackagePathResolver.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NuGet.Enterprise.snk" />

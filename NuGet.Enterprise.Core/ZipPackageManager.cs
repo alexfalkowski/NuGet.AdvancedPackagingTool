@@ -44,7 +44,7 @@
 
         public event EventHandler<PackageOperationEventArgs> PackageUninstalling;
 
-        public IFileSystem FileSystem { get; set; }
+        public NuGet.IFileSystem FileSystem { get; set; }
 
         public IPackageRepository LocalRepository { get; private set; }
 
@@ -63,11 +63,13 @@
 
             var packageOperationEventArgs = new PackageOperationEventArgs(package, this.FileSystem, this.LocalRepository.Source, this.FileSystem.Root);
             this.OnPackageInstalling(packageOperationEventArgs);
-            this.OnPackageInstalled(packageOperationEventArgs);
-
+            
             var zipPackage = (ZipPackage)package;
 
             zipPackage.ExtractContentsTo(this.FileSystem.Root);
+            this.LocalRepository.AddPackage(zipPackage);
+
+            this.OnPackageInstalled(packageOperationEventArgs);
         }
 
         public void InstallPackage(string packageId, SemanticVersion version, bool ignoreDependencies, bool allowPrereleaseVersions)
@@ -103,12 +105,38 @@
 
         public void UninstallPackage(IPackage package, bool forceRemove, bool removeDependencies)
         {
-            throw new NotImplementedException();
+            if (package == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException("package");
+            }
+
+            var packageOperationEventArgs = new PackageOperationEventArgs(package, this.FileSystem, this.LocalRepository.Source, this.FileSystem.Root);
+            this.OnPackageUninstalling(packageOperationEventArgs);
+            var installedPath = this.PathResolver.GetInstallFileName(package);
+
+            using (var installedPackage = new ZipPackage(installedPath))
+            {
+                this.LocalRepository.RemovePackage(installedPackage);
+            }
+
+            this.FileSystem.DeleteDirectory(".", true);
+            this.OnPackageUninstalled(packageOperationEventArgs);
         }
 
         public void UninstallPackage(string packageId, SemanticVersion version, bool forceRemove, bool removeDependencies)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(packageId))
+            {
+                throw ExceptionFactory.CreateArgumentNullException("packageId");
+            }
+
+            if (version == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException("version");
+            }
+
+            this.LocalRepository.FindPackage(
+                packageId, version, package => this.UninstallPackage(package, forceRemove, removeDependencies));
         }
 
         protected void OnPackageInstalled(PackageOperationEventArgs e)

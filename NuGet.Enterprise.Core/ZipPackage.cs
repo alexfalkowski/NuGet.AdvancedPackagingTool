@@ -106,16 +106,7 @@
 
         public void CopyTo(string path)
         {
-            var fileName = Path.GetFileName(this.filePath);
-
-            if (string.IsNullOrWhiteSpace(fileName))
-            {
-                throw ExceptionFactory.CreateInvalidOperationException(
-                    string.Format(CultureInfo.CurrentCulture, Resources.FileNameErrorMessage, this.filePath));
-            }
-
-            var destinationFilePath = Path.Combine(path, fileName);
-            File.Copy(this.filePath, destinationFilePath);
+            File.Copy(this.filePath, path);
         }
 
         public void ExtractContentsTo(string path)

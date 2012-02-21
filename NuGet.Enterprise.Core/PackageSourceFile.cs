@@ -49,7 +49,7 @@
                 throw new FormatException();
             }
 
-            return new PackageSource(uri.OriginalString, displayNameAttribute.Value);
+            return new PackageSource(uri.LocalPath, displayNameAttribute.Value);
         }
 
         private static IEnumerable<PackageSource> ReadFeeds(Func<Stream> getStream)

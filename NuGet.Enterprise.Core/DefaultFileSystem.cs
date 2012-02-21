@@ -4,13 +4,18 @@
     using System.IO;
     using System.Linq;
 
-    public class DefaultFileSystem : PhysicalFileSystem
+    public class DefaultFileSystem : PhysicalFileSystem, IFileSystem
     {
         private readonly bool install;
 
         public DefaultFileSystem(string installationPath, bool install)
             : base(installationPath)
         {
+            if (string.IsNullOrEmpty(installationPath))
+            {
+                throw ExceptionFactory.CreateArgumentNullException("installationPath");
+            }
+
             this.install = install;
         }
 
@@ -37,6 +42,11 @@
         public override IEnumerable<string> GetDirectories(string path)
         {
             return !Directory.Exists(path) ? Enumerable.Empty<string>() : Directory.EnumerateDirectories(path);
+        }
+
+        public void CreateDirectory(string path)
+        {
+            Directory.CreateDirectory(GetFullPath(path));
         }
     }
 }

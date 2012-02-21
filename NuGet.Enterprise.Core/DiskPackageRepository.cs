@@ -1,20 +1,39 @@
 ﻿namespace NuGet.Enterprise.Core
 {
-    using System;
     using System.Diagnostics.CodeAnalysis;
-    using System.IO;
     using System.Linq;
 
     public class DiskPackageRepository : IPackageRepository
     {
+        private readonly IFileSystem fileSystem;
+
+        private readonly IPackagePathResolver packagePathResolver;
+
         public DiskPackageRepository(string source)
+            : this(new DefaultFileSystem(source, false), new DefaultPackagePathResolver(source))
         {
-            if (string.IsNullOrWhiteSpace(source))
+            if (source == null)
             {
                 throw ExceptionFactory.CreateArgumentNullException("source");
             }
 
-            this.Source = new Uri(source).LocalPath;
+            this.Source = source;
+        }
+
+        public DiskPackageRepository(IFileSystem fileSystem, IPackagePathResolver packagePathResolver)
+        {
+            if (fileSystem == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException("fileSystem");
+            }
+
+            if (packagePathResolver == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException("packagePathResolver");
+            }
+
+            this.fileSystem = fileSystem;
+            this.packagePathResolver = packagePathResolver;
         }
 
         public string Source { get; private set; }
@@ -30,12 +49,14 @@
         [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Will be disposed later.")]
         public IQueryable<IPackage> GetPackages()
         {
-            if (!Directory.Exists(this.Source))
+            const string CurrentLocation = ".";
+
+            if (!this.fileSystem.DirectoryExists(string.Empty))
             {
                 return Enumerable.Empty<IPackage>().AsQueryable();
             }
 
-            var query = from file in Directory.EnumerateFiles(this.Source, "*.nupkg")
+            var query = from file in this.fileSystem.GetFiles(CurrentLocation, "*.nupkg")
                         orderby file descending
                         select (IPackage)new ZipPackage(file);
 
@@ -44,10 +65,13 @@
 
         public void AddPackage(IPackage package)
         {
-            Directory.CreateDirectory(this.Source);
+            var packageDirectory = this.packagePathResolver.GetPackageDirectory(package);
+            this.fileSystem.CreateDirectory(packageDirectory);
+
+            var installedPath = this.packagePathResolver.GetInstallFileName(package);
 
             var zipPackage = (ZipPackage)package;
-            zipPackage.CopyTo(this.Source);
+            zipPackage.CopyTo(installedPath);
         }
 
         public void RemovePackage(IPackage package)
