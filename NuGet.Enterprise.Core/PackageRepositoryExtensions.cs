@@ -13,6 +13,54 @@
         public static void FindPackage(
             this IPackageRepository repository,
             string packageId,
+            IVersionSpec version,
+            Action<IPackage> action)
+        {
+            if (repository == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException("repository");
+            }
+
+            if (string.IsNullOrWhiteSpace(packageId))
+            {
+                throw ExceptionFactory.CreateArgumentNullException("packageId");
+            }
+
+            if (version == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException("version");
+            }
+
+            if (action == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException("action");
+            }
+
+            var packages = repository.GetPackagesWithId(packageId);
+            var foundPackage = packages.FindByVersion(version).FirstOrDefault() as ZipPackage;
+
+            if (foundPackage == null)
+            {
+                throw ExceptionFactory.CreateInvalidOperationException(
+                    string.Format(
+                        CultureInfo.CurrentCulture,
+                        Resources.InvalidPackageWithVersion,
+                        packageId,
+                        version,
+                        repository.Source));
+            }
+
+            using (foundPackage)
+            {
+                action(foundPackage);
+            }
+
+            DisposePackages(packages);
+        }
+
+        public static void FindPackage(
+            this IPackageRepository repository,
+            string packageId,
             SemanticVersion version,
             Action<IPackage> action)
         {
@@ -83,11 +131,8 @@
                 throw ExceptionFactory.CreateArgumentNullException("action");
             }
 
-            var packages = repository.GetPackages();
-            var query = from package in packages
-                        where package.Id.Equals(packageId, StringComparison.CurrentCultureIgnoreCase)
-                        select (ZipPackage)package;
-            var foundPackage = query.FirstOrDefault();
+            var query = repository.GetPackagesWithId(packageId);
+            var foundPackage = query.FirstOrDefault() as ZipPackage;
 
             if (foundPackage == null)
             {
@@ -104,8 +149,6 @@
             {
                 action(foundPackage);
             }
-
-            DisposePackages(packages);
         }
 
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "The repository returns IQueryable<IPackage>")]
@@ -126,6 +169,15 @@
             action(packages);
 
             DisposePackages(packages);
+        }
+
+        internal static IEnumerable<IPackage> GetPackagesWithId(this IPackageRepository repository, string packageId)
+        {
+            var query = from package in repository.GetPackages()
+                        where package.Id.Equals(packageId, StringComparison.CurrentCultureIgnoreCase)
+                        select (ZipPackage)package;
+
+            return query;
         }
 
         private static void DisposePackages(IEnumerable<IPackage> packages)

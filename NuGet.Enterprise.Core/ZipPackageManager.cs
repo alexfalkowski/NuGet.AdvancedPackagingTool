@@ -107,6 +107,8 @@
 
         public void UpdatePackage(string packageId, IVersionSpec versionSpec, bool updateDependencies, bool allowPrereleaseVersions)
         {
+            this.SourceRepository.FindPackage(
+                packageId, versionSpec, package => this.UpdatePackage(package, updateDependencies, allowPrereleaseVersions));
         }
 
         public void UninstallPackage(IPackage package, bool forceRemove, bool removeDependencies)
