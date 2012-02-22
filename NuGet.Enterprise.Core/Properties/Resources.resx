@@ -162,4 +162,7 @@
   <data name="FileNameErrorMessage" xml:space="preserve">
     <value>Could not get file name name from path '{0}'.</value>
   </data>
+  <data name="AnyMessage">
+    <value xml:space="preserve">any</value>
+  </data>
 </root>

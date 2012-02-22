@@ -61,6 +61,15 @@ namespace NuGet.Enterprise.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to any.
+        /// </summary>
+        internal static string AnyMessage {
+            get {
+                return ResourceManager.GetString("AnyMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not get directory name from path &apos;{0}&apos;..
         /// </summary>
         internal static string DirectoryNameErrorMessage {

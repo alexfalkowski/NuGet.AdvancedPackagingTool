@@ -132,9 +132,18 @@
             this.Dispose(true);
             GC.SuppressFinalize(this);
 
-            if (this.markForDeletion)
+            if (!this.markForDeletion)
             {
-                File.Delete(this.filePath);
+                return;
+            }
+
+            File.Delete(this.filePath);
+
+            var directoryName = Path.GetDirectoryName(this.filePath);
+
+            if (directoryName != null && !Directory.EnumerateFiles(directoryName).Any())
+            {
+                Directory.Delete(directoryName);
             }
         }
 

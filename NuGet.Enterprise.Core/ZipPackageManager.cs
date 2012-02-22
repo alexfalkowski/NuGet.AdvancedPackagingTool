@@ -7,7 +7,7 @@
         public ZipPackageManager(
             IPackageRepository localRepository,
             IPackageRepository sourceRepository,
-            IFileSystem fileSystem,
+            NuGet.IFileSystem fileSystem,
             IPackagePathResolver pathResolver)
         {
             if (localRepository == null)
@@ -90,17 +90,21 @@
 
         public void UpdatePackage(IPackage newPackage, bool updateDependencies, bool allowPrereleaseVersions)
         {
-            throw new NotImplementedException();
+            if (newPackage == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException("newPackage");
+            }
+
+            this.LocalRepository.FindPackage(newPackage.Id, this.UninstallZipPackage);
+            this.InstallPackage(newPackage, updateDependencies, allowPrereleaseVersions);
         }
 
         public void UpdatePackage(string packageId, SemanticVersion version, bool updateDependencies, bool allowPrereleaseVersions)
         {
-            throw new NotImplementedException();
         }
 
         public void UpdatePackage(string packageId, IVersionSpec versionSpec, bool updateDependencies, bool allowPrereleaseVersions)
         {
-            throw new NotImplementedException();
         }
 
         public void UninstallPackage(IPackage package, bool forceRemove, bool removeDependencies)
@@ -110,17 +114,12 @@
                 throw ExceptionFactory.CreateArgumentNullException("package");
             }
 
-            var packageOperationEventArgs = new PackageOperationEventArgs(package, this.FileSystem, this.LocalRepository.Source, this.FileSystem.Root);
-            this.OnPackageUninstalling(packageOperationEventArgs);
             var installedPath = this.PathResolver.GetInstallFileName(package);
 
             using (var installedPackage = new ZipPackage(installedPath))
             {
-                this.LocalRepository.RemovePackage(installedPackage);
+                this.UninstallZipPackage(installedPackage);
             }
-
-            this.FileSystem.DeleteDirectory(".", true);
-            this.OnPackageUninstalled(packageOperationEventArgs);
         }
 
         public void UninstallPackage(string packageId, SemanticVersion version, bool forceRemove, bool removeDependencies)
@@ -135,8 +134,7 @@
                 throw ExceptionFactory.CreateArgumentNullException("version");
             }
 
-            this.LocalRepository.FindPackage(
-                packageId, version, package => this.UninstallPackage(package, forceRemove, removeDependencies));
+            this.LocalRepository.FindPackage(packageId, version, this.UninstallZipPackage);
         }
 
         protected void OnPackageInstalled(PackageOperationEventArgs e)
@@ -173,6 +171,15 @@
             {
                 handler(this, e);
             }
+        }
+
+        private void UninstallZipPackage(IPackage package)
+        {
+            var packageOperationEventArgs = new PackageOperationEventArgs(package, this.FileSystem, this.LocalRepository.Source, this.FileSystem.Root);
+            this.OnPackageUninstalling(packageOperationEventArgs);
+            this.LocalRepository.RemovePackage(package);
+            this.FileSystem.DeleteDirectory(".", true);
+            this.OnPackageUninstalled(packageOperationEventArgs);
         }
     }
 }

@@ -34,7 +34,7 @@ namespace NuGet.Enterprise.Test.Integration
         {
             var repository = new DiskPackageRepository(CurrentDirectoryPath);
 
-            repository.GetPackages(packages => packages.Count().Should().Be(1));
+            repository.GetPackages(packages => packages.Count().Should().Be(2));
         }
 
         [Test]

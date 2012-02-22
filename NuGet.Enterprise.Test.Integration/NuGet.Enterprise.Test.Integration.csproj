@@ -94,6 +94,10 @@
       <Link>DummyNews.1.0.nupkg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\NuGet.Enterprise.Service\Packages\DummyNews.1.1.nupkg">
+      <Link>DummyNews.1.1.nupkg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>

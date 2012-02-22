@@ -49,14 +49,12 @@
         [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Will be disposed later.")]
         public IQueryable<IPackage> GetPackages()
         {
-            const string CurrentLocation = ".";
-
             if (!this.fileSystem.DirectoryExists(string.Empty))
             {
                 return Enumerable.Empty<IPackage>().AsQueryable();
             }
 
-            var query = from file in this.fileSystem.GetFiles(CurrentLocation, "*.nupkg")
+            var query = from file in this.fileSystem.GetFiles(string.Empty, "*.nupkg")
                         orderby file descending
                         select (IPackage)new ZipPackage(file);
 
