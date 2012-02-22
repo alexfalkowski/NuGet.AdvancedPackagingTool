@@ -7,32 +7,9 @@
 
     public class DefaultFileSystem : PhysicalFileSystem, IFileSystem
     {
-        private readonly bool install;
-
-        public DefaultFileSystem(string installationPath, bool install)
-            : base(installationPath)
+        public DefaultFileSystem(string root)
+            : base(root)
         {
-            if (string.IsNullOrEmpty(installationPath))
-            {
-                throw ExceptionFactory.CreateArgumentNullException("installationPath");
-            }
-
-            this.install = install;
-        }
-
-        public override void AddFile(string path, Stream stream)
-        {
-            var fileName = Path.GetFileName(path);
-
-            if (!string.IsNullOrWhiteSpace(fileName))
-            {
-                base.AddFile(path, stream);
-            }
-        }
-
-        public override bool FileExists(string path)
-        {
-            return !this.install && base.FileExists(path);
         }
 
         public override IEnumerable<string> GetFiles(string path, string filter)

@@ -10,7 +10,7 @@
         private readonly IPackagePathResolver packagePathResolver;
 
         public DiskPackageRepository(string source)
-            : this(new DefaultFileSystem(source, false), new DefaultPackagePathResolver(source))
+            : this(new DefaultFileSystem(source), new DefaultPackagePathResolver(source))
         {
             if (source == null)
             {

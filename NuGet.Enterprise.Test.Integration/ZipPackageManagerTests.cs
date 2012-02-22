@@ -55,7 +55,7 @@ namespace NuGet.Enterprise.Test.Integration
                 var manager = new ZipPackageManager(
                     localRepository,
                     sourceRepository,
-                    new DefaultFileSystem(this.installationPath, true),
+                    new DefaultFileSystem(this.installationPath),
                     defaultPackagePathResolver);
 
                 SetupAllEvents(manager, collection);
@@ -79,7 +79,7 @@ namespace NuGet.Enterprise.Test.Integration
                 var manager = new ZipPackageManager(
                     localRepository,
                     sourceRepository,
-                    new DefaultFileSystem(this.installationPath, true),
+                    new DefaultFileSystem(this.installationPath),
                     defaultPackagePathResolver);
 
                 manager.InstallPackage(package, true, true);
@@ -105,7 +105,7 @@ namespace NuGet.Enterprise.Test.Integration
                 var manager = new ZipPackageManager(
                     localRepository,
                     sourceRepository,
-                    new DefaultFileSystem(this.installationPath, true),
+                    new DefaultFileSystem(this.installationPath),
                     defaultPackagePathResolver);
 
                 manager.InstallPackage(firstPackage, true, true);
@@ -138,7 +138,7 @@ namespace NuGet.Enterprise.Test.Integration
             var manager = new ZipPackageManager(
                 localRepository,
                 sourceRepository,
-                new DefaultFileSystem(this.installationPath, true),
+                new DefaultFileSystem(this.installationPath),
                 defaultPackagePathResolver);
 
             SetupAllEvents(manager, collection);
@@ -159,7 +159,7 @@ namespace NuGet.Enterprise.Test.Integration
             var manager = new ZipPackageManager(
                 localRepository,
                 sourceRepository,
-                new DefaultFileSystem(this.installationPath, true),
+                new DefaultFileSystem(this.installationPath),
                 defaultPackagePathResolver);
 
             const string PackageId = "DummyNews";
