@@ -95,12 +95,14 @@
                 throw ExceptionFactory.CreateArgumentNullException("newPackage");
             }
 
-            this.LocalRepository.FindPackage(newPackage.Id, this.UninstallZipPackage);
+            this.LocalRepository.FindPackage(newPackage.Id, this.UninstallPackage);
             this.InstallPackage(newPackage, updateDependencies, allowPrereleaseVersions);
         }
 
         public void UpdatePackage(string packageId, SemanticVersion version, bool updateDependencies, bool allowPrereleaseVersions)
         {
+            this.SourceRepository.FindPackage(
+                packageId, version, package => this.UpdatePackage(package, updateDependencies, allowPrereleaseVersions));
         }
 
         public void UpdatePackage(string packageId, IVersionSpec versionSpec, bool updateDependencies, bool allowPrereleaseVersions)
@@ -118,7 +120,7 @@
 
             using (var installedPackage = new ZipPackage(installedPath))
             {
-                this.UninstallZipPackage(installedPackage);
+                this.UninstallPackage(installedPackage);
             }
         }
 
@@ -134,7 +136,7 @@
                 throw ExceptionFactory.CreateArgumentNullException("version");
             }
 
-            this.LocalRepository.FindPackage(packageId, version, this.UninstallZipPackage);
+            this.LocalRepository.FindPackage(packageId, version, this.UninstallPackage);
         }
 
         protected void OnPackageInstalled(PackageOperationEventArgs e)
@@ -173,7 +175,7 @@
             }
         }
 
-        private void UninstallZipPackage(IPackage package)
+        private void UninstallPackage(IPackage package)
         {
             var packageOperationEventArgs = new PackageOperationEventArgs(package, this.FileSystem, this.LocalRepository.Source, this.FileSystem.Root);
             this.OnPackageUninstalling(packageOperationEventArgs);

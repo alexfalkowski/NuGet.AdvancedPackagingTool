@@ -128,6 +128,39 @@ namespace NuGet.Enterprise.Test.Integration
         }
 
         [Test]
+        public void ShouldUpdateSpecificVersionOfPackage()
+        {
+            var collection = new Collection<string>();
+            var sourceRepository = new DiskPackageRepository(this.source.Source);
+            var localRepository =
+                new DiskPackageRepository(this.packagePath);
+            var defaultPackagePathResolver = new DefaultPackagePathResolver(this.packagePath);
+            var manager = new ZipPackageManager(
+                localRepository,
+                sourceRepository,
+                new DefaultFileSystem(this.installationPath),
+                defaultPackagePathResolver);
+
+            manager.InstallPackage("DummyNews", new SemanticVersion("1.0"), true, true);
+            SetupAllEvents(manager, collection);
+            manager.UpdatePackage("DummyNews", new SemanticVersion("1.1"), true, true);
+            AssertUpdateEventsWereCalled(collection);
+            File.Exists(Path.Combine(this.packagePath, "DummyNews.1.0", FirstPackageFileName)).Should().BeFalse();
+            File.Exists(Path.Combine(this.packagePath, "DummyNews.1.1", SecondPackageFileName)).Should().BeTrue();
+
+            var query =
+                   from file in Directory.EnumerateFiles(this.installationPath, "*.*", SearchOption.AllDirectories)
+                   where file.EndsWith("WebsiteVersion.txt", StringComparison.CurrentCultureIgnoreCase)
+                   select file;
+            var fileVersion = query.FirstOrDefault();
+
+            fileVersion.Should().NotBeNull();
+            Debug.Assert(fileVersion != null, "fileVersion != null");
+            var content = File.ReadAllText(fileVersion);
+            content.Should().Be("1.1.0.0");
+        }
+
+        [Test]
         public void ShouldInstallSpecificVersionPackage()
         {
             var collection = new Collection<string>();
