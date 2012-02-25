@@ -61,6 +61,15 @@ namespace NuGet.Enterprise.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The package &apos;{0}&apos; with version &apos;{1}&apos; is already installed..
+        /// </summary>
+        internal static string AlreadyInstalledErrorMessage {
+            get {
+                return ResourceManager.GetString("AlreadyInstalledErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to any.
         /// </summary>
         internal static string AnyMessage {
@@ -93,6 +102,15 @@ namespace NuGet.Enterprise.Core.Properties {
         internal static string FileNameErrorMessage {
             get {
                 return ResourceManager.GetString("FileNameErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully added package &apos;{0}&apos; with version &apos;{1}&apos; to location &apos;{2}&apos;..
+        /// </summary>
+        internal static string InstallSuccessMessage {
+            get {
+                return ResourceManager.GetString("InstallSuccessMessage", resourceCulture);
             }
         }
         
@@ -151,6 +169,15 @@ namespace NuGet.Enterprise.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The package &apos;{0}&apos; is not installed..
+        /// </summary>
+        internal static string PackageNotInstalledErrorMessage {
+            get {
+                return ResourceManager.GetString("PackageNotInstalledErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The package was not specified..
         /// </summary>
         internal static string PackageNotSpecified {
@@ -201,6 +228,15 @@ namespace NuGet.Enterprise.Core.Properties {
         internal static string TargetFrameworkErrorMessage {
             get {
                 return ResourceManager.GetString("TargetFrameworkErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully removed package &apos;{0}&apos; with version &apos;{1}&apos; from location &apos;{2}&apos;..
+        /// </summary>
+        internal static string UninstallSuccessMessage {
+            get {
+                return ResourceManager.GetString("UninstallSuccessMessage", resourceCulture);
             }
         }
     }

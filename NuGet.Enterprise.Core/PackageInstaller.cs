@@ -1,41 +1,29 @@
 ﻿namespace NuGet.Enterprise.Core
 {
-    using System;
     using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
 
     using NuGet;
-    using NuGet.Enterprise.Core.Properties;
 
     public class PackageInstaller : IPackageInstaller
     {
-        private readonly PackageSource source;
+        private readonly PackageSource packageSource;
 
         private readonly string packageName;
 
         private readonly PackageLogger logger;
 
-        private readonly IPackageRepository sourceRepository;
-
-        private readonly IPackageRepository localRepository;
-
-        private IProjectSystem projectSystem;
-
-        private IProjectManager projectManager;
-
-        private bool isPackageInstalled;
+        private readonly IPackageManager manager;
 
         private bool installCalled;
 
         public PackageInstaller(
-            PackageSource source, 
+            PackageSource packageSource, 
             string localRepositoryPath, 
             string packageName)
         {
-            if (source == null)
+            if (packageSource == null)
             {
-                throw ExceptionFactory.CreateArgumentNullException("source");
+                throw ExceptionFactory.CreateArgumentNullException("packageSource");
             }
 
             if (string.IsNullOrWhiteSpace(localRepositoryPath))
@@ -48,11 +36,21 @@
                 throw ExceptionFactory.CreateArgumentNullException("packageName");
             }
 
-            this.source = source;
+            this.packageSource = packageSource;
             this.packageName = packageName;
             this.logger = new PackageLogger();
-            this.sourceRepository = PackageRepositoryFactory.CreatePackageRepository(this.source.Source);
-            this.localRepository = PackageRepositoryFactory.CreatePackageRepository(localRepositoryPath);
+            var sourceRepository = new DiskPackageRepository(this.packageSource.Source);
+            var localRepository = new DiskPackageRepository(localRepositoryPath);
+            var defaultPackagePathResolver = new DefaultPackagePathResolver(localRepositoryPath);
+
+            this.manager = new ZipPackageManager(localRepository, sourceRepository, defaultPackagePathResolver)
+                {
+                    Logger = this.logger 
+                };
+
+            this.manager.PackageInstalling += this.OnManagerPackageInstalling;
+            this.manager.PackageInstalled += this.OnManagerPackageInstalled;
+            this.manager.PackageUninstalling += this.OnManagerPackageUninstalling;
         }
 
         public IEnumerable<string> Logs
@@ -65,19 +63,10 @@
 
         public void InstallPackage(SemanticVersion version)
         {
-            this.installCalled = true;
-
             try
             {
-                var package = this.GetValidPackage(version);
-                using (package as IDisposable)
-                {
-                    this.isPackageInstalled = this.projectManager.IsPackageInstalled(package);
-
-                    Directory.CreateDirectory(package.ProjectUrl.LocalPath);
-
-                    this.projectManager.InstallPackage(package);
-                }
+                this.installCalled = true;
+                this.manager.UpdatePackage(this.packageName, version, false, false);
             }
             finally
             {
@@ -87,121 +76,37 @@
 
         public void UninstallPackage(SemanticVersion version)
         {
-            var package = this.GetValidPackage(version);
-            using (package as IDisposable)
-            {
-                this.projectManager.UninstallPackage(package, true);
-
-                var localPath = package.ProjectUrl.LocalPath;
-
-                PathHelper.SafeDelete(localPath);
-            }
+            this.manager.UninstallPackage(this.packageName, version, true, false);
         }
 
-        private void OnProjectManagerPackageReferenceRemoving(object sender, PackageOperationEventArgs e)
+        private void OnManagerPackageUninstalling(object sender, PackageOperationEventArgs e)
         {
             var package = e.Package;
             var unistallPackageFile = package.GetUninstallPackageFile();
             var teardownPackageFile = package.GetTeardownPackageFile();
 
-            unistallPackageFile.ExecutePowerShell(package, this.projectManager.Logger);
+            unistallPackageFile.ExecutePowerShell(package, this.logger);
 
             if (!this.installCalled)
             {
-                teardownPackageFile.ExecutePowerShell(package, this.projectManager.Logger);
+                teardownPackageFile.ExecutePowerShell(package, this.logger);
             }
         }
 
-        private void OnProjectManagerPackageReferenceAdding(object sender, PackageOperationEventArgs e)
+        private void OnManagerPackageInstalled(object sender, PackageOperationEventArgs e)
         {
-            if (this.isPackageInstalled)
-            {
-                return;
-            }
-
-            var package = e.Package;
-            var initPackageFile = package.GetSetupPackageFile();
-
-            initPackageFile.ExecutePowerShell(package, this.projectManager.Logger);
-        }
-
-        private void OnProjectManagerPackageReferenceAdded(object sender, PackageOperationEventArgs e)
-        {
-            if (this.isPackageInstalled)
-            {
-                return;
-            }
-
             var package = e.Package;
             var installPackageFile = package.GetInstallPackageFile();
 
-            installPackageFile.ExecutePowerShell(package, this.projectManager.Logger);
+            installPackageFile.ExecutePowerShell(package, this.logger);
         }
 
-        private IPackage GetValidPackage(SemanticVersion version)
+        private void OnManagerPackageInstalling(object sender, PackageOperationEventArgs e)
         {
-            var package = this.GetPackage(version);
+            var package = e.Package;
+            var initPackageFile = package.GetSetupPackageFile();
 
-            if (!package.IsValid())
-            {
-                throw ExceptionFactory.CreateInvalidOperationException(
-                    Resources.InvalidInstallationFolder, this.packageName);
-            }
-
-            return package;
-        }
-
-        private IPackage GetPackage(SemanticVersion version)
-        {
-            var package = this.FindPackage(version);
-            this.projectSystem = ProjectSystemFactory.CreateProjectSystem(package, this.installCalled);
-
-            var pathResolver = new DefaultPackagePathResolver(this.localRepository.Source);
-            this.projectManager = new ProjectManager(
-                this.sourceRepository, pathResolver, this.projectSystem, this.localRepository)
-                {
-                    Logger = this.logger
-                };
-            this.projectManager.PackageReferenceRemoving += this.OnProjectManagerPackageReferenceRemoving;
-            this.projectManager.PackageReferenceAdding += this.OnProjectManagerPackageReferenceAdding;
-            this.projectManager.PackageReferenceAdded += this.OnProjectManagerPackageReferenceAdded;
-
-            if (version != null)
-            {
-                return package;
-            }
-
-            var updatePackage = this.projectManager.GetUpdate(package);
-            var isUpdate = updatePackage != null;
-
-            return isUpdate ? updatePackage : package;
-        }
-
-        private IPackage FindPackage(SemanticVersion version)
-        {
-            var packages = this.sourceRepository.GetPackages();
-            var sourcePackage = packages.Find(this.packageName).FirstOrDefault();
-
-            if (sourcePackage == null)
-            {
-                throw ExceptionFactory.CreateInvalidOperationException(
-                    Resources.InvalidPackage, this.packageName, this.source.Source);
-            }
-
-            if (version != null)
-            {
-                var versionSourcePackage = this.sourceRepository.FindPackage(sourcePackage.Id, version);
-
-                if (versionSourcePackage == null)
-                {
-                    throw ExceptionFactory.CreateInvalidOperationException(
-                        Resources.InvalidPackageWithVersion, this.packageName, version, this.source.Source);
-                }
-
-                return versionSourcePackage;
-            }
-
-            return sourcePackage;
+            initPackageFile.ExecutePowerShell(package, this.logger);
         }
     }
 }

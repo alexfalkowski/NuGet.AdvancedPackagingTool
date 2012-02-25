@@ -18,9 +18,13 @@
     {
         private const string ShortVersion10 = "1.0";
 
-        private const string DummyNews10 = "DummyNews.1.0.nupkg";
+        private const string DummyNews10File = "DummyNews.1.0.nupkg";
 
-        private const string DummyNews11 = "DummyNews.1.1.nupkg";
+        private const string DummyNews10Folder = "DummyNews.1.0";
+
+        private const string DummyNews11File = "DummyNews.1.1.nupkg";
+
+        private const string DummyNews11Folder = "DummyNews.1.1";
 
         private const string Uninstall = "Uninstall";
 
@@ -34,7 +38,9 @@
 
         private const string Install = "Install";
 
-        private const string PackageShouldBeinstalled = "The package DummyNews should not be installed.";
+        private const string NotInstalled = "not installed";
+
+        private const string PackageShouldBeInstalled = "The package DummyNews should not be installed.";
 
         private const string Already = "already";
 
@@ -55,6 +61,18 @@
         protected string PackagePath { get; set; }
 
         [Test]
+        public void ShouldNotUninstallNotInstalledPackage()
+        {
+            var version = new SemanticVersion(ShortVersion10);
+
+            this.NewsInstaller.UninstallPackage(version);
+
+            var log = GetLog(this.NewsInstaller.Logs);
+
+            log.Should().Contain(NotInstalled);
+        }
+
+        [Test]
         public void ShouldInstallVersion10Package()
         {
             var version = new SemanticVersion(ShortVersion10);
@@ -66,7 +84,7 @@
             log.Should().Contain(Setup);
             log.Should().Contain(Added);
             log.Should().Contain(Install);
-            File.Exists(Path.Combine(this.PackagePath, DummyNews10)).Should().BeTrue();
+            File.Exists(Path.Combine(this.PackagePath, DummyNews10Folder, DummyNews10File)).Should().BeTrue();
             this.GetFileVersion().Should().Be(Version10);
             this.GetWebsiteVersion().Should().Be(Version10);
         }
@@ -76,7 +94,7 @@
         {
             this.NewsInstaller.InstallPackage(new SemanticVersion(ShortVersion11));
 
-            File.Exists(Path.Combine(this.PackagePath, DummyNews11)).Should().BeTrue();
+            File.Exists(Path.Combine(this.PackagePath, DummyNews11Folder, DummyNews11File)).Should().BeTrue();
             this.GetFileVersion().Should().Be(Version11);
             this.GetWebsiteVersion().Should().Be(Version11);
         }
@@ -97,8 +115,8 @@
             log.Should().Contain(Added);
             log.Should().Contain(Install);
 
-            File.Exists(Path.Combine(this.PackagePath, DummyNews10)).Should().BeFalse();
-            File.Exists(Path.Combine(this.PackagePath, DummyNews11)).Should().BeTrue();
+            File.Exists(Path.Combine(this.PackagePath, DummyNews10Folder, DummyNews10File)).Should().BeFalse();
+            File.Exists(Path.Combine(this.PackagePath, DummyNews11Folder, DummyNews11File)).Should().BeTrue();
             this.GetFileVersion().Should().Be(Version11);
             this.GetWebsiteVersion().Should().Be(Version11);
         }
@@ -115,7 +133,7 @@
             log.Should().Contain(Added);
             log.Should().Contain(Install);
 
-            File.Exists(Path.Combine(this.PackagePath, DummyNews10)).Should().BeTrue();
+            File.Exists(Path.Combine(this.PackagePath, DummyNews10Folder, DummyNews10File)).Should().BeTrue();
             this.GetFileVersion().Should().Be(Version10);
             this.GetWebsiteVersion().Should().Be(Version10);
         }
@@ -148,7 +166,7 @@
             log.Should().Contain(Uninstall);
             log.Should().Contain(Removed);
             log.Should().Contain(Teardown);
-            Directory.Exists(this.InstallationPath).Should().BeFalse(PackageShouldBeinstalled);
+            Directory.Exists(this.InstallationPath).Should().BeFalse(PackageShouldBeInstalled);
         }
 
         [Test]
@@ -165,7 +183,7 @@
             log.Should().Contain(Uninstall);
             log.Should().Contain(Removed);
             log.Should().Contain(Teardown);
-            Directory.Exists(this.InstallationPath).Should().BeFalse(PackageShouldBeinstalled);
+            Directory.Exists(this.InstallationPath).Should().BeFalse(PackageShouldBeInstalled);
         }
 
         private static string GetLog(IEnumerable<string> logs)

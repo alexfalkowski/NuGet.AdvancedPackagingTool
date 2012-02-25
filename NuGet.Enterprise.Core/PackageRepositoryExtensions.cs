@@ -3,10 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
-    using System.Globalization;
     using System.Linq;
-
-    using NuGet.Enterprise.Core.Properties;
 
     public static class PackageRepositoryExtensions
     {
@@ -37,25 +34,17 @@
             }
 
             var packages = repository.GetPackagesWithId(packageId);
+            // ReSharper disable PossibleMultipleEnumeration
             var foundPackage = packages.FindByVersion(version).FirstOrDefault() as ZipPackage;
-
-            if (foundPackage == null)
-            {
-                throw ExceptionFactory.CreateInvalidOperationException(
-                    string.Format(
-                        CultureInfo.CurrentCulture,
-                        Resources.InvalidPackageWithVersion,
-                        packageId,
-                        version,
-                        repository.Source));
-            }
-
+            // ReSharper restore PossibleMultipleEnumeration
             using (foundPackage)
             {
                 action(foundPackage);
             }
 
+            // ReSharper disable PossibleMultipleEnumeration
             DisposePackages(packages);
+            // ReSharper restore PossibleMultipleEnumeration
         }
 
         public static void FindPackage(
@@ -92,17 +81,6 @@
                         select (ZipPackage)package;
             var foundPackage = query.FirstOrDefault();
 
-            if (foundPackage == null)
-            {
-                throw ExceptionFactory.CreateInvalidOperationException(
-                    string.Format(
-                        CultureInfo.CurrentCulture,
-                        Resources.InvalidPackageWithVersion,
-                        packageId,
-                        version,
-                        repository.Source));
-            }
-
             using (foundPackage)
             {
                 action(foundPackage);
@@ -134,17 +112,6 @@
             var query = repository.GetPackagesWithId(packageId);
             var foundPackage = query.FirstOrDefault() as ZipPackage;
 
-            if (foundPackage == null)
-            {
-                throw ExceptionFactory.CreateInvalidOperationException(
-                    string.Format(
-                        CultureInfo.CurrentCulture,
-                        Resources.InvalidPackageWithVersion,
-                        packageId,
-                        Resources.AnyMessage,
-                        repository.Source));
-            }
-
             using (foundPackage)
             {
                 action(foundPackage);
@@ -171,7 +138,7 @@
             DisposePackages(packages);
         }
 
-        internal static IEnumerable<IPackage> GetPackagesWithId(this IPackageRepository repository, string packageId)
+        private static IEnumerable<IPackage> GetPackagesWithId(this IPackageRepository repository, string packageId)
         {
             var query = from package in repository.GetPackages()
                         where package.Id.Equals(packageId, StringComparison.CurrentCultureIgnoreCase)

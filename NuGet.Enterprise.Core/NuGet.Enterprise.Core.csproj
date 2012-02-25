@@ -104,8 +104,6 @@
     <Compile Include="ProcessExitInfo.cs" />
     <Compile Include="ProcessHelper.cs" />
     <Compile Include="ProjectManager.cs" />
-    <Compile Include="ProjectManagerExtensions.cs" />
-    <Compile Include="ProjectSystemFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PackageLogger.cs" />
     <Compile Include="IPackagesSourceFile.cs" />

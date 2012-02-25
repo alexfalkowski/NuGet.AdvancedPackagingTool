@@ -14,7 +14,7 @@
             var files = source.GetFiles();
             foreach (var file in files)
             {
-                file.CopyTo(Path.Combine(destination.FullName, file.Name));
+                file.CopyTo(Path.Combine(destination.FullName, file.Name), true);
             }
 
             var dirs = source.GetDirectories();

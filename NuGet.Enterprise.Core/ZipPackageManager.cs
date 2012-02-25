@@ -2,12 +2,13 @@
 {
     using System;
 
+    using NuGet.Enterprise.Core.Properties;
+
     public class ZipPackageManager : IPackageManager
     {
         public ZipPackageManager(
             IPackageRepository localRepository,
             IPackageRepository sourceRepository,
-            NuGet.IFileSystem fileSystem,
             IPackagePathResolver pathResolver)
         {
             if (localRepository == null)
@@ -20,11 +21,6 @@
                 throw ExceptionFactory.CreateArgumentNullException("sourceRepository");
             }
 
-            if (fileSystem == null)
-            {
-                throw ExceptionFactory.CreateArgumentNullException("fileSystem");
-            }
-
             if (pathResolver == null)
             {
                 throw ExceptionFactory.CreateArgumentNullException("pathResolver");
@@ -32,7 +28,6 @@
 
             this.LocalRepository = localRepository;
             this.SourceRepository = sourceRepository;
-            this.FileSystem = fileSystem;
             this.PathResolver = pathResolver;
         }
 
@@ -61,15 +56,30 @@
                 throw ExceptionFactory.CreateArgumentNullException("package");
             }
 
-            var packageOperationEventArgs = new PackageOperationEventArgs(package, this.FileSystem, this.LocalRepository.Source, this.FileSystem.Root);
+            if (!package.IsValid())
+            {
+                throw ExceptionFactory.CreateInvalidOperationException(Resources.InvalidInstallationFolder, package.Id);
+            }
+
+            var fileSystem = this.CreateFileSystem(package);
+            var logger = this.CreateLogger();
+            var installedFileName = this.PathResolver.GetInstallFileName(package);
+
+            if (fileSystem.FileExists(installedFileName))
+            {
+                logger.Log(MessageLevel.Error, Resources.AlreadyInstalledErrorMessage, package.Id, package.Version);
+                return;
+            }
+
+            var packageOperationEventArgs = new PackageOperationEventArgs(package, fileSystem, this.LocalRepository.Source, fileSystem.Root);
             this.OnPackageInstalling(packageOperationEventArgs);
             
             var zipPackage = (ZipPackage)package;
-
-            zipPackage.ExtractContentsTo(this.FileSystem.Root);
+            zipPackage.ExtractContentsTo(fileSystem.Root);
             this.LocalRepository.AddPackage(zipPackage);
 
             this.OnPackageInstalled(packageOperationEventArgs);
+            logger.Log(MessageLevel.Info, Resources.InstallSuccessMessage, package.Id, package.Version, fileSystem.Root);
         }
 
         public void InstallPackage(string packageId, SemanticVersion version, bool ignoreDependencies, bool allowPrereleaseVersions)
@@ -95,8 +105,23 @@
                 throw ExceptionFactory.CreateArgumentNullException("newPackage");
             }
 
-            this.LocalRepository.FindPackage(newPackage.Id, this.UninstallPackage);
-            this.InstallPackage(newPackage, updateDependencies, allowPrereleaseVersions);
+            if (!newPackage.IsValid())
+            {
+                throw ExceptionFactory.CreateInvalidOperationException(
+                    Resources.InvalidInstallationFolder, newPackage.Id);
+            }
+
+            this.LocalRepository.FindPackage(
+                newPackage.Id,
+                foundPackage =>
+                    {
+                        if (foundPackage != null)
+                        {
+                            this.UninstallPackage(foundPackage);
+                        }
+
+                        this.InstallPackage(newPackage, updateDependencies, allowPrereleaseVersions);
+                    });
         }
 
         public void UpdatePackage(string packageId, SemanticVersion version, bool updateDependencies, bool allowPrereleaseVersions)
@@ -138,7 +163,20 @@
                 throw ExceptionFactory.CreateArgumentNullException("version");
             }
 
-            this.LocalRepository.FindPackage(packageId, version, this.UninstallPackage);
+            this.LocalRepository.FindPackage(
+                packageId,
+                version,
+                foundPackage =>
+                    {
+                        if (foundPackage == null)
+                        {
+                            var logger = this.CreateLogger();
+                            logger.Log(MessageLevel.Error, Resources.PackageNotInstalledErrorMessage, packageId);
+                            return;
+                        }
+
+                        this.UninstallPackage(foundPackage);
+                    });
         }
 
         protected void OnPackageInstalled(PackageOperationEventArgs e)
@@ -179,11 +217,30 @@
 
         private void UninstallPackage(IPackage package)
         {
-            var packageOperationEventArgs = new PackageOperationEventArgs(package, this.FileSystem, this.LocalRepository.Source, this.FileSystem.Root);
+            var logger = this.CreateLogger();
+            var fileSystem = this.CreateFileSystem(package);
+            var packageOperationEventArgs = new PackageOperationEventArgs(
+                package, fileSystem, this.LocalRepository.Source, fileSystem.Root);
             this.OnPackageUninstalling(packageOperationEventArgs);
             this.LocalRepository.RemovePackage(package);
-            this.FileSystem.DeleteDirectory(".", true);
+            fileSystem.DeleteDirectory(".", true);
             this.OnPackageUninstalled(packageOperationEventArgs);
+            logger.Log(
+                MessageLevel.Info, Resources.UninstallSuccessMessage, package.Id, package.Version, fileSystem.Root);
+        }
+
+        private NuGet.IFileSystem CreateFileSystem(IPackageMetadata package)
+        {
+            var fileSystem = this.FileSystem;
+
+            return fileSystem ?? new DefaultFileSystem(package.ProjectUrl.LocalPath);
+        }
+
+        private ILogger CreateLogger()
+        {
+            var logger = this.Logger;
+
+            return logger ?? new PackageLogger();
         }
     }
 }

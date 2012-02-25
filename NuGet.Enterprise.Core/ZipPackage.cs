@@ -106,7 +106,7 @@
 
         public void CopyTo(string path)
         {
-            File.Copy(this.filePath, path);
+            File.Copy(this.filePath, path, true);
         }
 
         public void ExtractContentsTo(string path)
