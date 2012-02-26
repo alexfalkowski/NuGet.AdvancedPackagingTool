@@ -2,23 +2,24 @@ namespace NuGet.Enterprise.Core
 {
     public static class PackageInstallerFactory
     {
-        public static IPackageInstaller CreatePackageInstaller(Arguments args)
+        public static IPackageInstaller CreatePackageInstaller(
+            string packageSourceId, string packageId, bool isPackageValid)
         {
-            if (args == null)
+            if (string.IsNullOrEmpty(packageId))
             {
-                throw ExceptionFactory.CreateArgumentNullException("args");
+                throw ExceptionFactory.CreateArgumentNullException("packageId");
             }
 
-            if (args.IsValid)
+            if (isPackageValid)
             {
                 var packageSourceFile = PackageSourceFileFactory.CreatePackageSourceFile();
                 var packageManager = new PackageManagerModule(packageSourceFile);
-                var packageSource = string.IsNullOrWhiteSpace(args.Source)
+                var packageSource = string.IsNullOrWhiteSpace(packageSourceId)
                                         ? packageManager.ActiveSource
-                                        : packageManager.GetSource(args.Source);
+                                        : packageManager.GetSource(packageSourceId);
                 var packagePath = ConfigurationManager.PackagePath;
 
-                return new PackageInstaller(packageSource, packagePath, args.Package);
+                return new ZipPackageInstaller(packageSource, packagePath, packageId);
             }
 
             return new NullPackageInstaller();

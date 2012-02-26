@@ -1,4 +1,4 @@
-namespace NuGet.Enterprise.Core
+namespace NuGet.Enterprise.Command
 {
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -6,7 +6,7 @@ namespace NuGet.Enterprise.Core
 
     using FluentValidation.Results;
 
-    using NuGet;
+    using NuGet.Enterprise.Core;
 
     public class Arguments
     {

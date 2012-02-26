@@ -263,7 +263,7 @@
         {
             var fileSystem = this.FileSystem;
 
-            return fileSystem ?? new DefaultFileSystem(package.ProjectUrl.LocalPath);
+            return fileSystem ?? new DiskFileSystem(package.ProjectUrl.LocalPath);
         }
 
         private ILogger CreateLogger()

@@ -115,38 +115,11 @@ namespace NuGet.Enterprise.Core.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid execution of the package manager..
-        /// </summary>
-        internal static string InvalidExecutionErrorMessage {
-            get {
-                return ResourceManager.GetString("InvalidExecutionErrorMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invalid execution of the package manager, please check the logs..
-        /// </summary>
-        internal static string InvalidExecutionExceptionMessage {
-            get {
-                return ResourceManager.GetString("InvalidExecutionExceptionMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The package &apos;{0}&apos; does not contain a projectUrl in the spec file. This is used as the destination folder..
         /// </summary>
         internal static string InvalidInstallationFolder {
             get {
                 return ResourceManager.GetString("InvalidInstallationFolder", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Install or uninstall was not specified..
-        /// </summary>
-        internal static string InvalidInstallUninstallFlag {
-            get {
-                return ResourceManager.GetString("InvalidInstallUninstallFlag", resourceCulture);
             }
         }
         
@@ -174,15 +147,6 @@ namespace NuGet.Enterprise.Core.Properties {
         internal static string PackageNotInstalledErrorMessage {
             get {
                 return ResourceManager.GetString("PackageNotInstalledErrorMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The package was not specified..
-        /// </summary>
-        internal static string PackageNotSpecified {
-            get {
-                return ResourceManager.GetString("PackageNotSpecified", resourceCulture);
             }
         }
         

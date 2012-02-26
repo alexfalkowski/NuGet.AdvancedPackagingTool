@@ -117,4 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="InvalidExecutionErrorMessage" xml:space="preserve">
+    <value>Invalid execution of the package manager.</value>
+  </data>
+  <data name="InvalidInstallUninstallFlag" xml:space="preserve">
+    <value>Install or uninstall was not specified.</value>
+  </data>
+  <data name="PackageNotSpecified" xml:space="preserve">
+    <value>The package was not specified.</value>
+  </data>
 </root>

@@ -1,4 +1,4 @@
-namespace NuGet.Enterprise.Core
+namespace NuGet.Enterprise.Command
 {
     using System;
     using System.Collections.Generic;
@@ -6,7 +6,8 @@ namespace NuGet.Enterprise.Core
 
     using Common.Logging;
 
-    using NuGet.Enterprise.Core.Properties;
+    using NuGet.Enterprise.Command.Properties;
+    using NuGet.Enterprise.Core;
 
     public class Console
     {

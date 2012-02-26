@@ -59,5 +59,32 @@ namespace NuGet.Enterprise.Command.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid execution of the package manager..
+        /// </summary>
+        internal static string InvalidExecutionErrorMessage {
+            get {
+                return ResourceManager.GetString("InvalidExecutionErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Install or uninstall was not specified..
+        /// </summary>
+        internal static string InvalidInstallUninstallFlag {
+            get {
+                return ResourceManager.GetString("InvalidInstallUninstallFlag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The package was not specified..
+        /// </summary>
+        internal static string PackageNotSpecified {
+            get {
+                return ResourceManager.GetString("PackageNotSpecified", resourceCulture);
+            }
+        }
     }
 }

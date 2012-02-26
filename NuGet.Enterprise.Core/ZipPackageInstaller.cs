@@ -5,7 +5,7 @@
 
     using NuGet;
 
-    public class PackageInstaller : IPackageInstaller
+    public class ZipPackageInstaller : IPackageInstaller
     {
         private readonly PackageSource packageSource;
 
@@ -19,7 +19,7 @@
 
         private bool installCalled;
 
-        public PackageInstaller(
+        public ZipPackageInstaller(
             PackageSource packageSource, 
             string localRepositoryPath, 
             string packageName)
@@ -71,7 +71,7 @@
         {
             this.packageManager.UninstallPackage(this.packageName, version, true, false);
 
-            var fileSystem = new DefaultFileSystem(this.localRepositoryPath);
+            var fileSystem = new DiskFileSystem(this.localRepositoryPath);
 
             if (!fileSystem.GetDirectories(string.Empty).Any())
             {

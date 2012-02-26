@@ -7,10 +7,10 @@
     using NSubstitute;
 
     using NuGet;
+    using NuGet.Enterprise.Command;
+    using NuGet.Enterprise.Core;
 
     using NUnit.Framework;
-
-    using NuGet.Enterprise.Core;
 
     [TestFixture]
     public static class ConsoleTests

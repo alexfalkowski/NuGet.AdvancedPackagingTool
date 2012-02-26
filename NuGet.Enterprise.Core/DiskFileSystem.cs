@@ -5,9 +5,9 @@
     using System.IO;
     using System.Linq;
 
-    public class DefaultFileSystem : PhysicalFileSystem, IFileSystem
+    public class DiskFileSystem : PhysicalFileSystem, IFileSystem
     {
-        public DefaultFileSystem(string root)
+        public DiskFileSystem(string root)
             : base(root)
         {
         }

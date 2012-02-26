@@ -33,10 +33,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>NuGet.Enterprise.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FluentAssertions, Version=1.7.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
@@ -74,10 +75,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="NuGet.Enterprise.snk" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NuGet.Enterprise.Command\NuGet.Enterprise.Command.csproj">
+      <Project>{D811E049-216D-473F-A66E-DD4D659ACA08}</Project>
+      <Name>NuGet.Enterprise.Command</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NuGet.Enterprise.Core\NuGet.Enterprise.Core.csproj">
       <Project>{B5FB8812-1B24-4791-8C54-ABF2E64215B8}</Project>
       <Name>Ninemsn.PackageManager.NuGet</Name>

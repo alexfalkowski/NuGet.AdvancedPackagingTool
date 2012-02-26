@@ -24,12 +24,12 @@
             this.PackagePath = new Uri("file:///C:/Ninemsn/TestInstallPackage/").LocalPath;
             this.InstallationPath = Path.Combine(this.PackagePath, "DummyNews");
 
-            this.NewsInstaller = new PackageInstaller(
+            this.NewsInstaller = new ZipPackageInstaller(
                 this.Module.GetSource("TestRemoteFeed"),
                 this.PackagePath, 
                 "DummyNews");
 
-            this.SitecoreInstaller = new PackageInstaller(
+            this.SitecoreInstaller = new ZipPackageInstaller(
                 this.Module.GetSource("TestRemoteFeed"),
                 this.PackagePath,
                 "DummySitecore");

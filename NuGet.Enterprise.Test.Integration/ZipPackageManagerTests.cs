@@ -53,7 +53,7 @@ namespace NuGet.Enterprise.Test.Integration
                     new DiskPackageRepository(this.packagePath);
                 var defaultPackagePathResolver = new DefaultPackagePathResolver(this.packagePath);
                 var manager = new ZipPackageManager(localRepository, sourceRepository, defaultPackagePathResolver)
-                    { FileSystem = new DefaultFileSystem(this.installationPath) };
+                    { FileSystem = new DiskFileSystem(this.installationPath) };
 
                 SetupAllEvents(manager, collection);
                 manager.InstallPackage(package, true, true);
@@ -74,7 +74,7 @@ namespace NuGet.Enterprise.Test.Integration
                     new DiskPackageRepository(this.packagePath);
                 var defaultPackagePathResolver = new DefaultPackagePathResolver(this.packagePath);
                 var manager = new ZipPackageManager(localRepository, sourceRepository, defaultPackagePathResolver)
-                    { FileSystem = new DefaultFileSystem(this.installationPath) };
+                    { FileSystem = new DiskFileSystem(this.installationPath) };
 
                 manager.InstallPackage(package, true, true);
                 SetupAllEvents(manager, collection);
@@ -97,7 +97,7 @@ namespace NuGet.Enterprise.Test.Integration
                     new DiskPackageRepository(this.packagePath);
                 var defaultPackagePathResolver = new DefaultPackagePathResolver(this.packagePath);
                 var manager = new ZipPackageManager(localRepository, sourceRepository, defaultPackagePathResolver)
-                    { FileSystem = new DefaultFileSystem(this.installationPath) };
+                    { FileSystem = new DiskFileSystem(this.installationPath) };
 
                 manager.InstallPackage(firstPackage, true, true);
                 SetupAllEvents(manager, collection);
@@ -127,7 +127,7 @@ namespace NuGet.Enterprise.Test.Integration
                 new DiskPackageRepository(this.packagePath);
             var defaultPackagePathResolver = new DefaultPackagePathResolver(this.packagePath);
             var manager = new ZipPackageManager(localRepository, sourceRepository, defaultPackagePathResolver)
-                { FileSystem = new DefaultFileSystem(this.installationPath) };
+                { FileSystem = new DiskFileSystem(this.installationPath) };
 
             manager.InstallPackage("DummyNews", new SemanticVersion("1.0"), true, true);
             SetupAllEvents(manager, collection);
@@ -157,7 +157,7 @@ namespace NuGet.Enterprise.Test.Integration
                 new DiskPackageRepository(this.packagePath);
             var defaultPackagePathResolver = new DefaultPackagePathResolver(this.packagePath);
             var manager = new ZipPackageManager(localRepository, sourceRepository, defaultPackagePathResolver)
-                { FileSystem = new DefaultFileSystem(this.installationPath) };
+                { FileSystem = new DiskFileSystem(this.installationPath) };
 
             manager.InstallPackage("DummyNews", new SemanticVersion("1.0"), true, true);
             SetupAllEvents(manager, collection);
@@ -187,7 +187,7 @@ namespace NuGet.Enterprise.Test.Integration
                 new DiskPackageRepository(this.packagePath);
             var defaultPackagePathResolver = new DefaultPackagePathResolver(this.packagePath);
             var manager = new ZipPackageManager(localRepository, sourceRepository, defaultPackagePathResolver)
-                { FileSystem = new DefaultFileSystem(this.installationPath) };
+                { FileSystem = new DiskFileSystem(this.installationPath) };
 
             SetupAllEvents(manager, collection);
             manager.InstallPackage("DummyNews", new SemanticVersion("1.0"), true, true);
@@ -205,7 +205,7 @@ namespace NuGet.Enterprise.Test.Integration
                 new DiskPackageRepository(this.packagePath);
             var defaultPackagePathResolver = new DefaultPackagePathResolver(this.packagePath);
             var manager = new ZipPackageManager(localRepository, sourceRepository, defaultPackagePathResolver)
-                { FileSystem = new DefaultFileSystem(this.installationPath) };
+                { FileSystem = new DiskFileSystem(this.installationPath) };
 
             const string PackageId = "DummyNews";
             var version1 = new SemanticVersion("1.0");

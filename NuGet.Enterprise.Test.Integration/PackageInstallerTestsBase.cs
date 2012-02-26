@@ -52,9 +52,9 @@
 
         protected PackageManagerModule Module { get; set; }
 
-        protected PackageInstaller NewsInstaller { get; set; }
+        protected ZipPackageInstaller NewsInstaller { get; set; }
 
-        protected PackageInstaller SitecoreInstaller { get; set; }
+        protected ZipPackageInstaller SitecoreInstaller { get; set; }
 
         protected string InstallationPath { get; set; }
 
