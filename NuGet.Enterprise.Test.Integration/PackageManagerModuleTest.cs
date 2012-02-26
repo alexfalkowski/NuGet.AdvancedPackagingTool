@@ -3,17 +3,16 @@
     using FluentAssertions;
 
     using NuGet;
+    using NuGet.Enterprise.Core;
 
     using NUnit.Framework;
-
-    using NuGet.Enterprise.Core;
 
     [TestFixture]
     public class PackageManagerModuleTest
     {
-        private const string FirstSourceName = "TestRemoteFeed";
+        private const string FirstSourceName = "TestLocalFeed";
 
-        private const string FirstFeedUrl = "http://localhost:1544/DataServices/Packages.svc";
+        private const string FirstFeedUrl = @"C:\Ninemsn\PackageManager\NuGet.Enterprise.Service\Packages\";
 
         private PackageManagerModule module;
 
@@ -27,7 +26,7 @@
         [Test]
         public void ShouldHavePackageSources()
         {
-            this.module.PackageSources.Should().HaveCount(4);
+            this.module.PackageSources.Should().HaveCount(1);
         }
 
         [Test]

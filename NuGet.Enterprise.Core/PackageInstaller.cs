@@ -70,6 +70,13 @@
         public void UninstallPackage(SemanticVersion version)
         {
             this.packageManager.UninstallPackage(this.packageName, version, true, false);
+
+            var fileSystem = new DefaultFileSystem(this.localRepositoryPath);
+
+            if (!fileSystem.GetDirectories(string.Empty).Any())
+            {
+                fileSystem.DeleteDirectory(string.Empty, true);
+            }
         }
 
         private void OnPackageManagerPackageUninstalling(object sender, PackageOperationEventArgs e)
@@ -102,16 +109,6 @@
             initPackageFile.ExecutePowerShell(package, this.logger);
         }
 
-        private void OnManagerPackageUninstalled(object sender, PackageOperationEventArgs e)
-        {
-            var fileSystem = new DefaultFileSystem(this.localRepositoryPath);
-
-            if (!fileSystem.GetDirectories(string.Empty).Any())
-            {
-                fileSystem.DeleteDirectory(string.Empty, true);
-            }
-        }
-
         private IPackageManager CreatePackageManager()
         {
             var sourceRepository = new DiskPackageRepository(this.packageSource.Source);
@@ -126,7 +123,6 @@
             manager.PackageInstalling += this.OnPackageManagerPackageInstalling;
             manager.PackageInstalled += this.OnPackageManagerPackageInstalled;
             manager.PackageUninstalling += this.OnPackageManagerPackageUninstalling;
-            manager.PackageUninstalled += this.OnManagerPackageUninstalled;
 
             return manager;
         }

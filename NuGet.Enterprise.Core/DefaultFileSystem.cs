@@ -20,7 +20,9 @@
             {
                 return !Directory.Exists(fullPath)
                            ? Enumerable.Empty<string>()
-                           : Directory.EnumerateFiles(fullPath, filter, SearchOption.AllDirectories);
+                           : from file in Directory.EnumerateFiles(fullPath, filter, SearchOption.AllDirectories)
+                             orderby file descending
+                             select file;
             }
             catch (UnauthorizedAccessException)
             {

@@ -82,7 +82,8 @@
             logger.Log(MessageLevel.Info, Resources.InstallSuccessMessage, package.Id, package.Version, fileSystem.Root);
         }
 
-        public void InstallPackage(string packageId, SemanticVersion version, bool ignoreDependencies, bool allowPrereleaseVersions)
+        public void InstallPackage(
+            string packageId, SemanticVersion version, bool ignoreDependencies, bool allowPrereleaseVersions)
         {
             if (string.IsNullOrWhiteSpace(packageId))
             {
@@ -91,11 +92,16 @@
 
             if (version == null)
             {
-                throw ExceptionFactory.CreateArgumentNullException("version");
+                this.SourceRepository.FindPackage(
+                    packageId, package => this.InstallPackage(package, ignoreDependencies, allowPrereleaseVersions));
             }
-
-            this.SourceRepository.FindPackage(
-                packageId, version, package => this.InstallPackage(package, ignoreDependencies, allowPrereleaseVersions));
+            else
+            {
+                this.SourceRepository.FindPackage(
+                    packageId,
+                    version,
+                    package => this.InstallPackage(package, ignoreDependencies, allowPrereleaseVersions));
+            }
         }
 
         public void UpdatePackage(IPackage newPackage, bool updateDependencies, bool allowPrereleaseVersions)
@@ -124,16 +130,30 @@
                     });
         }
 
-        public void UpdatePackage(string packageId, SemanticVersion version, bool updateDependencies, bool allowPrereleaseVersions)
+        public void UpdatePackage(
+            string packageId, SemanticVersion version, bool updateDependencies, bool allowPrereleaseVersions)
         {
-            this.SourceRepository.FindPackage(
-                packageId, version, package => this.UpdatePackage(package, updateDependencies, allowPrereleaseVersions));
+            if (version == null)
+            {
+                this.SourceRepository.FindPackage(
+                    packageId, package => this.UpdatePackage(package, updateDependencies, allowPrereleaseVersions));
+            }
+            else
+            {
+                this.SourceRepository.FindPackage(
+                    packageId,
+                    version,
+                    package => this.UpdatePackage(package, updateDependencies, allowPrereleaseVersions));
+            }
         }
 
-        public void UpdatePackage(string packageId, IVersionSpec versionSpec, bool updateDependencies, bool allowPrereleaseVersions)
+        public void UpdatePackage(
+            string packageId, IVersionSpec versionSpec, bool updateDependencies, bool allowPrereleaseVersions)
         {
             this.SourceRepository.FindPackage(
-                packageId, versionSpec, package => this.UpdatePackage(package, updateDependencies, allowPrereleaseVersions));
+                packageId,
+                versionSpec,
+                package => this.UpdatePackage(package, updateDependencies, allowPrereleaseVersions));
         }
 
         public void UninstallPackage(IPackage package, bool forceRemove, bool removeDependencies)
@@ -151,7 +171,8 @@
             }
         }
 
-        public void UninstallPackage(string packageId, SemanticVersion version, bool forceRemove, bool removeDependencies)
+        public void UninstallPackage(
+            string packageId, SemanticVersion version, bool forceRemove, bool removeDependencies)
         {
             if (string.IsNullOrWhiteSpace(packageId))
             {
@@ -160,23 +181,17 @@
 
             if (version == null)
             {
-                throw ExceptionFactory.CreateArgumentNullException("version");
+                this.LocalRepository.FindPackage(
+                    packageId,
+                    foundPackage => this.UnisntallPackage(packageId, foundPackage));
             }
-
-            this.LocalRepository.FindPackage(
-                packageId,
-                version,
-                foundPackage =>
-                    {
-                        if (foundPackage == null)
-                        {
-                            var logger = this.CreateLogger();
-                            logger.Log(MessageLevel.Error, Resources.PackageNotInstalledErrorMessage, packageId);
-                            return;
-                        }
-
-                        this.UninstallPackage(foundPackage);
-                    });
+            else
+            {
+                this.LocalRepository.FindPackage(
+                    packageId,
+                    version,
+                    foundPackage => this.UnisntallPackage(packageId, foundPackage));
+            }
         }
 
         protected void OnPackageInstalled(PackageOperationEventArgs e)
@@ -213,6 +228,18 @@
             {
                 handler(this, e);
             }
+        }
+
+        private void UnisntallPackage(string packageId, IPackage foundPackage)
+        {
+            if (foundPackage == null)
+            {
+                var logger = this.CreateLogger();
+                logger.Log(MessageLevel.Error, Resources.PackageNotInstalledErrorMessage, packageId);
+                return;
+            }
+
+            this.UninstallPackage(foundPackage);
         }
 
         private void UninstallPackage(IPackage package)
