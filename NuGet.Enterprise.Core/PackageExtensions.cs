@@ -125,9 +125,9 @@
                         processExitInfo.ErrorMessage));
             }
 
-            foreach (var message in processExitInfo.OutputMessage.Split('\n'))
+            foreach (var message in processExitInfo.OutputMessage.Split('\n').Where(message => !string.IsNullOrWhiteSpace(message)))
             {
-                logger.Log(MessageLevel.Info, message);
+                logger.Log(MessageLevel.Info, message.Trim());
             }
         }
 

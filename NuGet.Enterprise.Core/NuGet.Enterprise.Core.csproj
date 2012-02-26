@@ -94,12 +94,10 @@
     <Compile Include="IPackageInstaller.cs" />
     <Compile Include="NullPackageFile.cs" />
     <Compile Include="NullPackageInstaller.cs" />
-    <Compile Include="NullProjectSystem.cs" />
     <Compile Include="PackageArtifact.cs" />
     <Compile Include="PackageExtensions.cs" />
     <Compile Include="PackageInstaller.cs" />
     <Compile Include="PackageSourceFileFactory.cs" />
-    <Compile Include="DefaultProjectSystem.cs" />
     <Compile Include="PowerShellConsole.cs" />
     <Compile Include="ProcessExitInfo.cs" />
     <Compile Include="ProcessHelper.cs" />

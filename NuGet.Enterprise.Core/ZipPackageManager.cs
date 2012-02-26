@@ -221,9 +221,12 @@
             var fileSystem = this.CreateFileSystem(package);
             var packageOperationEventArgs = new PackageOperationEventArgs(
                 package, fileSystem, this.LocalRepository.Source, fileSystem.Root);
+
             this.OnPackageUninstalling(packageOperationEventArgs);
+
             this.LocalRepository.RemovePackage(package);
-            fileSystem.DeleteDirectory(".", true);
+            fileSystem.DeleteDirectory(string.Empty, true);
+
             this.OnPackageUninstalled(packageOperationEventArgs);
             logger.Log(
                 MessageLevel.Info, Resources.UninstallSuccessMessage, package.Id, package.Version, fileSystem.Root);

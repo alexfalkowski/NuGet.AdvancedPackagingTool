@@ -1,6 +1,7 @@
 ﻿namespace NuGet.Enterprise.Core
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     using NuGet;
 
@@ -8,11 +9,13 @@
     {
         private readonly PackageSource packageSource;
 
+        private readonly string localRepositoryPath;
+
         private readonly string packageName;
 
         private readonly PackageLogger logger;
 
-        private readonly IPackageManager manager;
+        private readonly IPackageManager packageManager;
 
         private bool installCalled;
 
@@ -37,20 +40,10 @@
             }
 
             this.packageSource = packageSource;
+            this.localRepositoryPath = localRepositoryPath;
             this.packageName = packageName;
             this.logger = new PackageLogger();
-            var sourceRepository = new DiskPackageRepository(this.packageSource.Source);
-            var localRepository = new DiskPackageRepository(localRepositoryPath);
-            var defaultPackagePathResolver = new DefaultPackagePathResolver(localRepositoryPath);
-
-            this.manager = new ZipPackageManager(localRepository, sourceRepository, defaultPackagePathResolver)
-                {
-                    Logger = this.logger 
-                };
-
-            this.manager.PackageInstalling += this.OnManagerPackageInstalling;
-            this.manager.PackageInstalled += this.OnManagerPackageInstalled;
-            this.manager.PackageUninstalling += this.OnManagerPackageUninstalling;
+            this.packageManager = this.CreatePackageManager();
         }
 
         public IEnumerable<string> Logs
@@ -66,7 +59,7 @@
             try
             {
                 this.installCalled = true;
-                this.manager.UpdatePackage(this.packageName, version, false, false);
+                this.packageManager.UpdatePackage(this.packageName, version, false, false);
             }
             finally
             {
@@ -76,10 +69,10 @@
 
         public void UninstallPackage(SemanticVersion version)
         {
-            this.manager.UninstallPackage(this.packageName, version, true, false);
+            this.packageManager.UninstallPackage(this.packageName, version, true, false);
         }
 
-        private void OnManagerPackageUninstalling(object sender, PackageOperationEventArgs e)
+        private void OnPackageManagerPackageUninstalling(object sender, PackageOperationEventArgs e)
         {
             var package = e.Package;
             var unistallPackageFile = package.GetUninstallPackageFile();
@@ -93,7 +86,7 @@
             }
         }
 
-        private void OnManagerPackageInstalled(object sender, PackageOperationEventArgs e)
+        private void OnPackageManagerPackageInstalled(object sender, PackageOperationEventArgs e)
         {
             var package = e.Package;
             var installPackageFile = package.GetInstallPackageFile();
@@ -101,12 +94,41 @@
             installPackageFile.ExecutePowerShell(package, this.logger);
         }
 
-        private void OnManagerPackageInstalling(object sender, PackageOperationEventArgs e)
+        private void OnPackageManagerPackageInstalling(object sender, PackageOperationEventArgs e)
         {
             var package = e.Package;
             var initPackageFile = package.GetSetupPackageFile();
 
             initPackageFile.ExecutePowerShell(package, this.logger);
+        }
+
+        private void OnManagerPackageUninstalled(object sender, PackageOperationEventArgs e)
+        {
+            var fileSystem = new DefaultFileSystem(this.localRepositoryPath);
+
+            if (!fileSystem.GetDirectories(string.Empty).Any())
+            {
+                fileSystem.DeleteDirectory(string.Empty, true);
+            }
+        }
+
+        private IPackageManager CreatePackageManager()
+        {
+            var sourceRepository = new DiskPackageRepository(this.packageSource.Source);
+            var localRepository = new DiskPackageRepository(this.localRepositoryPath);
+            var packagePathResolver = new DefaultPackagePathResolver(this.localRepositoryPath);
+
+            var manager = new ZipPackageManager(localRepository, sourceRepository, packagePathResolver)
+                {
+                    Logger = this.logger
+                };
+
+            manager.PackageInstalling += this.OnPackageManagerPackageInstalling;
+            manager.PackageInstalled += this.OnPackageManagerPackageInstalled;
+            manager.PackageUninstalling += this.OnPackageManagerPackageUninstalling;
+            manager.PackageUninstalled += this.OnManagerPackageUninstalled;
+
+            return manager;
         }
     }
 }
