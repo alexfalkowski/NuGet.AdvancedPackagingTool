@@ -8,8 +8,8 @@
     <ProjectGuid>{E5EA40D4-6130-4773-97E1-D1128D357E19}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NuGet.Enterprise.Test.Integration</RootNamespace>
-    <AssemblyName>NuGet.Enterprise.Test.Integration</AssemblyName>
+    <RootNamespace>NuGet.AdvancedPackagingTool.Test.Integration</RootNamespace>
+    <AssemblyName>NuGet.AdvancedPackagingTool.Test.Integration</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -116,13 +116,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NuGet.Enterprise.Command\NuGet.Enterprise.Command.csproj">
+    <ProjectReference Include="..\NuGet.Enterprise.Command\NuGet.AdvancedPackagingTool.Command.csproj">
       <Project>{D811E049-216D-473F-A66E-DD4D659ACA08}</Project>
-      <Name>Ninemsn.PackageManager.NuGet.Command</Name>
+      <Name>NuGet.AdvancedPackagingTool.Command</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NuGet.Enterprise.Core\NuGet.Enterprise.Core.csproj">
+    <ProjectReference Include="..\NuGet.Enterprise.Core\NuGet.AdvancedPackagingTool.Core.csproj">
       <Project>{B5FB8812-1B24-4791-8C54-ABF2E64215B8}</Project>
-      <Name>Ninemsn.PackageManager.NuGet</Name>
+      <Name>NuGet.AdvancedPackagingTool.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

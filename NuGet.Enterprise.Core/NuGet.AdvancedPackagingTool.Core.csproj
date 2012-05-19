@@ -8,8 +8,8 @@
     <ProjectGuid>{B5FB8812-1B24-4791-8C54-ABF2E64215B8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NuGet.Enterprise.Core</RootNamespace>
-    <AssemblyName>NuGet.Enterprise.Core</AssemblyName>
+    <RootNamespace>NuGet.AdvancedPackagingTool.Core</RootNamespace>
+    <AssemblyName>NuGet.AdvancedPackagingTool.Core</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

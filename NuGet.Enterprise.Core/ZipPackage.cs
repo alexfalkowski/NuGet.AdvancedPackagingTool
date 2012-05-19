@@ -7,7 +7,7 @@
     using System.Linq;
 
     using Ionic.Zip;
-    using NuGet.Enterprise.Core.Properties;
+    using NuGet.AdvancedPackagingTool.Core.Properties;
 
     public class ZipPackage : IPackage, IDisposable
     {

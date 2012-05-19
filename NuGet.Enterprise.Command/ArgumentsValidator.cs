@@ -4,7 +4,7 @@ namespace NuGet.Enterprise.Command
 
     using FluentValidation;
 
-    using NuGet.Enterprise.Command.Properties;
+    using NuGet.AdvancedPackagingTool.Command.Properties;
 
     [SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "This is not a collection.")]
     public class ArgumentsValidator : AbstractValidator<Arguments>

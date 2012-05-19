@@ -6,7 +6,7 @@ namespace NuGet.Enterprise.Command
 
     using Common.Logging;
 
-    using NuGet.Enterprise.Command.Properties;
+    using NuGet.AdvancedPackagingTool.Command.Properties;
     using NuGet.Enterprise.Core;
 
     public class Console

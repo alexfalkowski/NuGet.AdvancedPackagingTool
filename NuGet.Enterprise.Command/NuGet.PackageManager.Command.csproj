@@ -8,7 +8,7 @@
     <ProjectGuid>{D811E049-216D-473F-A66E-DD4D659ACA08}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NuGet.Enterprise.Command</RootNamespace>
+    <RootNamespace>NuGetPackageManager.Command</RootNamespace>
     <AssemblyName>npm</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
@@ -40,7 +40,7 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>NuGet.Enterprise.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>NuGet.PackageManager.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <PlatformTarget>x64</PlatformTarget>
@@ -95,7 +95,7 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="NuGet.Enterprise.snk" />
+    <None Include="NuGet.PackageManager.snk" />
     <None Include="packages.config" />
     <None Include="PackageSources.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -103,9 +103,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NuGet.Enterprise.Core\NuGet.Enterprise.Core.csproj">
+    <ProjectReference Include="..\NuGet.Enterprise.Core\NuGet.PackageManager.Core.csproj">
       <Project>{B5FB8812-1B24-4791-8C54-ABF2E64215B8}</Project>
-      <Name>Ninemsn.PackageManager.NuGet</Name>
+      <Name>NuGet.PackageManager.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

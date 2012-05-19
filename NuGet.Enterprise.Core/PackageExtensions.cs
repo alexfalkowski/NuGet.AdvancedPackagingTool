@@ -7,7 +7,7 @@
     using System.Linq;
 
     using NuGet;
-    using NuGet.Enterprise.Core.Properties;
+    using NuGet.AdvancedPackagingTool.Core.Properties;
 
     public static class PackageExtensions
     {

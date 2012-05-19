@@ -2,7 +2,7 @@
 {
     using System;
 
-    using NuGet.Enterprise.Core.Properties;
+    using NuGet.AdvancedPackagingTool.Core.Properties;
 
     public class ZipPackageManager : IPackageManager
     {

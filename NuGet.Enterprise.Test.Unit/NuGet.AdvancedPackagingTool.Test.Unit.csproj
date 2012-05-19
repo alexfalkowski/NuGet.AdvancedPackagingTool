@@ -8,8 +8,8 @@
     <ProjectGuid>{4C3B52E6-1753-48F2-AAD2-EB2FE6306908}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NuGet.Enterprise.Test.Unit</RootNamespace>
-    <AssemblyName>NuGet.Enterprise.Test.Unit</AssemblyName>
+    <RootNamespace>NuGet.AdvancedPackagingTool.Test.Unit</RootNamespace>
+    <AssemblyName>NuGet.AdvancedPackagingTool.Test.Unit</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -78,13 +78,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NuGet.Enterprise.Command\NuGet.Enterprise.Command.csproj">
+    <ProjectReference Include="..\NuGet.Enterprise.Command\NuGet.AdvancedPackagingTool.Command.csproj">
       <Project>{D811E049-216D-473F-A66E-DD4D659ACA08}</Project>
-      <Name>NuGet.Enterprise.Command</Name>
+      <Name>NuGet.AdvancedPackagingTool.Command</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NuGet.Enterprise.Core\NuGet.Enterprise.Core.csproj">
+    <ProjectReference Include="..\NuGet.Enterprise.Core\NuGet.AdvancedPackagingTool.Core.csproj">
       <Project>{B5FB8812-1B24-4791-8C54-ABF2E64215B8}</Project>
-      <Name>Ninemsn.PackageManager.NuGet</Name>
+      <Name>NuGet.AdvancedPackagingTool.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
