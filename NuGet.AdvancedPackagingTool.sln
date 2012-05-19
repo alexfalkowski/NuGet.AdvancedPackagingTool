@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGet.AdvancedPackagingTool.Core", "NuGet.Enterprise.Core\NuGet.AdvancedPackagingTool.Core.csproj", "{B5FB8812-1B24-4791-8C54-ABF2E64215B8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGet.AdvancedPackagingTool.Core", "NuGet.AdvancedPackagingTool.Core\NuGet.AdvancedPackagingTool.Core.csproj", "{B5FB8812-1B24-4791-8C54-ABF2E64215B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGet.AdvancedPackagingTool.Test.Integration", "NuGet.Enterprise.Test.Integration\NuGet.AdvancedPackagingTool.Test.Integration.csproj", "{E5EA40D4-6130-4773-97E1-D1128D357E19}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGet.AdvancedPackagingTool.Test.Integration", "NuGet.AdvancedPackagingTool.Test.Integration\NuGet.AdvancedPackagingTool.Test.Integration.csproj", "{E5EA40D4-6130-4773-97E1-D1128D357E19}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGet.AdvancedPackagingTool.Command", "NuGet.Enterprise.Command\NuGet.AdvancedPackagingTool.Command.csproj", "{D811E049-216D-473F-A66E-DD4D659ACA08}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGet.AdvancedPackagingTool.Command", "NuGet.AdvancedPackagingTool.Command\NuGet.AdvancedPackagingTool.Command.csproj", "{D811E049-216D-473F-A66E-DD4D659ACA08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGet.AdvancedPackagingTool.Test.Unit", "NuGet.Enterprise.Test.Unit\NuGet.AdvancedPackagingTool.Test.Unit.csproj", "{4C3B52E6-1753-48F2-AAD2-EB2FE6306908}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGet.AdvancedPackagingTool.Test.Unit", "NuGet.AdvancedPackagingTool.Test.Unit\NuGet.AdvancedPackagingTool.Test.Unit.csproj", "{4C3B52E6-1753-48F2-AAD2-EB2FE6306908}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C55FE02C-DE9F-4B17-93D8-1C3C667A4B56}"
 EndProject
@@ -15,9 +15,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{72
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Console", "Console", "{3BF74FF6-0E9F-4E20-AB32-98D66F8807E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGet.AdvancedPackagingTool.Service", "NuGet.Enterprise.Service\NuGet.AdvancedPackagingTool.Service.csproj", "{5DD77433-3442-4BD7-8CD0-3D1EF44626AB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGet.AdvancedPackagingTool.Service", "NuGet.AdvancedPackagingTool.Service\NuGet.AdvancedPackagingTool.Service.csproj", "{5DD77433-3442-4BD7-8CD0-3D1EF44626AB}"
 EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "NuGet.AdvancedPackagingTool.Wix", "NuGet.Enterprise.Wix\NuGet.AdvancedPackagingTool.Wix.wixproj", "{35758440-E8EA-4591-9E10-615796C892C3}"
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "NuGet.AdvancedPackagingTool.Wix", "NuGet.AdvancedPackagingTool.Wix\NuGet.AdvancedPackagingTool.Wix.wixproj", "{35758440-E8EA-4591-9E10-615796C892C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

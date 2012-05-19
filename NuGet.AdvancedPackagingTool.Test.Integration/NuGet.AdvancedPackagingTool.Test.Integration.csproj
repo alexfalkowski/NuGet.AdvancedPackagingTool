@@ -87,14 +87,14 @@
     <Compile Include="ZipPackageTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\NuGet.Enterprise.Command\PackageSources.config">
+    <None Include="..\NuGet.AdvancedPackagingTool.Command\PackageSources.config">
       <Link>PackageSources.config</Link>
     </None>
-    <None Include="..\NuGet.Enterprise.Service\Packages\DummyNews.1.0.nupkg">
+    <None Include="..\NuGet.AdvancedPackagingTool.Service\Packages\DummyNews.1.0.nupkg">
       <Link>DummyNews.1.0.nupkg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\NuGet.Enterprise.Service\Packages\DummyNews.1.1.nupkg">
+    <None Include="..\NuGet.AdvancedPackagingTool.Service\Packages\DummyNews.1.1.nupkg">
       <Link>DummyNews.1.1.nupkg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -116,11 +116,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NuGet.Enterprise.Command\NuGet.AdvancedPackagingTool.Command.csproj">
+    <ProjectReference Include="..\NuGet.AdvancedPackagingTool.Command\NuGet.AdvancedPackagingTool.Command.csproj">
       <Project>{D811E049-216D-473F-A66E-DD4D659ACA08}</Project>
       <Name>NuGet.AdvancedPackagingTool.Command</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NuGet.Enterprise.Core\NuGet.AdvancedPackagingTool.Core.csproj">
+    <ProjectReference Include="..\NuGet.AdvancedPackagingTool.Core\NuGet.AdvancedPackagingTool.Core.csproj">
       <Project>{B5FB8812-1B24-4791-8C54-ABF2E64215B8}</Project>
       <Name>NuGet.AdvancedPackagingTool.Core</Name>
     </ProjectReference>
