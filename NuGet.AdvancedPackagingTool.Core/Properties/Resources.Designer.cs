@@ -142,6 +142,24 @@ namespace NuGet.AdvancedPackagingTool.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to latest.
+        /// </summary>
+        internal static string LatestVersionInfoMessage {
+            get {
+                return ResourceManager.GetString("LatestVersionInfoMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find package &apos;{0}&apos; with version &apos;{1}&apos;.
+        /// </summary>
+        internal static string NotFoundPackageErrorMessage {
+            get {
+                return ResourceManager.GetString("NotFoundPackageErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The package &apos;{0}&apos; is not installed..
         /// </summary>
         internal static string PackageNotInstalledErrorMessage {

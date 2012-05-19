@@ -165,4 +165,10 @@
   <data name="PackageNotInstalledErrorMessage" xml:space="preserve">
     <value>The package '{0}' is not installed.</value>
   </data>
+  <data name="NotFoundPackageErrorMessage">
+    <value xml:space="preserve">Could not find package '{0}' with version '{1}'</value>
+  </data>
+  <data name="LatestVersionInfoMessage">
+    <value xml:space="preserve">latest</value>
+  </data>
 </root>
