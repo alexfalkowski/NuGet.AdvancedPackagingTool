@@ -33,7 +33,7 @@
     <Compile Include="Product.wxs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NuGet.Enterprise.Command\NuGet.AdvancedPackagingTool.Command.csproj">
+    <ProjectReference Include="..\NuGet.AdvancedPackagingTool.Command\NuGet.AdvancedPackagingTool.Command.csproj">
       <Name>NuGet.AdvancedPackagingTool.Command</Name>
       <Project>{d811e049-216d-473f-a66e-dd4d659aca08}</Project>
       <Private>True</Private>

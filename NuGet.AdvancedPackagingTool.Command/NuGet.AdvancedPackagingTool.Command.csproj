@@ -40,11 +40,12 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>NuGet.Enterprise.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>NuGet.AdvancedPackagingTool.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <PlatformTarget>x64</PlatformTarget>
     <OutputPath>bin\x64\Debug\</OutputPath>
+    <CodeAnalysisRuleSet>..\NuGet.AdvancedPackagingTool.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <PlatformTarget>x64</PlatformTarget>
@@ -95,7 +96,7 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="NuGet.Enterprise.snk" />
+    <None Include="NuGet.AdvancedPackagingTool.snk" />
     <None Include="packages.config" />
     <None Include="PackageSources.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

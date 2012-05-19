@@ -22,7 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>true</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>..\PackageManager.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\NuGet.AdvancedPackagingTool.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -36,7 +36,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>NuGet.Enterprise.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>NuGet.AdvancedPackagingTool.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Logging">
@@ -115,7 +115,7 @@
     <Compile Include="ZipPackageManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="NuGet.Enterprise.snk" />
+    <None Include="NuGet.AdvancedPackagingTool.snk" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
