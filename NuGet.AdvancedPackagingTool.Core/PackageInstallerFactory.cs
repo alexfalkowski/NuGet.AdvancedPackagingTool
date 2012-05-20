@@ -5,11 +5,6 @@ namespace NuGet.Enterprise.Core
         public static IPackageInstaller CreatePackageInstaller(
             string packageSourceId, string packageId, bool isPackageValid)
         {
-            if (string.IsNullOrEmpty(packageId))
-            {
-                throw ExceptionFactory.CreateArgumentNullException("packageId");
-            }
-
             if (isPackageValid)
             {
                 var packageSourceFile = PackageSourceFileFactory.CreatePackageSourceFile();

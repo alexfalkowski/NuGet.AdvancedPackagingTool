@@ -105,7 +105,7 @@
     <None Include="Scripts\Web\Install.ps1">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="npm.exe.config">
+    <None Include="nuget-apt-get.exe.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config">
