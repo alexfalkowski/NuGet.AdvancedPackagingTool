@@ -1,6 +1,7 @@
 ﻿namespace NuGet.AdvancedPackagingTool.Core
 {
     using System;
+    using System.Globalization;
 
     using NuGet.AdvancedPackagingTool.Core.Properties;
 
@@ -136,14 +137,41 @@
             if (version == null)
             {
                 this.SourceRepository.FindPackage(
-                    packageId, package => this.UpdatePackage(package, updateDependencies, allowPrereleaseVersions));
+                    packageId,
+                    package =>
+                        {
+                            if (package == null)
+                            {
+                                throw ExceptionFactory.CreateInvalidOperationException(
+                                    string.Format(
+                                        CultureInfo.CurrentCulture,
+                                        Resources.PackageNotFoundErrorMessage,
+                                        packageId,
+                                        Resources.LatestVersionInfoMessage));
+                            }
+
+                            this.UpdatePackage(package, updateDependencies, allowPrereleaseVersions);
+                        });
             }
             else
             {
                 this.SourceRepository.FindPackage(
                     packageId,
                     version,
-                    package => this.UpdatePackage(package, updateDependencies, allowPrereleaseVersions));
+                    package =>
+                        {
+                            if (package == null)
+                            {
+                                throw ExceptionFactory.CreateInvalidOperationException(
+                                    string.Format(
+                                        CultureInfo.CurrentCulture,
+                                        Resources.PackageNotFoundErrorMessage,
+                                        packageId,
+                                        version));
+                            }
+
+                            this.UpdatePackage(package, updateDependencies, allowPrereleaseVersions);
+                        });
             }
         }
 

@@ -151,6 +151,15 @@ namespace NuGet.AdvancedPackagingTool.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not find package &apos;{0}&apos; with version &apos;{1}&apos;.
+        /// </summary>
+        internal static string PackageNotFoundErrorMessage {
+            get {
+                return ResourceManager.GetString("PackageNotFoundErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The package &apos;{0}&apos; is not installed..
         /// </summary>
         internal static string PackageNotInstalledErrorMessage {
