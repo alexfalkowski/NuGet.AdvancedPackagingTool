@@ -3,12 +3,12 @@ using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("Ninemsn.PackageManager.NuGet.Test.Integration")]
+[assembly: AssemblyTitle("NuGet.AdvancedPackagingTool.Test.Integration")]
 [assembly: AssemblyDescription("Integration Tests")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Ninemsn")]
-[assembly: AssemblyProduct("Ninemsn.PackageManager.NuGet.Test")]
-[assembly: AssemblyCopyright("Copyright © Ninemsn 2011")]
+[assembly: AssemblyCompany("NuGet")]
+[assembly: AssemblyProduct("NuGet.AdvancedPackagingTool.Test")]
+[assembly: AssemblyCopyright("Copyright © NuGet 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]

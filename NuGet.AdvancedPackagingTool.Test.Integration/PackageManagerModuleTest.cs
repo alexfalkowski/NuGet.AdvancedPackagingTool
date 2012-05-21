@@ -1,9 +1,9 @@
-﻿namespace NuGet.Enterprise.Test.Integration
+﻿namespace NuGet.AdvancedPackagingTool.Test.Integration
 {
     using FluentAssertions;
 
     using NuGet;
-    using NuGet.Enterprise.Core;
+    using NuGet.AdvancedPackagingTool.Core;
 
     using NUnit.Framework;
 
@@ -12,7 +12,7 @@
     {
         private const string FirstSourceName = "TestLocalFeed";
 
-        private const string FirstFeedUrl = @"C:\Ninemsn\PackageManager\NuGet.AdvancedPackagingTool.Service\Packages\";
+        private const string FirstFeedUrl = @"C:\NuGet\PackageManager\NuGet.AdvancedPackagingTool.Service\Packages\";
 
         private PackageManagerModule module;
 

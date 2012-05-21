@@ -3,12 +3,12 @@ using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("Ninemsn.PackageManager.NuGet.Console")]
-[assembly: AssemblyDescription("npm console application")]
+[assembly: AssemblyTitle("NuGet.AdvancedPackagingTool.Console")]
+[assembly: AssemblyDescription("nuget-apt-get console application")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Ninemsn")]
-[assembly: AssemblyProduct("Ninemsn.PackageManager.NuGet.Console")]
-[assembly: AssemblyCopyright("Copyright © Ninemsn 2011")]
+[assembly: AssemblyCompany("NuGet")]
+[assembly: AssemblyProduct("NuGet.AdvancedPackagingTool.Console")]
+[assembly: AssemblyCopyright("Copyright © NuGet 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]

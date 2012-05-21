@@ -1,11 +1,11 @@
-namespace NuGet.Enterprise.Test.Integration
+namespace NuGet.AdvancedPackagingTool.Test.Integration
 {
     using System;
     using System.Linq;
 
     using FluentAssertions;
 
-    using NuGet.Enterprise.Core;
+    using NuGet.AdvancedPackagingTool.Core;
 
     using NUnit.Framework;
 
@@ -49,7 +49,7 @@ namespace NuGet.Enterprise.Test.Integration
             {
                 package.Id.Should().Be("DummyNews");
                 package.Version.Should().Be(new SemanticVersion("1.0"));
-                package.ProjectUrl.Should().Be(new Uri("file:///C:/Ninemsn/TestInstallPackage/DummyNews/"));
+                package.ProjectUrl.Should().Be(new Uri("file:///C:/NuGet/TestInstallPackage/DummyNews/"));
                 package.AssemblyReferences.Count().Should().Be(0);
             }
         }

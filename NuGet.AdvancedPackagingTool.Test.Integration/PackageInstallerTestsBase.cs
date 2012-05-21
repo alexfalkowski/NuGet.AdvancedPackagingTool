@@ -1,8 +1,9 @@
-﻿namespace NuGet.Enterprise.Test.Integration
+﻿namespace NuGet.AdvancedPackagingTool.Test.Integration
 {
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
     using System.Text;
@@ -10,7 +11,7 @@
     using FluentAssertions;
 
     using NuGet;
-    using NuGet.Enterprise.Core;
+    using NuGet.AdvancedPackagingTool.Core;
 
     using NUnit.Framework;
 
@@ -54,6 +55,7 @@
 
         protected ZipPackageInstaller NewsInstaller { get; set; }
 
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sitecore", Justification = "Sitecore is a company.")]
         protected ZipPackageInstaller SitecoreInstaller { get; set; }
 
         protected string InstallationPath { get; set; }

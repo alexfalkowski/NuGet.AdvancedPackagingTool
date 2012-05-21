@@ -1,4 +1,4 @@
-﻿namespace NuGet.Enterprise.Core
+﻿namespace NuGet.AdvancedPackagingTool.Core
 {
     using System.Collections.Generic;
     using System.Globalization;
@@ -17,7 +17,7 @@
             var directoryName = this.DirectoryName;
             var targetFrameworkString = GetTargetFrameworkString(directoryName);
             this.TargetFramework = VersionUtility.ParseFrameworkName(targetFrameworkString);
-            this.Name = System.IO.Path.GetFileName(Path);
+            this.Name = System.IO.Path.GetFileName(this.Path);
         }
 
         public IEnumerable<FrameworkName> SupportedFrameworks

@@ -1,4 +1,4 @@
-namespace NuGet.Enterprise.Test.Integration
+namespace NuGet.AdvancedPackagingTool.Test.Integration
 {
     using System;
     using System.IO;
@@ -7,7 +7,7 @@ namespace NuGet.Enterprise.Test.Integration
 
     using FluentAssertions;
 
-    using NuGet.Enterprise.Core;
+    using NuGet.AdvancedPackagingTool.Core;
 
     using NUnit.Framework;
 

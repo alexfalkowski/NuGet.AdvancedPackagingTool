@@ -1,4 +1,4 @@
-namespace NuGet.Enterprise.Command
+namespace NuGet.AdvancedPackagingTool.Command
 {
     using System.Diagnostics.CodeAnalysis;
 

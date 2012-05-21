@@ -1,8 +1,8 @@
-﻿namespace NuGet.Enterprise.Command
+﻿namespace NuGet.AdvancedPackagingTool.Command
 {
     using Args;
 
-    using NuGet.Enterprise.Core;
+    using NuGet.AdvancedPackagingTool.Core;
 
     public static class Program
     {

@@ -1,4 +1,4 @@
-namespace NuGet.Enterprise.Command
+namespace NuGet.AdvancedPackagingTool.Command
 {
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -6,7 +6,7 @@ namespace NuGet.Enterprise.Command
 
     using FluentValidation.Results;
 
-    using NuGet.Enterprise.Core;
+    using NuGet.AdvancedPackagingTool.Core;
 
     public class Arguments
     {

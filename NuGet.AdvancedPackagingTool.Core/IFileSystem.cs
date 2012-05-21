@@ -1,4 +1,4 @@
-﻿namespace NuGet.Enterprise.Core
+﻿namespace NuGet.AdvancedPackagingTool.Core
 {
     public interface IFileSystem : NuGet.IFileSystem
     {

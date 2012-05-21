@@ -1,4 +1,4 @@
-﻿namespace NuGet.Enterprise.Core
+﻿namespace NuGet.AdvancedPackagingTool.Core
 {
     using System;
     using System.Collections.Generic;
@@ -7,6 +7,7 @@
     using System.Linq;
 
     using Ionic.Zip;
+
     using NuGet.AdvancedPackagingTool.Core.Properties;
 
     public class ZipPackage : IPackage, IDisposable

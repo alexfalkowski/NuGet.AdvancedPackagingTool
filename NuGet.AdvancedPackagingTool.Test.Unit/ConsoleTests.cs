@@ -1,4 +1,4 @@
-﻿namespace NuGet.Enterprise.Test.Unit
+﻿namespace NuGet.AdvancedPackagingTool.Test.Unit
 {
     using System.Linq;
 
@@ -7,8 +7,8 @@
     using NSubstitute;
 
     using NuGet;
-    using NuGet.Enterprise.Command;
-    using NuGet.Enterprise.Core;
+    using NuGet.AdvancedPackagingTool.Command;
+    using NuGet.AdvancedPackagingTool.Core;
 
     using NUnit.Framework;
 

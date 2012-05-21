@@ -26,7 +26,7 @@
 			</Directory>
 		</Directory>
 		
-		<Feature Id="ProductFeature" Title="Ninemsn.PackageManager" Level="1">
+		<Feature Id="ProductFeature" Title="NuGet.AdvancedPackagingTool" Level="1">
 			<ComponentRef Id="ProductComponent" />
 			<ComponentGroupRef Id="Product.Generated" />
 			

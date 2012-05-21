@@ -1,9 +1,9 @@
-﻿namespace NuGet.Enterprise.Test.Integration
+﻿namespace NuGet.AdvancedPackagingTool.Test.Integration
 {
     using System;
     using System.IO;
 
-    using NuGet.Enterprise.Core;
+    using NuGet.AdvancedPackagingTool.Core;
 
     using NUnit.Framework;
 
@@ -21,7 +21,7 @@
 
             var packageSourceFile = PackageSourceFileFactory.CreatePackageSourceFile();
             this.Module = new PackageManagerModule(packageSourceFile);
-            this.PackagePath = new Uri("file:///C:/Ninemsn/TestInstallPackage/").LocalPath;
+            this.PackagePath = new Uri("file:///C:/NuGet/TestInstallPackage/").LocalPath;
             this.InstallationPath = Path.Combine(this.PackagePath, "DummyNews");
 
             this.NewsInstaller = new ZipPackageInstaller(

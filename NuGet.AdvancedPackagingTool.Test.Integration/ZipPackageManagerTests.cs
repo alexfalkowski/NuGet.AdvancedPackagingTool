@@ -1,4 +1,4 @@
-namespace NuGet.Enterprise.Test.Integration
+namespace NuGet.AdvancedPackagingTool.Test.Integration
 {
     using System;
     using System.Collections.Generic;
@@ -9,7 +9,7 @@ namespace NuGet.Enterprise.Test.Integration
 
     using FluentAssertions;
 
-    using NuGet.Enterprise.Core;
+    using NuGet.AdvancedPackagingTool.Core;
 
     using NUnit.Framework;
 
@@ -32,7 +32,7 @@ namespace NuGet.Enterprise.Test.Integration
         public void Setup()
         {
             this.module = new PackageManagerModule(PackageSourceFileFactory.CreatePackageSourceFile());
-            this.packagePath = new Uri("file:///C:/Ninemsn/TestInstallPackage/").LocalPath;
+            this.packagePath = new Uri("file:///C:/NuGet/TestInstallPackage/").LocalPath;
             this.installationPath = Path.Combine(this.packagePath, "DummyNews");
             this.source = this.module.GetSource("TestLocalFeed");
 

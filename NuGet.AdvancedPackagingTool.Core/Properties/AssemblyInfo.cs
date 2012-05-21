@@ -3,12 +3,12 @@ using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("Ninemsn.PackageManager.NuGet")]
-[assembly: AssemblyDescription("Package manager framework")]
+[assembly: AssemblyTitle("NuGet.AdvancedPackagingTool")]
+[assembly: AssemblyDescription("nuget-apt-get framework")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Ninemsn")]
-[assembly: AssemblyProduct("Ninemsn.PackageManager.NuGet")]
-[assembly: AssemblyCopyright("Copyright © Ninemsn 2011")]
+[assembly: AssemblyCompany("NuGet")]
+[assembly: AssemblyProduct("NuGet.AdvancedPackagingTool")]
+[assembly: AssemblyCopyright("Copyright © NuGet 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]

@@ -1,4 +1,4 @@
-﻿namespace NuGet.Enterprise.Test.Integration
+﻿namespace NuGet.AdvancedPackagingTool.Test.Integration
 {
     using System;
     using System.Diagnostics;
@@ -7,7 +7,7 @@
     using System.Reflection;
     using System.Threading;
 
-    using NuGet.Enterprise.Core;
+    using NuGet.AdvancedPackagingTool.Core;
 
     public class PackagesWebServer
     {
@@ -22,16 +22,7 @@
 
             foreach (var runningProcess in Process.GetProcessesByName("iisexpress"))
             {
-                try
-                {
-                    runningProcess.Kill();
-                }
-                // ReSharper disable EmptyGeneralCatchClause
-                catch
-                // ReSharper restore EmptyGeneralCatchClause
-                {
-                    // Ignore the exception.
-                }
+                KillProcess(runningProcess);
             }
 
             var currentExecutingDirectoryName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase);
@@ -57,16 +48,23 @@
                 return;
             }
 
-            if (this.process != null)
+            KillProcess(this.process);
+        }
+
+        private static void KillProcess(Process processToKill)
+        {
+            if (processToKill == null)
             {
-                try
-                {
-                    this.process.Kill();
-                }
-                catch (InvalidOperationException)
-                {
-                }
+                return;
             }
-        } 
+
+            try
+            {
+                processToKill.Kill();
+            }
+            catch (InvalidOperationException)
+            {
+            }
+        }
     }
 }

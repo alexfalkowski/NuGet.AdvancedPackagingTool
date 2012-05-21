@@ -1,4 +1,4 @@
-﻿namespace NuGet.Enterprise.Core
+﻿namespace NuGet.AdvancedPackagingTool.Core
 {
     using System;
     using System.ComponentModel;

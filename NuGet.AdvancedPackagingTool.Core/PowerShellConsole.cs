@@ -1,4 +1,4 @@
-﻿namespace NuGet.Enterprise.Core
+﻿namespace NuGet.AdvancedPackagingTool.Core
 {
     using System;
     using System.Globalization;
@@ -9,11 +9,11 @@
 
     public class PowerShellConsole
     {
+        private const string ScriptSignature = "param ([string]$installationFolder, $configuration)";
+
         private readonly IPackage package;
 
         private readonly string script;
-
-        private const string ScriptSignature = "param ([string]$installationFolder, $configuration)";
 
         public PowerShellConsole(IPackage package, string script)
         {

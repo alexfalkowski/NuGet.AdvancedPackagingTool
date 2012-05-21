@@ -1,15 +1,17 @@
-using NuGet.Enterprise.Service.DataServices;
+using NuGet.AdvancedPackagingTool.Service.DataServices;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(NuGetRoutes), "Start")]
 
-namespace NuGet.Enterprise.Service.DataServices 
+namespace NuGet.AdvancedPackagingTool.Service.DataServices 
 {
     using System.Data.Services;
+    using System.Diagnostics.CodeAnalysis;
     using System.ServiceModel.Activation;
     using System.Web.Routing;
 
     using NuGet.Server.DataServices;
 
+    [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Nu", Justification = "NuGet is the company.")]
     public static class NuGetRoutes 
     {
         public static void Start() 

@@ -1,4 +1,4 @@
-namespace NuGet.Enterprise.Command
+namespace NuGet.AdvancedPackagingTool.Command
 {
     using System;
     using System.Collections.Generic;
@@ -7,7 +7,7 @@ namespace NuGet.Enterprise.Command
     using Common.Logging;
 
     using NuGet.AdvancedPackagingTool.Command.Properties;
-    using NuGet.Enterprise.Core;
+    using NuGet.AdvancedPackagingTool.Core;
 
     public class Console
     {

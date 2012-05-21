@@ -1,4 +1,4 @@
-namespace NuGet.Enterprise.Core
+namespace NuGet.AdvancedPackagingTool.Core
 {
     public static class ConfigurationManager
     {
