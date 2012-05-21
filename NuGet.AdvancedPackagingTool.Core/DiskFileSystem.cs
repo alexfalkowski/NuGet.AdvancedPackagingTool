@@ -14,7 +14,7 @@
 
         public override IEnumerable<string> GetFiles(string path, string filter)
         {
-            var fullPath = GetFullPath(path);
+            var fullPath = this.GetFullPath(path);
 
             try
             {
@@ -36,7 +36,7 @@
 
         public void CreateDirectory(string path)
         {
-            Directory.CreateDirectory(GetFullPath(path));
+            Directory.CreateDirectory(this.GetFullPath(path));
         }
     }
 }

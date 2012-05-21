@@ -3,10 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
-    using System.Globalization;
     using System.Linq;
-
-    using NuGet.AdvancedPackagingTool.Core.Properties;
 
     public static class PackageRepositoryExtensions
     {
@@ -84,12 +81,6 @@
                         select (ZipPackage)package;
             var foundPackage = query.FirstOrDefault();
 
-            if (foundPackage == null)
-            {
-                throw ExceptionFactory.CreateInvalidOperationException(
-                    string.Format(CultureInfo.CurrentCulture, Resources.NotFoundPackageErrorMessage, packageId, version));
-            }
-
             using (foundPackage)
             {
                 action(foundPackage);
@@ -120,16 +111,6 @@
 
             var query = repository.GetPackagesWithId(packageId);
             var foundPackage = query.FirstOrDefault() as ZipPackage;
-
-            if (foundPackage == null)
-            {
-                throw ExceptionFactory.CreateInvalidOperationException(
-                    string.Format(
-                        CultureInfo.CurrentCulture,
-                        Resources.NotFoundPackageErrorMessage,
-                        packageId,
-                        Resources.LatestVersionInfoMessage));
-            }
 
             using (foundPackage)
             {

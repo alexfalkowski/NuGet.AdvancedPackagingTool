@@ -59,7 +59,13 @@
 
             if (this.process != null)
             {
-                this.process.Kill();
+                try
+                {
+                    this.process.Kill();
+                }
+                catch (InvalidOperationException)
+                {
+                }
             }
         } 
     }

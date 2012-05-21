@@ -12,7 +12,7 @@
     {
         private const string FirstSourceName = "TestLocalFeed";
 
-        private const string FirstFeedUrl = @"C:\Ninemsn\PackageManager\NuGet.Enterprise.Service\Packages\";
+        private const string FirstFeedUrl = @"C:\Ninemsn\PackageManager\NuGet.AdvancedPackagingTool.Service\Packages\";
 
         private PackageManagerModule module;
 
