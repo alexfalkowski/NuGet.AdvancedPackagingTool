@@ -72,7 +72,7 @@
                 return;
             }
 
-            var packageOperationEventArgs = new PackageOperationEventArgs(package, fileSystem, this.LocalRepository.Source, fileSystem.Root);
+            var packageOperationEventArgs = new PackageOperationEventArgs(package, fileSystem, fileSystem.Root);
             this.OnPackageInstalling(packageOperationEventArgs);
             
             var zipPackage = (ZipPackage)package;
@@ -274,8 +274,7 @@
         {
             var logger = this.CreateLogger();
             var fileSystem = this.CreateFileSystem(package);
-            var packageOperationEventArgs = new PackageOperationEventArgs(
-                package, fileSystem, this.LocalRepository.Source, fileSystem.Root);
+            var packageOperationEventArgs = new PackageOperationEventArgs(package, fileSystem, fileSystem.Root);
 
             this.OnPackageUninstalling(packageOperationEventArgs);
 
