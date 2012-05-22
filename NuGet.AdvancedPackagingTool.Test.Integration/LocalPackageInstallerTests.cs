@@ -18,12 +18,12 @@
             this.PackagePath = new Uri("file:///C:/NuGet/TestInstallPackage/").LocalPath;
             this.InstallationPath = Path.Combine(this.PackagePath, "DummyNews");
 
-            this.NewsInstaller = new ZipPackageInstaller(
+            this.NewsInstaller = new ValidPackageInstaller(
                 this.Module.GetSource("TestLocalFeed"),
                 this.PackagePath, 
                 "DummyNews");
 
-            this.SitecoreInstaller = new ZipPackageInstaller(
+            this.SitecoreInstaller = new ValidPackageInstaller(
                 this.Module.GetSource("TestLocalFeed"),
                 this.PackagePath,
                 "DummySitecore");

@@ -6,7 +6,6 @@
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
-    using System.Text;
 
     using FluentAssertions;
 
@@ -29,17 +28,15 @@
 
         private const string Uninstall = "Uninstall";
 
-        private const string Removed = "removed";
+        private const string Uninstalled = "uninstalled";
 
         private const string Setup = "Setup";
 
         private const string Teardown = "Teardown";
 
-        private const string Added = "added";
+        private const string Installed = "installed";
 
         private const string Install = "Install";
-
-        private const string NotInstalled = "not installed";
 
         private const string PackageShouldBeInstalled = "The package DummyNews should not be installed.";
 
@@ -53,10 +50,10 @@
 
         protected PackageManagerModule Module { get; set; }
 
-        protected ZipPackageInstaller NewsInstaller { get; set; }
+        protected ValidPackageInstaller NewsInstaller { get; set; }
 
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sitecore", Justification = "Sitecore is a company.")]
-        protected ZipPackageInstaller SitecoreInstaller { get; set; }
+        protected ValidPackageInstaller SitecoreInstaller { get; set; }
 
         protected string InstallationPath { get; set; }
 
@@ -66,12 +63,9 @@
         public void ShouldNotUninstallNotInstalledPackage()
         {
             var version = new SemanticVersion(ShortVersion10);
+            Action action = () => this.NewsInstaller.UninstallPackage(version);
 
-            this.NewsInstaller.UninstallPackage(version);
-
-            var log = GetLog(this.NewsInstaller.Logs);
-
-            log.Should().Contain(NotInstalled);
+            action.ShouldThrow<InvalidOperationException>().WithMessage("Unable to find package 'DummyNews'.");
         }
 
         [Test]
@@ -81,24 +75,33 @@
 
             this.NewsInstaller.InstallPackage(version);
 
-            var log = GetLog(this.NewsInstaller.Logs);
+            ShouldContainLogEntry(this.NewsInstaller.Logs, Setup);
+            ShouldContainLogEntry(this.NewsInstaller.Logs, Installed);
+            ShouldContainLogEntry(this.NewsInstaller.Logs, Install);
 
-            log.Should().Contain(Setup);
-            log.Should().Contain(Added);
-            log.Should().Contain(Install);
-            File.Exists(Path.Combine(this.PackagePath, DummyNews10Folder, DummyNews10File)).Should().BeTrue();
-            this.GetFileVersion().Should().Be(Version10);
-            this.GetWebsiteVersion().Should().Be(Version10);
+            var installPath = Path.Combine(this.PackagePath, DummyNews10Folder);
+            File.Exists(Path.Combine(installPath, DummyNews10File)).Should().BeTrue();
+            var contentPath = Path.Combine(installPath, "content");
+            GetFileVersion(contentPath).Should().Be(Version10);
+            GetWebsiteVersion(contentPath).Should().Be(Version10);
         }
 
         [Test]
         public void ShouldInstallVersion11Package()
         {
-            this.NewsInstaller.InstallPackage(new SemanticVersion(ShortVersion11));
+            var version = new SemanticVersion(ShortVersion11);
 
-            File.Exists(Path.Combine(this.PackagePath, DummyNews11Folder, DummyNews11File)).Should().BeTrue();
-            this.GetFileVersion().Should().Be(Version11);
-            this.GetWebsiteVersion().Should().Be(Version11);
+            this.NewsInstaller.InstallPackage(version);
+
+            ShouldContainLogEntry(this.NewsInstaller.Logs, Setup);
+            ShouldContainLogEntry(this.NewsInstaller.Logs, Installed);
+            ShouldContainLogEntry(this.NewsInstaller.Logs, Install);
+
+            var installPath = Path.Combine(this.PackagePath, DummyNews11Folder);
+            File.Exists(Path.Combine(installPath, DummyNews11File)).Should().BeTrue();
+            var contentPath = Path.Combine(installPath, "content");
+            GetFileVersion(contentPath).Should().Be(Version11);
+            GetWebsiteVersion(contentPath).Should().Be(Version11);
         }
 
         [Test]
@@ -106,38 +109,22 @@
         {
             this.NewsInstaller.InstallPackage(new SemanticVersion(ShortVersion10));
             this.NewsInstaller.InstallPackage(new SemanticVersion(ShortVersion11));
-            var log = GetLog(this.NewsInstaller.Logs);
 
-            log.Should().Contain(Setup);
-            log.Should().Contain(Added);
-            log.Should().Contain(Install);
-            log.Should().Contain(Uninstall);
-            log.Should().Contain(Removed);
-            log.Should().Contain(Setup);
-            log.Should().Contain(Added);
-            log.Should().Contain(Install);
+            ShouldContainLogEntry(this.NewsInstaller.Logs, Setup);
+            ShouldContainLogEntry(this.NewsInstaller.Logs, Installed);
+            ShouldContainLogEntry(this.NewsInstaller.Logs, Install);
+            ShouldContainLogEntry(this.NewsInstaller.Logs, Uninstall);
+            ShouldContainLogEntry(this.NewsInstaller.Logs, Uninstalled);
+            ShouldContainLogEntry(this.NewsInstaller.Logs, Setup);
+            ShouldContainLogEntry(this.NewsInstaller.Logs, Installed);
+            ShouldContainLogEntry(this.NewsInstaller.Logs, Install);
 
             File.Exists(Path.Combine(this.PackagePath, DummyNews10Folder, DummyNews10File)).Should().BeFalse();
             File.Exists(Path.Combine(this.PackagePath, DummyNews11Folder, DummyNews11File)).Should().BeTrue();
-            this.GetFileVersion().Should().Be(Version11);
-            this.GetWebsiteVersion().Should().Be(Version11);
-        }
-
-        [Test]
-        public void ShouldInstallOnePackageThenAnotherPackageShouldOverwriteFiles()
-        {
-            this.SitecoreInstaller.InstallPackage(new SemanticVersion(ShortVersion10));
-            this.NewsInstaller.InstallPackage(new SemanticVersion(ShortVersion10));
-            
-            var log = GetLog(this.NewsInstaller.Logs);
-
-            log.Should().Contain(Setup);
-            log.Should().Contain(Added);
-            log.Should().Contain(Install);
-
-            File.Exists(Path.Combine(this.PackagePath, DummyNews10Folder, DummyNews10File)).Should().BeTrue();
-            this.GetFileVersion().Should().Be(Version10);
-            this.GetWebsiteVersion().Should().Be(Version10);
+            var installPath = Path.Combine(this.PackagePath, DummyNews11Folder);
+            var contentPath = Path.Combine(installPath, "content");
+            GetFileVersion(contentPath).Should().Be(Version11);
+            GetWebsiteVersion(contentPath).Should().Be(Version11);
         }
 
         [Test]
@@ -146,12 +133,11 @@
             var version = new SemanticVersion(ShortVersion10);
             this.NewsInstaller.InstallPackage(version);
             this.NewsInstaller.InstallPackage(version);
-            var log = GetLog(this.NewsInstaller.Logs);
 
-            log.Should().Contain(Setup);
-            log.Should().Contain(Added);
-            log.Should().Contain(Install);
-            log.Should().Contain(Already);
+            ShouldContainLogEntry(this.NewsInstaller.Logs, Setup);
+            ShouldContainLogEntry(this.NewsInstaller.Logs, Installed);
+            ShouldContainLogEntry(this.NewsInstaller.Logs, Install);
+            ShouldContainLogEntry(this.NewsInstaller.Logs, Already);
         }
 
         [Test]
@@ -160,14 +146,13 @@
             var version = new SemanticVersion(ShortVersion10);
             this.NewsInstaller.InstallPackage(version);
             this.NewsInstaller.UninstallPackage(version);
-            var log = GetLog(this.NewsInstaller.Logs);
 
-            log.Should().Contain(Setup);
-            log.Should().Contain(Added);
-            log.Should().Contain(Install);
-            log.Should().Contain(Uninstall);
-            log.Should().Contain(Removed);
-            log.Should().Contain(Teardown);
+            ShouldContainLogEntry(this.NewsInstaller.Logs, Setup);
+            ShouldContainLogEntry(this.NewsInstaller.Logs, Installed);
+            ShouldContainLogEntry(this.NewsInstaller.Logs, Install);
+            ShouldContainLogEntry(this.NewsInstaller.Logs, Uninstall);
+            ShouldContainLogEntry(this.NewsInstaller.Logs, Uninstalled);
+            ShouldContainLogEntry(this.NewsInstaller.Logs, Teardown);
             Directory.Exists(this.InstallationPath).Should().BeFalse(PackageShouldBeInstalled);
         }
 
@@ -177,40 +162,35 @@
             var version = new SemanticVersion(ShortVersion11);
             this.NewsInstaller.InstallPackage(version);
             this.NewsInstaller.UninstallPackage(version);
-            var log = GetLog(this.NewsInstaller.Logs);
 
-            log.Should().Contain(Setup);
-            log.Should().Contain(Added);
-            log.Should().Contain(Install);
-            log.Should().Contain(Uninstall);
-            log.Should().Contain(Removed);
-            log.Should().Contain(Teardown);
+            ShouldContainLogEntry(this.NewsInstaller.Logs, Setup);
+            ShouldContainLogEntry(this.NewsInstaller.Logs, Installed);
+            ShouldContainLogEntry(this.NewsInstaller.Logs, Install);
+            ShouldContainLogEntry(this.NewsInstaller.Logs, Uninstall);
+            ShouldContainLogEntry(this.NewsInstaller.Logs, Uninstalled);
+            ShouldContainLogEntry(this.NewsInstaller.Logs, Teardown);
             Directory.Exists(this.InstallationPath).Should().BeFalse(PackageShouldBeInstalled);
         }
 
-        private static string GetLog(IEnumerable<string> logs)
+        private static void ShouldContainLogEntry(IEnumerable<string> logs, string entry)
         {
-            var builder = new StringBuilder();
+            var query = logs.Where(s => s.Contains(entry, StringComparison.CurrentCultureIgnoreCase));
+            var foundEntry = query.FirstOrDefault();
 
-            foreach (var log in logs)
-            {
-                builder.AppendLine(log);
-            }
-
-            return builder.ToString();
+            foundEntry.Should().NotBeNullOrEmpty("The logs should contain: " + entry);
         }
 
-        private string GetFileVersion()
+        private static string GetFileVersion(string path)
         {
-            var dllFile = Directory.EnumerateFiles(Path.Combine(this.InstallationPath, "bin")).First();
+            var dllFile = Directory.EnumerateFiles(Path.Combine(path, "bin")).First();
             var info = FileVersionInfo.GetVersionInfo(dllFile);
 
             return info.FileVersion;
         }
 
-        private string GetWebsiteVersion()
+        private static string GetWebsiteVersion(string path)
         {
-            var versionFile = Directory.EnumerateFiles(this.InstallationPath).Where(x => x.EndsWith("WebsiteVersion.txt", StringComparison.CurrentCultureIgnoreCase)).First();
+            var versionFile = Directory.EnumerateFiles(path).Where(x => x.EndsWith("WebsiteVersion.txt", StringComparison.CurrentCultureIgnoreCase)).First();
             return File.ReadAllText(versionFile);
         }
     }

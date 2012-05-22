@@ -5,7 +5,7 @@
 
     using NuGet;
 
-    public class NullPackageInstaller : IPackageInstaller
+    public class InvalidPackageInstaller : IPackageInstaller
     {
         public IEnumerable<string> Logs
         {

@@ -1,11 +1,10 @@
 ﻿namespace NuGet.AdvancedPackagingTool.Core
 {
     using System.Collections.Generic;
-    using System.Linq;
 
     using NuGet;
 
-    public class ZipPackageInstaller : IPackageInstaller
+    public class ValidPackageInstaller : IPackageInstaller
     {
         private readonly PackageSource packageSource;
 
@@ -17,9 +16,11 @@
 
         private readonly IPackageManager packageManager;
 
+        private readonly LocalPackageRepository localRepository;
+
         private bool installCalled;
 
-        public ZipPackageInstaller(
+        public ValidPackageInstaller(
             PackageSource packageSource, 
             string localRepositoryPath, 
             string packageName)
@@ -43,6 +44,7 @@
             this.localRepositoryPath = localRepositoryPath;
             this.packageName = packageName;
             this.logger = new PackageLogger();
+            this.localRepository = new LocalPackageRepository(this.localRepositoryPath);
             this.packageManager = this.CreatePackageManager();
         }
 
@@ -59,7 +61,20 @@
             try
             {
                 this.installCalled = true;
-                this.packageManager.UpdatePackage(this.packageName, version, false, false);
+
+                if (this.localRepository.Exists(this.packageName, version))
+                {
+                    this.packageManager.InstallPackage(this.packageName, version, false, false);
+                    return;
+                }
+
+                if (this.localRepository.Exists(this.packageName))
+                {
+                    this.packageManager.UpdatePackage(this.packageName, version, false, false);
+                    return;
+                }
+
+                this.packageManager.InstallPackage(this.packageName, version, false, false);
             }
             finally
             {
@@ -70,13 +85,6 @@
         public void UninstallPackage(SemanticVersion version)
         {
             this.packageManager.UninstallPackage(this.packageName, version, true, false);
-
-            var fileSystem = new DiskFileSystem(this.localRepositoryPath);
-
-            if (!fileSystem.GetDirectories(string.Empty).Any())
-            {
-                fileSystem.DeleteDirectory(string.Empty, true);
-            }
         }
 
         private void OnPackageManagerPackageUninstalling(object sender, PackageOperationEventArgs e)
@@ -111,11 +119,11 @@
 
         private IPackageManager CreatePackageManager()
         {
-            var sourceRepository = new DiskPackageRepository(this.packageSource.Source);
-            var localRepository = new DiskPackageRepository(this.localRepositoryPath);
+            var sourceRepository = new LocalPackageRepository(this.packageSource.Source);
             var packagePathResolver = new DefaultPackagePathResolver(this.localRepositoryPath);
+            var fileSystem = new PhysicalFileSystem(this.localRepositoryPath) { Logger = this.logger };
 
-            var manager = new ZipPackageManager(localRepository, sourceRepository, packagePathResolver)
+            var manager = new PackageManager(sourceRepository, packagePathResolver, fileSystem, this.localRepository)
                 {
                     Logger = this.logger
                 };
