@@ -94,14 +94,41 @@
             if (version == null)
             {
                 this.SourceRepository.FindPackage(
-                    packageId, package => this.InstallPackage(package, ignoreDependencies, allowPrereleaseVersions));
+                    packageId,
+                    package =>
+                        {
+                            if (package == null)
+                            {
+                                throw ExceptionFactory.CreateInvalidOperationException(
+                                    string.Format(
+                                        CultureInfo.CurrentCulture,
+                                        Resources.PackageNotFoundErrorMessage,
+                                        packageId,
+                                        Resources.LatestVersionInfoMessage));
+                            }
+
+                            this.InstallPackage(package, ignoreDependencies, allowPrereleaseVersions);
+                        });
             }
             else
             {
                 this.SourceRepository.FindPackage(
                     packageId,
                     version,
-                    package => this.InstallPackage(package, ignoreDependencies, allowPrereleaseVersions));
+                    package =>
+                        {
+                            if (package == null)
+                            {
+                                throw ExceptionFactory.CreateInvalidOperationException(
+                                    string.Format(
+                                        CultureInfo.CurrentCulture,
+                                        Resources.PackageNotFoundErrorMessage,
+                                        packageId,
+                                        version));
+                            }
+
+                            this.InstallPackage(package, ignoreDependencies, allowPrereleaseVersions);
+                        });
             }
         }
 
