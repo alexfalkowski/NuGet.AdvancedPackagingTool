@@ -1,6 +1,7 @@
 ﻿namespace NuGet.AdvancedPackagingTool.Test.Integration
 {
     using System;
+    using System.ComponentModel;
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
@@ -34,7 +35,7 @@
 
             const string FileName = @"C:\Program Files (x86)\IIS Express\iisexpress.exe";
             var currentPath = new Uri(currentExecutingDirectoryName).LocalPath;
-            var path = Path.GetFullPath(Path.Combine(currentPath, @"..\..\..\NuGet.Enterprise.Service"));
+            var path = Path.GetFullPath(Path.Combine(currentPath, @"..\..\..\NuGet.AdvancedPackagingTool.Service"));
             var arguments = string.Format(CultureInfo.CurrentCulture, @"/path:""{0}"" /port:1544", path);
 
             this.process = ProcessHelper.CreateBackgroundProcess(FileName, arguments);
@@ -63,6 +64,9 @@
                 processToKill.Kill();
             }
             catch (InvalidOperationException)
+            {
+            }
+            catch (Win32Exception)
             {
             }
         }

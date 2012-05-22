@@ -13,5 +13,11 @@
 
             return source.IndexOf(value, comparison) >= 0;
         }
+
+        public static bool IsUri(this string value)
+        {
+            Uri uri;
+            return Uri.TryCreate(value, UriKind.RelativeOrAbsolute, out uri);
+        }
     }
 }

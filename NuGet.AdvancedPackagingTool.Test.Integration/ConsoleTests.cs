@@ -1,5 +1,6 @@
 ﻿namespace NuGet.AdvancedPackagingTool.Test.Integration
 {
+    using System;
     using System.IO;
     using System.Linq;
 
@@ -89,8 +90,8 @@
         {
             var info = ProcessHelper.ExecuteBackgroundProcess("nuget-apt-get.exe", arguments);
 
-            System.Console.WriteLine(info.OutputMessage);
-            System.Console.WriteLine(info.ErrorMessage);
+            Console.WriteLine(info.OutputMessage);
+            Console.WriteLine(info.ErrorMessage);
 
             info.ExitCode.Should().Be(0);
         }

@@ -38,8 +38,6 @@ namespace NuGet.AdvancedPackagingTool.Command
         {
             if (!this.arguments.IsValid)
             {
-                WriteInformationToConsole(this.arguments.Errors);
-
                 return 1;
             }
 
@@ -48,13 +46,11 @@ namespace NuGet.AdvancedPackagingTool.Command
                 if (this.arguments.Install)
                 {
                     this.installer.InstallPackage(this.arguments.Version);
-                    WriteInformationToConsole(this.installer.Logs);
                 }
 
                 if (this.arguments.Uninstall)
                 {
                     this.installer.UninstallPackage(this.arguments.Version);
-                    WriteInformationToConsole(this.installer.Logs);
                 }
 
                 return 0;
@@ -64,6 +60,10 @@ namespace NuGet.AdvancedPackagingTool.Command
                 this.logger.Error(Resources.InvalidExecutionErrorMessage, e);
 
                 return 1;
+            }
+            finally
+            {
+                WriteInformationToConsole(this.installer.Logs);
             }
         }
 

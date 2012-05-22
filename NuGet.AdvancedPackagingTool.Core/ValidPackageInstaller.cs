@@ -1,12 +1,13 @@
 ﻿namespace NuGet.AdvancedPackagingTool.Core
 {
+    using System;
     using System.Collections.Generic;
 
     using NuGet;
 
     public class ValidPackageInstaller : IPackageInstaller
     {
-        private readonly PackageSource packageSource;
+        private readonly IPackageRepository sourceRepository;
 
         private readonly string localRepositoryPath;
 
@@ -21,13 +22,13 @@
         private bool installCalled;
 
         public ValidPackageInstaller(
-            PackageSource packageSource, 
+            IPackageRepository sourceRepository,
             string localRepositoryPath, 
             string packageName)
         {
-            if (packageSource == null)
+            if (sourceRepository == null)
             {
-                throw ExceptionFactory.CreateArgumentNullException("packageSource");
+                throw ExceptionFactory.CreateArgumentNullException("sourceRepository");
             }
 
             if (string.IsNullOrWhiteSpace(localRepositoryPath))
@@ -40,7 +41,7 @@
                 throw ExceptionFactory.CreateArgumentNullException("packageName");
             }
 
-            this.packageSource = packageSource;
+            this.sourceRepository = sourceRepository;
             this.localRepositoryPath = localRepositoryPath;
             this.packageName = packageName;
             this.logger = new PackageLogger();
@@ -76,6 +77,10 @@
 
                 this.packageManager.InstallPackage(this.packageName, version, false, false);
             }
+            catch (InvalidOperationException e)
+            {
+                this.logger.Log(MessageLevel.Error, e.Message);
+            }
             finally
             {
                 this.installCalled = false;
@@ -84,7 +89,14 @@
 
         public void UninstallPackage(SemanticVersion version)
         {
-            this.packageManager.UninstallPackage(this.packageName, version, true, false);
+            try
+            {
+                this.packageManager.UninstallPackage(this.packageName, version, true, false);
+            }
+            catch (InvalidOperationException e)
+            {
+                this.logger.Log(MessageLevel.Error, e.Message);
+            }
         }
 
         private void OnPackageManagerPackageUninstalling(object sender, PackageOperationEventArgs e)
@@ -119,14 +131,11 @@
 
         private IPackageManager CreatePackageManager()
         {
-            var sourceRepository = new LocalPackageRepository(this.packageSource.Source);
             var packagePathResolver = new DefaultPackagePathResolver(this.localRepositoryPath);
             var fileSystem = new PhysicalFileSystem(this.localRepositoryPath) { Logger = this.logger };
 
-            var manager = new PackageManager(sourceRepository, packagePathResolver, fileSystem, this.localRepository)
-                {
-                    Logger = this.logger
-                };
+            var manager = new PackageManager(
+                this.sourceRepository, packagePathResolver, fileSystem, this.localRepository) { Logger = this.logger };
 
             manager.PackageInstalling += this.OnPackageManagerPackageInstalling;
             manager.PackageInstalled += this.OnPackageManagerPackageInstalled;

@@ -1,5 +1,7 @@
 namespace NuGet.AdvancedPackagingTool.Core
 {
+    using System;
+
     public static class PackageInstallerFactory
     {
         public static IPackageInstaller CreatePackageInstaller(
@@ -14,7 +16,12 @@ namespace NuGet.AdvancedPackagingTool.Core
                                         : packageManager.GetSource(packageSourceId);
                 var packagePath = ConfigurationManager.PackagePath;
 
-                return new ValidPackageInstaller(packageSource, packagePath, packageId);
+                var source = packageSource.Source;
+                var sourceRepository = source.IsUri()
+                                           ? new LocalPackageRepository(source)
+                                           : (IPackageRepository)new DataServicePackageRepository(new Uri(source));
+
+                return new ValidPackageInstaller(sourceRepository, packagePath, packageId);
             }
 
             return new InvalidPackageInstaller();

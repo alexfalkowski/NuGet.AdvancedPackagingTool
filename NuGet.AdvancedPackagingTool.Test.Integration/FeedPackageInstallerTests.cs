@@ -23,15 +23,11 @@
             this.PackagePath = new Uri("file:///C:/NuGet/TestInstallPackage/").LocalPath;
             this.InstallationPath = Path.Combine(this.PackagePath, "DummyNews");
 
-            this.NewsInstaller = new ValidPackageInstaller(
-                this.Module.GetSource("TestRemoteFeed"),
-                this.PackagePath, 
-                "DummyNews");
-
-            this.SitecoreInstaller = new ValidPackageInstaller(
-                this.Module.GetSource("TestRemoteFeed"),
-                this.PackagePath,
-                "DummySitecore");
+            this.Installer =
+                new ValidPackageInstaller(
+                    new DataServicePackageRepository(new Uri(this.Module.GetSource("TestRemoteFeed").Source)),
+                    this.PackagePath,
+                    "DummyNews");
 
             if (Directory.Exists(this.PackagePath))
             {

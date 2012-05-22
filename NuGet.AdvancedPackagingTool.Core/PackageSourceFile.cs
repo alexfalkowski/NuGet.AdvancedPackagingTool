@@ -49,7 +49,9 @@
                 throw new FormatException();
             }
 
-            return new PackageSource(uri.LocalPath, displayNameAttribute.Value);
+            var path = uri.IsFile ? uri.LocalPath : uri.ToString();
+
+            return new PackageSource(path, displayNameAttribute.Value);
         }
 
         private static IEnumerable<PackageSource> ReadFeeds(Func<Stream> getStream)
