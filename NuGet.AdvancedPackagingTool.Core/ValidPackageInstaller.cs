@@ -23,24 +23,9 @@
             PackageLogger logger,
             string packageName)
         {
-            if (destinationRepository == null)
-            {
-                throw ExceptionFactory.CreateArgumentNullException("localRepositoryPath");
-            }
-
             if (packageManager == null)
             {
                 throw ExceptionFactory.CreateArgumentNullException("packageManager");
-            }
-
-            if (logger == null)
-            {
-                throw ExceptionFactory.CreateArgumentNullException("logger");
-            }
-
-            if (string.IsNullOrWhiteSpace(packageName))
-            {
-                throw ExceptionFactory.CreateArgumentNullException("packageName");
             }
 
             this.packageManager = packageManager;
