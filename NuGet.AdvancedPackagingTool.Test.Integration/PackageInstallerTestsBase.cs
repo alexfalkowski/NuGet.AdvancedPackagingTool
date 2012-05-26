@@ -29,7 +29,7 @@
 
         private const string Uninstalled = "uninstalled";
 
-        private const string Setup = "Setup";
+        private const string SetupText = "Setup";
 
         private const string Teardown = "Teardown";
 
@@ -46,8 +46,6 @@
         private const string Version11 = "1.1.0.0";
 
         private const string ShortVersion11 = "1.1";
-
-        protected PackageManagerModule Module { get; set; }
 
         protected IPackageInstaller Installer { get; set; }
 
@@ -71,7 +69,7 @@
 
             this.Installer.InstallPackage(version);
 
-            ShouldContainLogEntry(this.Installer.Logs, Setup);
+            ShouldContainLogEntry(this.Installer.Logs, SetupText);
             ShouldContainLogEntry(this.Installer.Logs, Installed);
             ShouldContainLogEntry(this.Installer.Logs, Install);
 
@@ -89,7 +87,7 @@
 
             this.Installer.InstallPackage(version);
 
-            ShouldContainLogEntry(this.Installer.Logs, Setup);
+            ShouldContainLogEntry(this.Installer.Logs, SetupText);
             ShouldContainLogEntry(this.Installer.Logs, Installed);
             ShouldContainLogEntry(this.Installer.Logs, Install);
 
@@ -106,12 +104,12 @@
             this.Installer.InstallPackage(new SemanticVersion(ShortVersion10));
             this.Installer.InstallPackage(new SemanticVersion(ShortVersion11));
 
-            ShouldContainLogEntry(this.Installer.Logs, Setup);
+            ShouldContainLogEntry(this.Installer.Logs, SetupText);
             ShouldContainLogEntry(this.Installer.Logs, Installed);
             ShouldContainLogEntry(this.Installer.Logs, Install);
             ShouldContainLogEntry(this.Installer.Logs, Uninstall);
             ShouldContainLogEntry(this.Installer.Logs, Uninstalled);
-            ShouldContainLogEntry(this.Installer.Logs, Setup);
+            ShouldContainLogEntry(this.Installer.Logs, SetupText);
             ShouldContainLogEntry(this.Installer.Logs, Installed);
             ShouldContainLogEntry(this.Installer.Logs, Install);
 
@@ -130,7 +128,7 @@
             this.Installer.InstallPackage(version);
             this.Installer.InstallPackage(version);
 
-            ShouldContainLogEntry(this.Installer.Logs, Setup);
+            ShouldContainLogEntry(this.Installer.Logs, SetupText);
             ShouldContainLogEntry(this.Installer.Logs, Installed);
             ShouldContainLogEntry(this.Installer.Logs, Install);
             ShouldContainLogEntry(this.Installer.Logs, Already);
@@ -143,7 +141,7 @@
             this.Installer.InstallPackage(version);
             this.Installer.UninstallPackage(version);
 
-            ShouldContainLogEntry(this.Installer.Logs, Setup);
+            ShouldContainLogEntry(this.Installer.Logs, SetupText);
             ShouldContainLogEntry(this.Installer.Logs, Installed);
             ShouldContainLogEntry(this.Installer.Logs, Install);
             ShouldContainLogEntry(this.Installer.Logs, Uninstall);
@@ -159,13 +157,32 @@
             this.Installer.InstallPackage(version);
             this.Installer.UninstallPackage(version);
 
-            ShouldContainLogEntry(this.Installer.Logs, Setup);
+            ShouldContainLogEntry(this.Installer.Logs, SetupText);
             ShouldContainLogEntry(this.Installer.Logs, Installed);
             ShouldContainLogEntry(this.Installer.Logs, Install);
             ShouldContainLogEntry(this.Installer.Logs, Uninstall);
             ShouldContainLogEntry(this.Installer.Logs, Uninstalled);
             ShouldContainLogEntry(this.Installer.Logs, Teardown);
             Directory.Exists(this.InstallationPath).Should().BeFalse(PackageShouldBeInstalled);
+        }
+
+        protected void Setup(PackageSource source)
+        {
+            var configurationManager = new TestConfigurationManager();
+            this.PackagePath = configurationManager.PackagePath;
+            this.InstallationPath = Path.Combine(this.PackagePath, "DummyNews");
+
+            var factory =
+                new PackageInstallerFactory(
+                    new SourcePackageRepositoryFactory(source),
+                    configurationManager);
+
+            this.Installer = factory.CreatePackageInstaller("DummyNews", true);
+
+            if (Directory.Exists(this.PackagePath))
+            {
+                Directory.Delete(this.PackagePath, true);
+            }
         }
 
         private static void ShouldContainLogEntry(IEnumerable<string> logs, string entry)

@@ -7,33 +7,35 @@
 
     public class ValidPackageInstaller : IPackageInstaller
     {
-        private readonly IPackageRepository sourceRepository;
-
-        private readonly string localRepositoryPath;
-
         private readonly string packageName;
 
         private readonly PackageLogger logger;
 
         private readonly IPackageManager packageManager;
 
-        private readonly LocalPackageRepository localRepository;
+        private readonly IPackageRepository destinationRepository;
 
         private bool installCalled;
 
         public ValidPackageInstaller(
-            IPackageRepository sourceRepository,
-            string localRepositoryPath, 
+            IPackageRepository destinationRepository,
+            IPackageManager packageManager,
+            PackageLogger logger,
             string packageName)
         {
-            if (sourceRepository == null)
-            {
-                throw ExceptionFactory.CreateArgumentNullException("sourceRepository");
-            }
-
-            if (string.IsNullOrWhiteSpace(localRepositoryPath))
+            if (destinationRepository == null)
             {
                 throw ExceptionFactory.CreateArgumentNullException("localRepositoryPath");
+            }
+
+            if (packageManager == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException("packageManager");
+            }
+
+            if (logger == null)
+            {
+                throw ExceptionFactory.CreateArgumentNullException("logger");
             }
 
             if (string.IsNullOrWhiteSpace(packageName))
@@ -41,12 +43,13 @@
                 throw ExceptionFactory.CreateArgumentNullException("packageName");
             }
 
-            this.sourceRepository = sourceRepository;
-            this.localRepositoryPath = localRepositoryPath;
+            this.packageManager = packageManager;
+            this.packageManager.PackageInstalling += this.OnPackageManagerPackageInstalling;
+            this.packageManager.PackageInstalled += this.OnPackageManagerPackageInstalled;
+            this.packageManager.PackageUninstalling += this.OnPackageManagerPackageUninstalling;
+            this.logger = logger;
             this.packageName = packageName;
-            this.logger = new PackageLogger();
-            this.localRepository = new LocalPackageRepository(this.localRepositoryPath);
-            this.packageManager = this.CreatePackageManager();
+            this.destinationRepository = destinationRepository;
         }
 
         public IEnumerable<string> Logs
@@ -63,13 +66,13 @@
             {
                 this.installCalled = true;
 
-                if (this.localRepository.Exists(this.packageName, version))
+                if (this.destinationRepository.Exists(this.packageName, version))
                 {
                     this.packageManager.InstallPackage(this.packageName, version, false, false);
                     return;
                 }
 
-                if (this.localRepository.Exists(this.packageName))
+                if (this.destinationRepository.Exists(this.packageName))
                 {
                     this.packageManager.UpdatePackage(this.packageName, version, false, false);
                     return;
@@ -127,21 +130,6 @@
             var initPackageFile = package.GetSetupPackageFile();
 
             initPackageFile.ExecutePowerShell(package, this.logger);
-        }
-
-        private IPackageManager CreatePackageManager()
-        {
-            var packagePathResolver = new DefaultPackagePathResolver(this.localRepositoryPath);
-            var fileSystem = new PhysicalFileSystem(this.localRepositoryPath) { Logger = this.logger };
-
-            var manager = new PackageManager(
-                this.sourceRepository, packagePathResolver, fileSystem, this.localRepository) { Logger = this.logger };
-
-            manager.PackageInstalling += this.OnPackageManagerPackageInstalling;
-            manager.PackageInstalled += this.OnPackageManagerPackageInstalled;
-            manager.PackageUninstalling += this.OnPackageManagerPackageUninstalling;
-
-            return manager;
         }
     }
 }

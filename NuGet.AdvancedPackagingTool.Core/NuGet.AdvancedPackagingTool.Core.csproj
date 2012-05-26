@@ -81,6 +81,7 @@
     <Compile Include="IPackageInstallerFactory.cs" />
     <Compile Include="IPackageSourceFileFactory.cs" />
     <Compile Include="ISourcePackageRepositoryFactory.cs" />
+    <Compile Include="SourcePackageRepositoryFactory.cs" />
     <Compile Include="SystemConfigurationManager.cs" />
     <Compile Include="ExceptionFactory.cs" />
     <Compile Include="GlobalSuppressions.cs" />

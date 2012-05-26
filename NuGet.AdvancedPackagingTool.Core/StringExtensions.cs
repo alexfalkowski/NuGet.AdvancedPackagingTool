@@ -14,10 +14,15 @@
             return source.IndexOf(value, comparison) >= 0;
         }
 
-        public static bool IsUri(this string value)
+        public static bool IsHttpUri(this string value)
         {
             Uri uri;
-            return Uri.TryCreate(value, UriKind.RelativeOrAbsolute, out uri);
+            if (Uri.TryCreate(value, UriKind.RelativeOrAbsolute, out uri))
+            {
+                return uri.Scheme == "http" || uri.Scheme == "https";
+            }
+
+            return false;
         }
     }
 }
