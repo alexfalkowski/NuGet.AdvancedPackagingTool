@@ -19,7 +19,7 @@
         [SetUp]
         public void Setup()
         {
-            var packageSourceFile = PackageSourceFileFactory.CreatePackageSourceFile();
+            var packageSourceFile = new PackageSourceFileFactory().CreatePackageSourceFile();
             this.module = new PackageManagerModule(packageSourceFile);
         }
 

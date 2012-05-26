@@ -18,7 +18,7 @@
             this.server = new PackagesWebServer();
             this.server.Startup();
 
-            var packageSourceFile = PackageSourceFileFactory.CreatePackageSourceFile();
+            var packageSourceFile = new PackageSourceFileFactory().CreatePackageSourceFile();
             this.Module = new PackageManagerModule(packageSourceFile);
             this.PackagePath = new Uri("file:///C:/NuGet/TestInstallPackage/").LocalPath;
             this.InstallationPath = Path.Combine(this.PackagePath, "DummyNews");

@@ -1,25 +1,25 @@
 namespace NuGet.AdvancedPackagingTool.Core
 {
-    using System;
-
-    public static class PackageInstallerFactory
+    public class PackageInstallerFactory : IPackageInstallerFactory
     {
-        public static IPackageInstaller CreatePackageInstaller(
+        private readonly IConfigurationManager configurationManager;
+
+        private readonly ISourcePackageRepositoryFactory source;
+
+        public PackageInstallerFactory(
+            ISourcePackageRepositoryFactory source, IConfigurationManager configurationManager)
+        {
+            this.source = source;
+            this.configurationManager = configurationManager;
+        }
+
+        public IPackageInstaller CreatePackageInstaller(
             string packageSourceId, string packageId, bool areArgumentsValid)
         {
             if (areArgumentsValid)
             {
-                var packageSourceFile = PackageSourceFileFactory.CreatePackageSourceFile();
-                var packageManager = new PackageManagerModule(packageSourceFile);
-                var packageSource = string.IsNullOrWhiteSpace(packageSourceId)
-                                        ? packageManager.ActiveSource
-                                        : packageManager.GetSource(packageSourceId);
-                var packagePath = ConfigurationManager.PackagePath;
-
-                var source = packageSource.Source;
-                var sourceRepository = source.IsUri()
-                                           ? new LocalPackageRepository(source)
-                                           : (IPackageRepository)new DataServicePackageRepository(new Uri(source));
+                var packagePath = this.configurationManager.PackagePath;
+                var sourceRepository = this.source.CreatePackageRepository();
 
                 return new ValidPackageInstaller(sourceRepository, packagePath, packageId);
             }

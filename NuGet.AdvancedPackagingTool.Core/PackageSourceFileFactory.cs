@@ -1,8 +1,8 @@
 ﻿namespace NuGet.AdvancedPackagingTool.Core
 {
-    public static class PackageSourceFileFactory
+    public class PackageSourceFileFactory : IPackageSourceFileFactory
     {
-         public static PackageSourceFile CreatePackageSourceFile()
+        public IPackagesSourceFile CreatePackageSourceFile()
          {
              return new PackageSourceFile("PackageSources.config");
          }
