@@ -170,10 +170,8 @@
 
         private static void ShouldContainLogEntry(IEnumerable<string> logs, string entry)
         {
-            var query = logs.Where(s => s.Contains(entry, StringComparison.CurrentCultureIgnoreCase));
-            var foundEntry = query.FirstOrDefault();
-
-            foundEntry.Should().NotBeNullOrEmpty("The logs should contain: " + entry);
+            logs.Should().Contain(
+                s => s.Contains(entry, StringComparison.CurrentCultureIgnoreCase), "The log should contain {0}", entry);
         }
 
         private static string GetFileVersion(string path)

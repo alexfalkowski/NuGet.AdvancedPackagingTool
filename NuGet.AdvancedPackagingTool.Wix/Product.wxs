@@ -17,7 +17,7 @@
 							<File Id="FluentValidation" Name="FluentValidation.dll" Source="$(var.NuGet.AdvancedPackagingTool.Command.TargetDir)\FluentValidation.dll" DiskId="1"  />
 							<File Id="NuGet.AdvancedPackagingTool.Core" Name="NuGet.AdvancedPackagingTool.Core.dll" Source="$(var.NuGet.AdvancedPackagingTool.Command.TargetDir)\NuGet.AdvancedPackagingTool.Core.dll" DiskId="1"  />
 							<File Id="NLog" Name="NLog.dll" Source="$(var.NuGet.AdvancedPackagingTool.Command.TargetDir)\NLog.dll" DiskId="1"  />
-							<File Id="npm.exe.config" Name="npm.exe.config" Source="$(var.NuGet.AdvancedPackagingTool.Command.TargetDir)\nuget-apt-get.exe.config" DiskId="1"  />
+							<File Id="npm.exe.config" Name="npm.exe.config" Source="$(var.NuGet.AdvancedPackagingTool.Command.TargetDir)\napt-get.exe.config" DiskId="1"  />
 							<File Id="NuGet.Core" Name="NuGet.Core.dll" Source="$(var.NuGet.AdvancedPackagingTool.Command.TargetDir)\NuGet.Core.dll" DiskId="1"  />
 							<File Id="PackageSources.config" Name="PackageSources.config" Source="$(var.NuGet.AdvancedPackagingTool.Command.TargetDir)\PackageSources.config" DiskId="1"  />
 							<Environment Id="Path" Name="Path" Value="[INSTALLDIR]" Separator=";" Permanent="no" Part="last" Action="set" System="yes" />

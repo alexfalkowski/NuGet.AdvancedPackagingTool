@@ -88,7 +88,7 @@
 
         private static void RunPackageManagerProcess(string arguments)
         {
-            var info = ProcessHelper.ExecuteBackgroundProcess("nuget-apt-get.exe", arguments);
+            var info = ProcessHelper.ExecuteBackgroundProcess("napt-get.exe", arguments);
 
             Console.WriteLine(info.OutputMessage);
             Console.WriteLine(info.ErrorMessage);
