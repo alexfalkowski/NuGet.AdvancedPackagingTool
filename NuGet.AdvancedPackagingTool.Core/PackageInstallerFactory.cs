@@ -23,11 +23,10 @@ namespace NuGet.AdvancedPackagingTool.Core
                 var packagePathResolver = new DefaultPackagePathResolver(packagePath);
                 var fileSystem = new PhysicalFileSystem(packagePath) { Logger = logger };
                 var destinationRepository = new LocalPackageRepository(packagePath);
-
                 var manager = new PackageManager(
                     sourceRepository, packagePathResolver, fileSystem, destinationRepository) { Logger = logger };
 
-                return new ValidPackageInstaller(destinationRepository, manager, logger, packageId);
+                return new ValidPackageInstaller(manager, logger, packageId);
             }
 
             return new InvalidPackageInstaller();

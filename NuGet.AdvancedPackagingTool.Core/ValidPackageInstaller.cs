@@ -13,15 +13,9 @@
 
         private readonly IPackageManager packageManager;
 
-        private readonly IPackageRepository destinationRepository;
-
         private bool installCalled;
 
-        public ValidPackageInstaller(
-            IPackageRepository destinationRepository,
-            IPackageManager packageManager,
-            PackageLogger logger,
-            string packageName)
+        public ValidPackageInstaller(IPackageManager packageManager, PackageLogger logger, string packageName)
         {
             if (packageManager == null)
             {
@@ -34,7 +28,6 @@
             this.packageManager.PackageUninstalling += this.OnPackageManagerPackageUninstalling;
             this.logger = logger;
             this.packageName = packageName;
-            this.destinationRepository = destinationRepository;
         }
 
         public IEnumerable<string> Logs
@@ -51,13 +44,13 @@
             {
                 this.installCalled = true;
 
-                if (this.destinationRepository.Exists(this.packageName, version))
+                if (this.packageManager.LocalRepository.Exists(this.packageName, version))
                 {
                     this.packageManager.InstallPackage(this.packageName, version, false, false);
                     return;
                 }
 
-                if (this.destinationRepository.Exists(this.packageName))
+                if (this.packageManager.LocalRepository.Exists(this.packageName))
                 {
                     this.packageManager.UpdatePackage(this.packageName, version, false, false);
                     return;
