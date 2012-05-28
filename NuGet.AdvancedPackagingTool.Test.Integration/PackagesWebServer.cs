@@ -12,7 +12,7 @@
 
     public class PackagesWebServer
     {
-        private Process process;
+        private System.Diagnostics.Process process;
 
         public void Startup()
         {
@@ -21,7 +21,7 @@
                 return;
             }
 
-            foreach (var runningProcess in Process.GetProcessesByName("iisexpress"))
+            foreach (var runningProcess in System.Diagnostics.Process.GetProcessesByName("iisexpress"))
             {
                 KillProcess(runningProcess);
             }
@@ -38,7 +38,7 @@
             var path = Path.GetFullPath(Path.Combine(currentPath, @"..\..\..\NuGet.AdvancedPackagingTool.Service"));
             var arguments = string.Format(CultureInfo.CurrentCulture, @"/path:""{0}"" /port:1544", path);
 
-            this.process = ProcessHelper.CreateBackgroundProcess(FileName, arguments);
+            this.process = new BackgroundProcess().CreateProcess(FileName, arguments);
             Thread.Sleep(3000);
         }
 
@@ -52,7 +52,7 @@
             KillProcess(this.process);
         }
 
-        private static void KillProcess(Process processToKill)
+        private static void KillProcess(System.Diagnostics.Process processToKill)
         {
             if (processToKill == null)
             {

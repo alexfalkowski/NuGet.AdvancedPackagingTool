@@ -78,8 +78,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IProcess.cs" />
     <Compile Include="IPackageInstallerFactory.cs" />
     <Compile Include="IPackageSourceFileFactory.cs" />
+    <Compile Include="IShellConsole.cs" />
     <Compile Include="ISourcePackageRepositoryFactory.cs" />
     <Compile Include="SourcePackageRepositoryFactory.cs" />
     <Compile Include="SystemConfigurationManager.cs" />
@@ -96,7 +98,7 @@
     <Compile Include="PackageSourceFileFactory.cs" />
     <Compile Include="PowerShellConsole.cs" />
     <Compile Include="ProcessExitInfo.cs" />
-    <Compile Include="ProcessHelper.cs" />
+    <Compile Include="BackgroundProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PackageLogger.cs" />
     <Compile Include="IPackagesSourceFile.cs" />

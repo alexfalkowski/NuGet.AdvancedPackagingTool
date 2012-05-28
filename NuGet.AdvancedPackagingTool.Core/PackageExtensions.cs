@@ -112,7 +112,7 @@
                 throw ExceptionFactory.CreateArgumentNullException("logger");
             }
 
-            var console = new PowerShellConsole(package, file.GetStream().ReadToEnd());
+            var console = new PowerShellConsole(package, new BackgroundProcess(), file.GetStream().ReadToEnd());
             var processExitInfo = console.Start();
 
             if (processExitInfo.ExitCode > 0)

@@ -2,9 +2,9 @@
 {
     using System.Diagnostics;
 
-    public static class ProcessHelper
+    public class BackgroundProcess : IProcess
     {
-        public static Process CreateBackgroundProcess(string command, string arguments)
+        public Process CreateProcess(string command, string arguments)
         {
             var processInfo = new ProcessStartInfo(command, arguments)
                 {
@@ -18,9 +18,9 @@
             return Process.Start(processInfo);
         }
 
-        public static ProcessExitInfo ExecuteBackgroundProcess(string command, string arguments)
+        public ProcessExitInfo ExecuteProcess(string command, string arguments)
         {
-            using (var process = CreateBackgroundProcess(command, arguments))
+            using (var process = this.CreateProcess(command, arguments))
             {
                 process.WaitForExit();
 

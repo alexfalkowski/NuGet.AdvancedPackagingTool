@@ -7,7 +7,7 @@
 
     using NuGet;
 
-    public class PowerShellConsole
+    public class PowerShellConsole : IShellConsole
     {
         private const string ScriptSignature = "param ([string]$installationFolder, $configuration)";
 
@@ -15,19 +15,12 @@
 
         private readonly string script;
 
-        public PowerShellConsole(IPackage package, string script)
-        {
-            if (package == null)
-            {
-                throw ExceptionFactory.CreateArgumentNullException("package");
-            }
+        private readonly IProcess process;
 
-            if (string.IsNullOrWhiteSpace("script"))
-            {
-                throw ExceptionFactory.CreateArgumentNullException("script");
-            }
-
+        public PowerShellConsole(IPackage package, IProcess process, string script)
+        {        
             this.package = package;
+            this.process = process;
             this.script = script;
         }
 
@@ -70,7 +63,7 @@
                 this.package.ProjectUrl.AbsolutePath);
             var parameters = string.Format(CultureInfo.CurrentCulture, ParameterFormat, executableScript);
 
-            var info = ProcessHelper.ExecuteBackgroundProcess("powershell.exe", parameters);
+            var info = this.process.ExecuteProcess("powershell.exe", parameters);
             PathHelper.SafeDelete(scriptTempFile);
             PathHelper.SafeDelete(configurationTempFile);
 

@@ -90,7 +90,7 @@
 
         private static void RunPackageManagerProcess(string arguments)
         {
-            var info = ProcessHelper.ExecuteBackgroundProcess("napt-get.exe", arguments);
+            var info = new BackgroundProcess().ExecuteProcess("napt-get.exe", arguments);
 
             Console.WriteLine(info.OutputMessage);
             Console.WriteLine(info.ErrorMessage);
