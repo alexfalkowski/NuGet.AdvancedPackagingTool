@@ -117,7 +117,7 @@
 
             if (processExitInfo.ExitCode > 0)
             {
-                throw new InvalidOperationException(
+                throw ExceptionFactory.CreateInvalidOperationException(
                     string.Format(
                         CultureInfo.CurrentCulture,
                         Resources.PowershellErrorMessage,
@@ -133,7 +133,9 @@
 
         private static IPackageFile GetToolFile(IEnumerable<IPackageFile> toolsFiles, string fileName)
         {
-            var powershellFilesQuery = toolsFiles.Where(packgeFile => packgeFile.Path.Contains(fileName, StringComparison.CurrentCultureIgnoreCase));
+            var powershellFilesQuery =
+                toolsFiles.Where(
+                    packgeFile => packgeFile.Path.Contains(fileName, StringComparison.CurrentCultureIgnoreCase));
             var powershellFile = powershellFilesQuery.FirstOrDefault();
 
             return powershellFile ?? new NullPackageFile();
