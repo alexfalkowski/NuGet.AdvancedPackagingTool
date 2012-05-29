@@ -82,7 +82,9 @@
     <Compile Include="IPackageInstallerFactory.cs" />
     <Compile Include="IPackageSourceFileFactory.cs" />
     <Compile Include="IShellConsole.cs" />
+    <Compile Include="IShellPackageFile.cs" />
     <Compile Include="ISourcePackageRepositoryFactory.cs" />
+    <Compile Include="PowerShellPackageFile.cs" />
     <Compile Include="SourcePackageRepositoryFactory.cs" />
     <Compile Include="SystemConfigurationManager.cs" />
     <Compile Include="ExceptionFactory.cs" />

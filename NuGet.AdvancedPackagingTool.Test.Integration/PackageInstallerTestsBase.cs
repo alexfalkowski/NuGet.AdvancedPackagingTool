@@ -25,6 +25,8 @@
 
         private const string DummyNews11Folder = "DummyNews.1.1";
 
+        private const string DummyNews = "DummyNews";
+
         private const string Uninstall = "Uninstall";
 
         private const string Uninstalled = "uninstalled";
@@ -57,7 +59,7 @@
         public void ShouldNotUninstallNotInstalledPackage()
         {
             var version = new SemanticVersion(ShortVersion10);
-            this.Installer.UninstallPackage(version);
+            this.Installer.UninstallPackage(DummyNews, version);
 
             ShouldContainLogEntry(this.Installer.Logs, "Unable to find package 'DummyNews'.");
         }
@@ -67,7 +69,7 @@
         {
             var version = new SemanticVersion(ShortVersion10);
 
-            this.Installer.InstallPackage(version);
+            this.Installer.InstallPackage(DummyNews, version);
 
             ShouldContainLogEntry(this.Installer.Logs, SetupText);
             ShouldContainLogEntry(this.Installer.Logs, Installed);
@@ -85,7 +87,7 @@
         {
             var version = new SemanticVersion(ShortVersion11);
 
-            this.Installer.InstallPackage(version);
+            this.Installer.InstallPackage(DummyNews, version);
 
             ShouldContainLogEntry(this.Installer.Logs, SetupText);
             ShouldContainLogEntry(this.Installer.Logs, Installed);
@@ -101,8 +103,8 @@
         [Test]
         public void ShouldUpgradeAlreadyInstalledPackage()
         {
-            this.Installer.InstallPackage(new SemanticVersion(ShortVersion10));
-            this.Installer.InstallPackage(new SemanticVersion(ShortVersion11));
+            this.Installer.InstallPackage(DummyNews, new SemanticVersion(ShortVersion10));
+            this.Installer.InstallPackage(DummyNews, new SemanticVersion(ShortVersion11));
 
             ShouldContainLogEntry(this.Installer.Logs, SetupText);
             ShouldContainLogEntry(this.Installer.Logs, Installed);
@@ -125,8 +127,8 @@
         public void ShouldNotInstallTheSameVersionOfThePackage()
         {
             var version = new SemanticVersion(ShortVersion10);
-            this.Installer.InstallPackage(version);
-            this.Installer.InstallPackage(version);
+            this.Installer.InstallPackage(DummyNews, version);
+            this.Installer.InstallPackage(DummyNews, version);
 
             ShouldContainLogEntry(this.Installer.Logs, SetupText);
             ShouldContainLogEntry(this.Installer.Logs, Installed);
@@ -138,8 +140,8 @@
         public void ShouldUninstallVersion10Package()
         {
             var version = new SemanticVersion(ShortVersion10);
-            this.Installer.InstallPackage(version);
-            this.Installer.UninstallPackage(version);
+            this.Installer.InstallPackage(DummyNews, version);
+            this.Installer.UninstallPackage(DummyNews, version);
 
             ShouldContainLogEntry(this.Installer.Logs, SetupText);
             ShouldContainLogEntry(this.Installer.Logs, Installed);
@@ -154,8 +156,8 @@
         public void ShouldUninstallVersion11Package()
         {
             var version = new SemanticVersion(ShortVersion11);
-            this.Installer.InstallPackage(version);
-            this.Installer.UninstallPackage(version);
+            this.Installer.InstallPackage(DummyNews, version);
+            this.Installer.UninstallPackage(DummyNews, version);
 
             ShouldContainLogEntry(this.Installer.Logs, SetupText);
             ShouldContainLogEntry(this.Installer.Logs, Installed);
@@ -177,7 +179,7 @@
                     new SourcePackageRepositoryFactory(source),
                     configurationManager);
 
-            this.Installer = factory.CreatePackageInstaller("DummyNews", true);
+            this.Installer = factory.CreatePackageInstaller(true);
 
             if (Directory.Exists(this.PackagePath))
             {

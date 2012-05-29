@@ -7,16 +7,18 @@
 
     public class ValidPackageInstaller : IPackageInstaller
     {
-        private readonly string packageName;
-
         private readonly PackageLogger logger;
 
         private readonly IPackageManager packageManager;
 
+        private readonly IShellPackageFile shellPackageFile;
+
         private bool installCalled;
 
-        public ValidPackageInstaller(IPackageManager packageManager, PackageLogger logger, string packageName)
+        public ValidPackageInstaller(
+            IPackageManager packageManager, IShellPackageFile shellPackageFile, PackageLogger logger)
         {
+            this.shellPackageFile = shellPackageFile;
             if (packageManager == null)
             {
                 throw ExceptionFactory.CreateArgumentNullException("packageManager");
@@ -27,7 +29,6 @@
             this.packageManager.PackageInstalled += this.OnPackageManagerPackageInstalled;
             this.packageManager.PackageUninstalling += this.OnPackageManagerPackageUninstalling;
             this.logger = logger;
-            this.packageName = packageName;
         }
 
         public IEnumerable<string> Logs
@@ -38,25 +39,25 @@
             }
         }
 
-        public void InstallPackage(SemanticVersion version)
+        public void InstallPackage(string packageId, SemanticVersion version)
         {
             try
             {
                 this.installCalled = true;
 
-                if (this.packageManager.LocalRepository.Exists(this.packageName, version))
+                if (this.packageManager.LocalRepository.Exists(packageId, version))
                 {
-                    this.packageManager.InstallPackage(this.packageName, version, false, false);
+                    this.packageManager.InstallPackage(packageId, version, false, false);
                     return;
                 }
 
-                if (this.packageManager.LocalRepository.Exists(this.packageName))
+                if (this.packageManager.LocalRepository.Exists(packageId))
                 {
-                    this.packageManager.UpdatePackage(this.packageName, version, false, false);
+                    this.packageManager.UpdatePackage(packageId, version, false, false);
                     return;
                 }
 
-                this.packageManager.InstallPackage(this.packageName, version, false, false);
+                this.packageManager.InstallPackage(packageId, version, false, false);
             }
             catch (InvalidOperationException e)
             {
@@ -68,11 +69,11 @@
             }
         }
 
-        public void UninstallPackage(SemanticVersion version)
+        public void UninstallPackage(string packageId, SemanticVersion version)
         {
             try
             {
-                this.packageManager.UninstallPackage(this.packageName, version, true, false);
+                this.packageManager.UninstallPackage(packageId, version, true, false);
             }
             catch (InvalidOperationException e)
             {
@@ -84,30 +85,29 @@
         {
             var package = e.Package;
             var unistallPackageFile = package.GetUninstallPackageFile();
-            var teardownPackageFile = package.GetTeardownPackageFile();
+            this.shellPackageFile.Execute(unistallPackageFile, package, this.logger);
 
-            unistallPackageFile.ExecutePowerShell(package, this.logger);
-
-            if (!this.installCalled)
+            if (this.installCalled)
             {
-                teardownPackageFile.ExecutePowerShell(package, this.logger);
+                return;
             }
+
+            var teardownPackageFile = package.GetTeardownPackageFile();
+            this.shellPackageFile.Execute(teardownPackageFile, package, this.logger);
         }
 
         private void OnPackageManagerPackageInstalled(object sender, PackageOperationEventArgs e)
         {
             var package = e.Package;
             var installPackageFile = package.GetInstallPackageFile();
-
-            installPackageFile.ExecutePowerShell(package, this.logger);
+            this.shellPackageFile.Execute(installPackageFile, package, this.logger);
         }
 
         private void OnPackageManagerPackageInstalling(object sender, PackageOperationEventArgs e)
         {
             var package = e.Package;
             var initPackageFile = package.GetSetupPackageFile();
-
-            initPackageFile.ExecutePowerShell(package, this.logger);
+            this.shellPackageFile.Execute(initPackageFile, package, this.logger);
         }
     }
 }

@@ -2,6 +2,6 @@
 {
     public interface IPackageInstallerFactory
     {
-        IPackageInstaller CreatePackageInstaller(string packageId, bool areArgumentsValid);
+        IPackageInstaller CreatePackageInstaller(bool areArgumentsValid);
     }
 }

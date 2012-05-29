@@ -85,7 +85,7 @@
 
             program.Start();
 
-            installer.Received().InstallPackage(version);
+            installer.Received().InstallPackage(arguments.Package, version);
         }
 
         [Test]
@@ -98,7 +98,7 @@
 
             program.Start();
 
-            installer.Received().UninstallPackage(version);
+            installer.Received().UninstallPackage(arguments.Package, version);
         }
     }
 }

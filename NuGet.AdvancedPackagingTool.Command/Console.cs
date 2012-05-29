@@ -45,12 +45,12 @@ namespace NuGet.AdvancedPackagingTool.Command
             {
                 if (this.arguments.Install)
                 {
-                    this.installer.InstallPackage(this.arguments.Version);
+                    this.installer.InstallPackage(this.arguments.Package, this.arguments.Version);
                 }
 
                 if (this.arguments.Uninstall)
                 {
-                    this.installer.UninstallPackage(this.arguments.Version);
+                    this.installer.UninstallPackage(this.arguments.Package, this.arguments.Version);
                 }
 
                 return 0;

@@ -8,8 +8,8 @@
     {
         IEnumerable<string> Logs { get; }
 
-        void InstallPackage(SemanticVersion version);
+        void InstallPackage(string packageId, SemanticVersion version);
 
-        void UninstallPackage(SemanticVersion version);
+        void UninstallPackage(string packageId, SemanticVersion version);
     }
 }

@@ -2,12 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.IO;
     using System.Linq;
 
     using NuGet;
-    using NuGet.AdvancedPackagingTool.Core.Properties;
 
     public static class PackageExtensions
     {
@@ -27,62 +25,27 @@
 
         public static IPackageFile GetSetupPackageFile(this IPackage package)
         {
-            if (package == null)
-            {
-                throw ExceptionFactory.CreateArgumentNullException(PackageParameterName);
-            }
-
-            var toolFiles = package.GetFiles(Constants.ToolsDirectory);
-
-            return GetToolFile(toolFiles, "Setup");
+            return package.GetPackageFile("Setup");
         }
 
         public static IPackageFile GetInstallPackageFile(this IPackage package)
         {
-            if (package == null)
-            {
-                throw ExceptionFactory.CreateArgumentNullException(PackageParameterName);
-            }
-
-            var toolFiles = package.GetFiles(Constants.ToolsDirectory);
-
-            return GetToolFile(toolFiles, "Install");
+            return package.GetPackageFile("Install");
         }
 
         public static IPackageFile GetUninstallPackageFile(this IPackage package)
         {
-            if (package == null)
-            {
-                throw ExceptionFactory.CreateArgumentNullException(PackageParameterName);
-            }
-
-            var toolFiles = package.GetFiles(Constants.ToolsDirectory);
-
-            return GetToolFile(toolFiles, "Uninstall");
+            return package.GetPackageFile("Uninstall");
         }
 
         public static IPackageFile GetTeardownPackageFile(this IPackage package)
         {
-            if (package == null)
-            {
-                throw ExceptionFactory.CreateArgumentNullException(PackageParameterName);
-            }
-
-            var toolFiles = package.GetFiles(Constants.ToolsDirectory);
-
-            return GetToolFile(toolFiles, "Teardown");
+            return package.GetPackageFile("Teardown");
         }
 
         public static IPackageFile GetConfigurationPackageFile(this IPackage package)
         {
-            if (package == null)
-            {
-                throw ExceptionFactory.CreateArgumentNullException(PackageParameterName);
-            }
-
-            var toolFiles = package.GetFiles(Constants.ToolsDirectory);
-
-            return GetToolFile(toolFiles, "Configuration");
+            return package.GetPackageFile("Configuration");
         }
 
         public static bool IsValid(this IPackageMetadata package)
@@ -95,40 +58,16 @@
             return package.ProjectUrl != null;
         }
 
-        public static void ExecutePowerShell(this IPackageFile file, IPackage package, ILogger logger)
+        private static IPackageFile GetPackageFile(this IPackage package, string fileName)
         {
-            if (file == null)
-            {
-                throw ExceptionFactory.CreateArgumentNullException("file");
-            }
-
             if (package == null)
             {
-                throw ExceptionFactory.CreateArgumentNullException("package");
+                throw ExceptionFactory.CreateArgumentNullException(PackageParameterName);
             }
 
-            if (logger == null)
-            {
-                throw ExceptionFactory.CreateArgumentNullException("logger");
-            }
+            var toolFiles = package.GetFiles(Constants.ToolsDirectory);
 
-            var console = new PowerShellConsole(package, new BackgroundProcess(), file.GetStream().ReadToEnd());
-            var processExitInfo = console.Start();
-
-            if (processExitInfo.ExitCode > 0)
-            {
-                throw ExceptionFactory.CreateInvalidOperationException(
-                    string.Format(
-                        CultureInfo.CurrentCulture,
-                        Resources.PowershellErrorMessage,
-                        file.Path,
-                        processExitInfo.ErrorMessage));
-            }
-
-            foreach (var message in processExitInfo.OutputMessage.Split('\n').Where(message => !string.IsNullOrWhiteSpace(message)))
-            {
-                logger.Log(MessageLevel.Info, message.Trim());
-            }
+            return GetToolFile(toolFiles, fileName);
         }
 
         private static IPackageFile GetToolFile(IEnumerable<IPackageFile> toolsFiles, string fileName)

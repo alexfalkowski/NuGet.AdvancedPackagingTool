@@ -13,7 +13,7 @@ namespace NuGet.AdvancedPackagingTool.Core
             this.configurationManager = configurationManager;
         }
 
-        public IPackageInstaller CreatePackageInstaller(string packageId, bool areArgumentsValid)
+        public IPackageInstaller CreatePackageInstaller(bool areArgumentsValid)
         {
             if (areArgumentsValid)
             {
@@ -25,8 +25,9 @@ namespace NuGet.AdvancedPackagingTool.Core
                 var destinationRepository = new LocalPackageRepository(packagePath);
                 var manager = new PackageManager(
                     sourceRepository, packagePathResolver, fileSystem, destinationRepository) { Logger = logger };
+                var powerShellPackageFile = new PowerShellPackageFile(new BackgroundProcess());
 
-                return new ValidPackageInstaller(manager, logger, packageId);
+                return new ValidPackageInstaller(manager, powerShellPackageFile, logger);
             }
 
             return new InvalidPackageInstaller();

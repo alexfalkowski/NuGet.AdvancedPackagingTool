@@ -15,11 +15,11 @@
             }
         }
 
-        public void InstallPackage(SemanticVersion version)
+        public void InstallPackage(string packageId, SemanticVersion version)
         {
         }
 
-        public void UninstallPackage(SemanticVersion version)
+        public void UninstallPackage(string packageId, SemanticVersion version)
         {
         }
     }
