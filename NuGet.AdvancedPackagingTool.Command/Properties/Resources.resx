@@ -121,9 +121,9 @@
     <value>Invalid execution of the package manager.</value>
   </data>
   <data name="InvalidInstallUninstallFlag" xml:space="preserve">
-    <value>Install or uninstall was not specified.</value>
+    <value>The /i (install) parameter or /u (uninstall) paramater was not specified.</value>
   </data>
   <data name="PackageNotSpecified" xml:space="preserve">
-    <value>The package was not specified.</value>
+    <value>The /p (package) parameter was not specified.</value>
   </data>
 </root>

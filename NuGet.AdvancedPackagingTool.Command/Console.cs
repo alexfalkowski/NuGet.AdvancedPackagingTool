@@ -38,6 +38,7 @@ namespace NuGet.AdvancedPackagingTool.Command
         {
             if (!this.arguments.IsValid)
             {
+                WriteInformationToConsole(this.arguments.Errors);
                 return 1;
             }
 

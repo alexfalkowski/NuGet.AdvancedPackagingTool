@@ -70,7 +70,7 @@ namespace NuGet.AdvancedPackagingTool.Command.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Install or uninstall was not specified..
+        ///   Looks up a localized string similar to The /i (install) parameter or /u (uninstall) paramater was not specified..
         /// </summary>
         internal static string InvalidInstallUninstallFlag {
             get {
@@ -79,7 +79,7 @@ namespace NuGet.AdvancedPackagingTool.Command.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The package was not specified..
+        ///   Looks up a localized string similar to The /p (package) parameter was not specified..
         /// </summary>
         internal static string PackageNotSpecified {
             get {
