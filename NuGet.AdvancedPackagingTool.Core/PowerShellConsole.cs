@@ -40,7 +40,7 @@
             }
         }
 
-        public ProcessExitInfo Start()
+        public ProcessExitInfo Start(string installationPath)
         {
             var configurationFile = this.package.GetConfigurationPackageFile();
             var configurationFileContent = configurationFile.GetStream().ReadToEnd();
@@ -60,7 +60,7 @@
                 ScriptTemplateFormat,
                 configurationTempFile,
                 scriptTempFile,
-                this.package.ProjectUrl.AbsolutePath);
+                installationPath);
             var parameters = string.Format(CultureInfo.CurrentCulture, ParameterFormat, executableScript);
 
             var info = this.process.ExecuteProcess("powershell.exe", parameters);

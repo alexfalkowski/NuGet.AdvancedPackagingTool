@@ -90,6 +90,7 @@
     <Compile Include="PackagesWebServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestConfigurationManager.cs" />
+    <Compile Include="TestDirectorySystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\NuGet.AdvancedPackagingTool.Command\PackageSources.config">

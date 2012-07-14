@@ -16,8 +16,9 @@
                                         ? packageManager.ActiveSource
                                         : packageManager.GetSource(arguments.Source);
             var sourceFactory = new SourcePackageRepositoryFactory(packageSource);
-            var factory = new PackageInstallerFactory(sourceFactory, new SystemConfigurationManager());
-            var installer = factory.CreatePackageInstaller(arguments.IsValid);
+            var factory = new PackageInstallerFactory(
+                sourceFactory, new SystemConfigurationManager(), new PhysicalDirectorySystem());
+            var installer = factory.CreatePackageInstaller(arguments.IsValid, arguments.Destination);
             var program = new Console(arguments, installer);
 
             return program.Start();

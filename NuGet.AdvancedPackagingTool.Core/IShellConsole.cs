@@ -2,6 +2,6 @@ namespace NuGet.AdvancedPackagingTool.Core
 {
     public interface IShellConsole
     {
-        ProcessExitInfo Start();
+        ProcessExitInfo Start(string installationPath);
     }
 }

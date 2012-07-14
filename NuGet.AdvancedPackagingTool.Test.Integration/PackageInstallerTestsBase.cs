@@ -51,8 +51,6 @@
 
         protected IPackageInstaller Installer { get; set; }
 
-        protected string InstallationPath { get; set; }
-
         protected string PackagePath { get; set; }
 
         [Test]
@@ -77,7 +75,7 @@
 
             var installPath = Path.Combine(this.PackagePath, DummyNews10Folder);
             File.Exists(Path.Combine(installPath, DummyNews10File)).Should().BeTrue();
-            var contentPath = Path.Combine(installPath, "content");
+            var contentPath = Path.Combine(this.PackagePath, DummyNews10Folder, "content");
             GetFileVersion(contentPath).Should().Be(Version10);
             GetWebsiteVersion(contentPath).Should().Be(Version10);
         }
@@ -95,7 +93,7 @@
 
             var installPath = Path.Combine(this.PackagePath, DummyNews11Folder);
             File.Exists(Path.Combine(installPath, DummyNews11File)).Should().BeTrue();
-            var contentPath = Path.Combine(installPath, "content");
+            var contentPath = Path.Combine(this.PackagePath, DummyNews11Folder, "content");
             GetFileVersion(contentPath).Should().Be(Version11);
             GetWebsiteVersion(contentPath).Should().Be(Version11);
         }
@@ -117,8 +115,7 @@
 
             File.Exists(Path.Combine(this.PackagePath, DummyNews10Folder, DummyNews10File)).Should().BeFalse();
             File.Exists(Path.Combine(this.PackagePath, DummyNews11Folder, DummyNews11File)).Should().BeTrue();
-            var installPath = Path.Combine(this.PackagePath, DummyNews11Folder);
-            var contentPath = Path.Combine(installPath, "content");
+            var contentPath = Path.Combine(this.PackagePath, DummyNews11Folder, "content");
             GetFileVersion(contentPath).Should().Be(Version11);
             GetWebsiteVersion(contentPath).Should().Be(Version11);
         }
@@ -149,7 +146,8 @@
             ShouldContainLogEntry(this.Installer.Logs, Uninstall);
             ShouldContainLogEntry(this.Installer.Logs, Uninstalled);
             ShouldContainLogEntry(this.Installer.Logs, Teardown);
-            Directory.Exists(this.InstallationPath).Should().BeFalse(PackageShouldBeInstalled);
+            Directory.Exists(Path.Combine(this.PackagePath, DummyNews10Folder)).Should().BeFalse(
+                PackageShouldBeInstalled);
         }
 
         [Test]
@@ -165,21 +163,19 @@
             ShouldContainLogEntry(this.Installer.Logs, Uninstall);
             ShouldContainLogEntry(this.Installer.Logs, Uninstalled);
             ShouldContainLogEntry(this.Installer.Logs, Teardown);
-            Directory.Exists(this.InstallationPath).Should().BeFalse(PackageShouldBeInstalled);
+            Directory.Exists(Path.Combine(this.PackagePath, DummyNews11Folder)).Should().BeFalse(
+                PackageShouldBeInstalled);
         }
 
         protected void Setup(PackageSource source)
         {
             var configurationManager = new TestConfigurationManager();
             this.PackagePath = configurationManager.PackagePath;
-            this.InstallationPath = Path.Combine(this.PackagePath, "DummyNews");
 
-            var factory =
-                new PackageInstallerFactory(
-                    new SourcePackageRepositoryFactory(source),
-                    configurationManager);
+            var factory = new PackageInstallerFactory(
+                new SourcePackageRepositoryFactory(source), configurationManager, new TestDirectorySystem());
 
-            this.Installer = factory.CreatePackageInstaller(true);
+            this.Installer = factory.CreatePackageInstaller(true, this.PackagePath);
 
             if (Directory.Exists(this.PackagePath))
             {

@@ -48,16 +48,6 @@
             return package.GetPackageFile("Configuration");
         }
 
-        public static bool IsValid(this IPackageMetadata package)
-        {
-            if (package == null)
-            {
-                throw ExceptionFactory.CreateArgumentNullException(PackageParameterName);
-            }
-
-            return package.ProjectUrl != null;
-        }
-
         private static IPackageFile GetPackageFile(this IPackage package, string fileName)
         {
             if (package == null)

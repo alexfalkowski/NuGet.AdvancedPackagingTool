@@ -2,6 +2,7 @@ namespace NuGet.AdvancedPackagingTool.Core
 {
     using System;
     using System.Globalization;
+    using System.IO;
     using System.Linq;
 
     using NuGet.AdvancedPackagingTool.Core.Properties;
@@ -10,9 +11,12 @@ namespace NuGet.AdvancedPackagingTool.Core
     {
         private readonly IProcess process;
 
-        public PowerShellPackageFile(IProcess process)
+        private readonly IPackageManager manager;
+
+        public PowerShellPackageFile(IProcess process, IPackageManager manager)
         {
             this.process = process;
+            this.manager = manager;
         }
 
         public void Execute(IPackageFile file, IPackage package, ILogger logger)
@@ -27,8 +31,10 @@ namespace NuGet.AdvancedPackagingTool.Core
                 throw ExceptionFactory.CreateArgumentNullException("logger");
             }
 
+            var installationPath = Path.Combine(
+                this.manager.FileSystem.Root, this.manager.PathResolver.GetPackageDirectory(package));
             var console = new PowerShellConsole(package, this.process, file.GetStream().ReadToEnd());
-            var processExitInfo = console.Start();
+            var processExitInfo = console.Start(installationPath);
 
             if (processExitInfo.ExitCode > 0)
             {
