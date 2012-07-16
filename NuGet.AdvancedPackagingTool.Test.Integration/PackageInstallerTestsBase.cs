@@ -15,15 +15,15 @@
 
     public abstract class PackageInstallerTestsBase
     {
+        internal const string DummyNews10Folder = "DummyNews.1.0";
+
+        internal const string DummyNews11Folder = "DummyNews.1.1";
+
         private const string ShortVersion10 = "1.0";
 
         private const string DummyNews10File = "DummyNews.1.0.nupkg";
 
-        private const string DummyNews10Folder = "DummyNews.1.0";
-
         private const string DummyNews11File = "DummyNews.1.1.nupkg";
-
-        private const string DummyNews11Folder = "DummyNews.1.1";
 
         private const string DummyNews = "DummyNews";
 

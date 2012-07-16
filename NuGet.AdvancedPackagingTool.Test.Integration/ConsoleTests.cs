@@ -17,10 +17,13 @@
 
         private IConfigurationManager configurationManager;
 
+        private IDirectorySystem directorySystem;
+
         [SetUp]
         public void BeforeEach()
         {
             this.configurationManager = new SystemConfigurationManager();
+            this.directorySystem = new PhysicalDirectorySystem();
             this.server = new PackagesWebServer();
             this.server.Startup();
 
@@ -44,7 +47,27 @@
             Directory.EnumerateDirectories(this.configurationManager.PackagePath, "DummyNews.1.0").Any().Should().BeTrue(
                 "The package DummyNews should be installed.");
 
+            var path = Path.Combine(this.directorySystem.CurrentDirectory, PackageInstallerTestsBase.DummyNews10Folder);
+            Directory.EnumerateDirectories(path).Any().Should().BeTrue("Should have directories under " + path);
+
             RunPackageManagerProcess("/u /p DummyNews /v 1.0");
+
+            Directory.Exists(this.configurationManager.PackagePath).Should().BeFalse("The package DummyNews should not be installed.");
+        }
+
+        [Test]
+        public void ShouldInstallAndUninstallVersion10PackageUnderSpecificFolder()
+        {
+            this.directorySystem = new TestDirectorySystem();
+            RunPackageManagerProcess("/i /p DummyNews /v 1.0 /d " + this.directorySystem.CurrentDirectory);
+
+            Directory.EnumerateDirectories(this.configurationManager.PackagePath, "DummyNews.1.0").Any().Should().BeTrue(
+                "The package DummyNews should be installed.");
+
+            var path = Path.Combine(this.directorySystem.CurrentDirectory, PackageInstallerTestsBase.DummyNews10Folder);
+            Directory.EnumerateDirectories(path).Any().Should().BeTrue("Should have directories under " + path);
+
+            RunPackageManagerProcess("/u /p DummyNews /v 1.0 /d " + this.directorySystem.CurrentDirectory);
 
             Directory.Exists(this.configurationManager.PackagePath).Should().BeFalse("The package DummyNews should not be installed.");
         }
@@ -57,7 +80,27 @@
             Directory.EnumerateDirectories(this.configurationManager.PackagePath, "DummyNews.1.1").Any().Should().BeTrue(
                 "The package DummyNews should be installed.");
 
+            var path = Path.Combine(this.directorySystem.CurrentDirectory, PackageInstallerTestsBase.DummyNews11Folder);
+            Directory.EnumerateDirectories(path).Any().Should().BeTrue("Should have directories under " + path);
+
             RunPackageManagerProcess("/u /p DummyNews /v 1.1");
+
+            Directory.Exists(this.configurationManager.PackagePath).Should().BeFalse("The package DummyNews should not be installed.");
+        }
+
+        [Test]
+        public void ShouldInstallAndUninstallVersion11PackageUnderSpecificFolder()
+        {
+            this.directorySystem = new TestDirectorySystem();
+            RunPackageManagerProcess("/i /p DummyNews /v 1.1 /d " + this.directorySystem.CurrentDirectory);
+
+            Directory.EnumerateDirectories(this.configurationManager.PackagePath, "DummyNews.1.1").Any().Should().BeTrue(
+                "The package DummyNews should be installed.");
+
+            var path = Path.Combine(this.directorySystem.CurrentDirectory, PackageInstallerTestsBase.DummyNews11Folder);
+            Directory.EnumerateDirectories(path).Any().Should().BeTrue("Should have directories under " + path);
+
+            RunPackageManagerProcess("/u /p DummyNews /v 1.1 /d " + this.directorySystem.CurrentDirectory);
 
             Directory.Exists(this.configurationManager.PackagePath).Should().BeFalse("The package DummyNews should not be installed.");
         }
