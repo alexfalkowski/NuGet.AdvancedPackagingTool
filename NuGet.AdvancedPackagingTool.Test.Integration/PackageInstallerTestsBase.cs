@@ -49,9 +49,9 @@
 
         private const string ShortVersion11 = "1.1";
 
-        protected IPackageInstaller Installer { get; set; }
+        private IPackageInstaller Installer { get; set; }
 
-        protected string PackagePath { get; set; }
+        private string PackagePath { get; set; }
 
         [Test]
         public void ShouldNotUninstallNotInstalledPackage()

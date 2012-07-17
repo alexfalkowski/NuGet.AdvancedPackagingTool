@@ -6,8 +6,6 @@
 
     public interface IPackagesSourceFile
     {
-        bool Exists();
-
         IEnumerable<PackageSource> ReadSources();
     }
 }

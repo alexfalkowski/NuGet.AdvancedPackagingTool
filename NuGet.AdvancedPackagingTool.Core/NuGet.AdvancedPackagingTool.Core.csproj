@@ -94,7 +94,6 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IConfigurationManager.cs" />
     <Compile Include="PackageInstallerFactory.cs" />
-    <Compile Include="PathHelper.cs" />
     <Compile Include="IPackageInstaller.cs" />
     <Compile Include="NullPackageFile.cs" />
     <Compile Include="InvalidPackageInstaller.cs" />

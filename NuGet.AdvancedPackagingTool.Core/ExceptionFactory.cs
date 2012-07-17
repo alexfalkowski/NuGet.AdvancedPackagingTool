@@ -12,21 +12,6 @@
             return new InvalidOperationException(FormatMessage(message, parameters));
         }
 
-        public static ArgumentException CreateArgumentException(
-            string message, 
-            params object[] parameters)
-        {
-            return new ArgumentException(FormatMessage(message, parameters));
-        }
-
-        public static ArgumentNullException CreateArgumentNullException(
-            string parameterName,
-            string message,
-            params object[] parameters)
-        {
-            return new ArgumentNullException(parameterName, FormatMessage(message, parameters));
-        }
-
         public static ArgumentNullException CreateArgumentNullException(string parameterName)
         {
             return new ArgumentNullException(parameterName);

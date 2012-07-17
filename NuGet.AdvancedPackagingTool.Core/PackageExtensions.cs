@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
 
     using NuGet;
@@ -10,18 +9,6 @@
     public static class PackageExtensions
     {
         private const string PackageParameterName = "package";
-
-        public static IEnumerable<IPackageFile> GetModuleFiles(this IPackage package)
-        {
-            var toolFiles = package.GetFiles(Constants.ToolsDirectory);
-
-            return toolFiles.Where(packageFile =>
-                {
-                    var extension = Path.GetExtension(packageFile.Path);
-
-                    return extension != null && extension.Equals(".psm1", StringComparison.CurrentCultureIgnoreCase);
-                });
-        }
 
         public static IPackageFile GetSetupPackageFile(this IPackage package)
         {

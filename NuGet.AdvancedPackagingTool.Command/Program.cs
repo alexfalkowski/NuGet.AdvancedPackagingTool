@@ -9,14 +9,14 @@
         public static int Main(string[] args)
         {
             var arguments = Configuration.Configure<Arguments>().CreateAndBind(args);
-            var packageSourceFileFactory = new PackageSourceFileFactory();
+            IPackageSourceFileFactory packageSourceFileFactory = new PackageSourceFileFactory();
             var packageSourceFile = packageSourceFileFactory.CreatePackageSourceFile();
             var packageManager = new PackageManagerModule(packageSourceFile);
             var packageSource = string.IsNullOrWhiteSpace(arguments.Source)
                                         ? packageManager.ActiveSource
                                         : packageManager.GetSource(arguments.Source);
             var sourceFactory = new SourcePackageRepositoryFactory(packageSource);
-            var factory = new PackageInstallerFactory(
+            IPackageInstallerFactory factory = new PackageInstallerFactory(
                 sourceFactory, new SystemConfigurationManager(), new PhysicalDirectorySystem());
             var installer = factory.CreatePackageInstaller(arguments.IsValid, arguments.Destination);
             var program = new Console(arguments, installer);

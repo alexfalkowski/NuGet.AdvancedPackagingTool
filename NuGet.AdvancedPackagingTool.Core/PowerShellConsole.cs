@@ -7,6 +7,10 @@
 
     public class PowerShellConsole : IShellConsole
     {
+        private const string ScriptTemplateFormat = @"$environment = import-clixml {0}; & '{1}' '{2}' $environment";
+        
+        private const string ParameterFormat = "-inputformat none -NoProfile -ExecutionPolicy unrestricted -Command \"{0} \"";
+
         private readonly IPackage package;
 
         private readonly IPackageFile packageFile;
@@ -33,8 +37,6 @@
             var scriptTempPath = Guid.NewGuid() + ".ps1";
             this.fileSystem.AddFile(scriptTempPath, this.packageFile.GetStream());
 
-            const string ScriptTemplateFormat = @"$environment = import-clixml {0}; & '{1}' '{2}' $environment";
-            const string ParameterFormat = "-inputformat none -NoProfile -ExecutionPolicy unrestricted -Command \"{0} \"";
             var executableScript = string.Format(
                 CultureInfo.CurrentCulture,
                 ScriptTemplateFormat,
@@ -42,7 +44,6 @@
                 this.fileSystem.GetFullPath(scriptTempPath),
                 installationPath);
             var parameters = string.Format(CultureInfo.CurrentCulture, ParameterFormat, executableScript);
-
             var info = this.process.ExecuteProcess("powershell.exe", parameters);
 
             this.fileSystem.DeleteFile(configurationTempPath);

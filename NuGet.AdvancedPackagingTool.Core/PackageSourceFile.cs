@@ -22,11 +22,6 @@
             return ReadFeeds(this.GetStreamForRead);
         }
 
-        public bool Exists()
-        {
-            return File.Exists(this.fileName);
-        }
-
         public override string ToString()
         {
             return this.fileName;

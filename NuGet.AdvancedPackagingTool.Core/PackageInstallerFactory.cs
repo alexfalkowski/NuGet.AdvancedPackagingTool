@@ -31,7 +31,8 @@ namespace NuGet.AdvancedPackagingTool.Core
                 var destinationRepository = new LocalPackageRepository(packagePath);
                 var manager = new PackageManager(
                     sourceRepository, packagePathResolver, fileSystem, destinationRepository) { Logger = logger };
-                var powerShellPackageFile = new PowerShellPackageFile(new BackgroundProcess(), manager, this.directorySystem);
+                var powerShellPackageFile = new PowerShellPackageFile(
+                    new BackgroundProcess(), manager, new PhysicalFileSystem(this.directorySystem.TemporaryPath));
 
                 return new ValidPackageInstaller(manager, powerShellPackageFile, logger);
             }

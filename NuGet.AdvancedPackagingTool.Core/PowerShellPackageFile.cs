@@ -13,13 +13,13 @@ namespace NuGet.AdvancedPackagingTool.Core
 
         private readonly IPackageManager manager;
 
-        private readonly IDirectorySystem directorySystem;
+        private readonly IFileSystem fileSystem;
 
-        public PowerShellPackageFile(IProcess process, IPackageManager manager, IDirectorySystem directorySystem)
+        public PowerShellPackageFile(IProcess process, IPackageManager manager, IFileSystem fileSystem)
         {
             this.process = process;
             this.manager = manager;
-            this.directorySystem = directorySystem;
+            this.fileSystem = fileSystem;
         }
 
         public void Execute(IPackageFile file, IPackage package, ILogger logger)
@@ -36,8 +36,7 @@ namespace NuGet.AdvancedPackagingTool.Core
 
             var installationPath = Path.Combine(
                 this.manager.FileSystem.Root, this.manager.PathResolver.GetPackageDirectory(package));
-            var console = new PowerShellConsole(
-                package, this.process, new PhysicalFileSystem(this.directorySystem.TemporaryPath), file);
+            IShellConsole console = new PowerShellConsole(package, this.process, this.fileSystem, file);
             var processExitInfo = console.Start(installationPath);
 
             if (processExitInfo.ExitCode > 0)
