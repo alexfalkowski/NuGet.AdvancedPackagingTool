@@ -6,11 +6,21 @@
 
     public class TestDirectorySystem : IDirectorySystem
     {
+        private readonly string localPath = new Uri("file:///C:/NuGet/TestInstallPackage/").LocalPath;
+
         public string CurrentDirectory
         {
             get
             {
-                return new Uri("file:///C:/NuGet/TestInstallPackage/").LocalPath;
+                return this.localPath;
+            }
+        }
+
+        public string TemporaryPath
+        {
+            get
+            {
+                return this.localPath;
             }
         }
     }

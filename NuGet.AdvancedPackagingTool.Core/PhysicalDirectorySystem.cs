@@ -11,5 +11,13 @@ namespace NuGet.AdvancedPackagingTool.Core
                 return Directory.GetCurrentDirectory();
             }
         }
+
+        public string TemporaryPath
+        {
+            get
+            {
+                return Path.GetTempPath();
+            }
+        }
     }
 }

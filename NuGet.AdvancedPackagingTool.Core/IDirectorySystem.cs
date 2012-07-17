@@ -3,5 +3,7 @@
     public interface IDirectorySystem
     {
         string CurrentDirectory { get; }
+
+        string TemporaryPath { get; }
     }
 }
