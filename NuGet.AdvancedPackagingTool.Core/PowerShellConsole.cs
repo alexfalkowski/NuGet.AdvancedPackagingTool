@@ -7,7 +7,7 @@
 
     public class PowerShellConsole : IShellConsole
     {
-        private const string ScriptTemplateFormat = @"$environment = import-clixml {0}; & '{1}' '{2}' $environment";
+        private const string ScriptTemplateFormat = @"$configuration = ConvertFrom-Json([System.IO.File]::ReadAllText('{0}')); & '{1}' '{2}' $configuration";
         
         private const string ParameterFormat = "-inputformat none -NoProfile -ExecutionPolicy unrestricted -Command \"{0} \"";
 
@@ -31,7 +31,7 @@
         {
             var configurationFile = this.package.GetConfigurationPackageFile();
 
-            var configurationTempPath = Guid.NewGuid() + ".xml";
+            var configurationTempPath = Guid.NewGuid() + ".json";
             this.fileSystem.AddFile(configurationTempPath, configurationFile.GetStream());
 
             var scriptTempPath = Guid.NewGuid() + ".ps1";

@@ -49,6 +49,8 @@
 
         private const string ShortVersion11 = "1.1";
 
+        private const string ConfigurationInternalText = "Configuration internal";
+
         private IPackageInstaller Installer { get; set; }
 
         private string PackagePath { get; set; }
@@ -72,6 +74,7 @@
             ShouldContainLogEntry(this.Installer.Logs, SetupText);
             ShouldContainLogEntry(this.Installer.Logs, Installed);
             ShouldContainLogEntry(this.Installer.Logs, Install);
+            ShouldContainLogEntry(this.Installer.Logs, ConfigurationInternalText);
 
             var installPath = Path.Combine(this.PackagePath, DummyNews10Folder);
             File.Exists(Path.Combine(installPath, DummyNews10File)).Should().BeTrue();
@@ -90,6 +93,7 @@
             ShouldContainLogEntry(this.Installer.Logs, SetupText);
             ShouldContainLogEntry(this.Installer.Logs, Installed);
             ShouldContainLogEntry(this.Installer.Logs, Install);
+            ShouldContainLogEntry(this.Installer.Logs, ConfigurationInternalText);
 
             var installPath = Path.Combine(this.PackagePath, DummyNews11Folder);
             File.Exists(Path.Combine(installPath, DummyNews11File)).Should().BeTrue();
@@ -112,6 +116,7 @@
             ShouldContainLogEntry(this.Installer.Logs, SetupText);
             ShouldContainLogEntry(this.Installer.Logs, Installed);
             ShouldContainLogEntry(this.Installer.Logs, Install);
+            ShouldContainLogEntry(this.Installer.Logs, ConfigurationInternalText);
 
             File.Exists(Path.Combine(this.PackagePath, DummyNews10Folder, DummyNews10File)).Should().BeFalse();
             File.Exists(Path.Combine(this.PackagePath, DummyNews11Folder, DummyNews11File)).Should().BeTrue();
@@ -130,6 +135,7 @@
             ShouldContainLogEntry(this.Installer.Logs, SetupText);
             ShouldContainLogEntry(this.Installer.Logs, Installed);
             ShouldContainLogEntry(this.Installer.Logs, Install);
+            ShouldContainLogEntry(this.Installer.Logs, ConfigurationInternalText);
             ShouldContainLogEntry(this.Installer.Logs, Already);
         }
 
@@ -143,6 +149,7 @@
             ShouldContainLogEntry(this.Installer.Logs, SetupText);
             ShouldContainLogEntry(this.Installer.Logs, Installed);
             ShouldContainLogEntry(this.Installer.Logs, Install);
+            ShouldContainLogEntry(this.Installer.Logs, ConfigurationInternalText);
             ShouldContainLogEntry(this.Installer.Logs, Uninstall);
             ShouldContainLogEntry(this.Installer.Logs, Uninstalled);
             ShouldContainLogEntry(this.Installer.Logs, Teardown);
@@ -160,6 +167,7 @@
             ShouldContainLogEntry(this.Installer.Logs, SetupText);
             ShouldContainLogEntry(this.Installer.Logs, Installed);
             ShouldContainLogEntry(this.Installer.Logs, Install);
+            ShouldContainLogEntry(this.Installer.Logs, ConfigurationInternalText);
             ShouldContainLogEntry(this.Installer.Logs, Uninstall);
             ShouldContainLogEntry(this.Installer.Logs, Uninstalled);
             ShouldContainLogEntry(this.Installer.Logs, Teardown);
