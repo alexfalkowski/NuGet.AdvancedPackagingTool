@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
 
@@ -55,6 +56,8 @@
 
         private string PackagePath { get; set; }
 
+        private string ConfigurationText { get; set; }
+
         [Test]
         public void ShouldNotUninstallNotInstalledPackage()
         {
@@ -74,7 +77,7 @@
             ShouldContainLogEntry(this.Installer.Logs, SetupText);
             ShouldContainLogEntry(this.Installer.Logs, Installed);
             ShouldContainLogEntry(this.Installer.Logs, Install);
-            ShouldContainLogEntry(this.Installer.Logs, ConfigurationInternalText);
+            ShouldContainLogEntry(this.Installer.Logs, this.ConfigurationText);
 
             var installPath = Path.Combine(this.PackagePath, DummyNews10Folder);
             File.Exists(Path.Combine(installPath, DummyNews10File)).Should().BeTrue();
@@ -93,7 +96,7 @@
             ShouldContainLogEntry(this.Installer.Logs, SetupText);
             ShouldContainLogEntry(this.Installer.Logs, Installed);
             ShouldContainLogEntry(this.Installer.Logs, Install);
-            ShouldContainLogEntry(this.Installer.Logs, ConfigurationInternalText);
+            ShouldContainLogEntry(this.Installer.Logs, this.ConfigurationText);
 
             var installPath = Path.Combine(this.PackagePath, DummyNews11Folder);
             File.Exists(Path.Combine(installPath, DummyNews11File)).Should().BeTrue();
@@ -116,7 +119,7 @@
             ShouldContainLogEntry(this.Installer.Logs, SetupText);
             ShouldContainLogEntry(this.Installer.Logs, Installed);
             ShouldContainLogEntry(this.Installer.Logs, Install);
-            ShouldContainLogEntry(this.Installer.Logs, ConfigurationInternalText);
+            ShouldContainLogEntry(this.Installer.Logs, this.ConfigurationText);
 
             File.Exists(Path.Combine(this.PackagePath, DummyNews10Folder, DummyNews10File)).Should().BeFalse();
             File.Exists(Path.Combine(this.PackagePath, DummyNews11Folder, DummyNews11File)).Should().BeTrue();
@@ -135,7 +138,7 @@
             ShouldContainLogEntry(this.Installer.Logs, SetupText);
             ShouldContainLogEntry(this.Installer.Logs, Installed);
             ShouldContainLogEntry(this.Installer.Logs, Install);
-            ShouldContainLogEntry(this.Installer.Logs, ConfigurationInternalText);
+            ShouldContainLogEntry(this.Installer.Logs, this.ConfigurationText);
             ShouldContainLogEntry(this.Installer.Logs, Already);
         }
 
@@ -149,7 +152,7 @@
             ShouldContainLogEntry(this.Installer.Logs, SetupText);
             ShouldContainLogEntry(this.Installer.Logs, Installed);
             ShouldContainLogEntry(this.Installer.Logs, Install);
-            ShouldContainLogEntry(this.Installer.Logs, ConfigurationInternalText);
+            ShouldContainLogEntry(this.Installer.Logs, this.ConfigurationText);
             ShouldContainLogEntry(this.Installer.Logs, Uninstall);
             ShouldContainLogEntry(this.Installer.Logs, Uninstalled);
             ShouldContainLogEntry(this.Installer.Logs, Teardown);
@@ -167,7 +170,7 @@
             ShouldContainLogEntry(this.Installer.Logs, SetupText);
             ShouldContainLogEntry(this.Installer.Logs, Installed);
             ShouldContainLogEntry(this.Installer.Logs, Install);
-            ShouldContainLogEntry(this.Installer.Logs, ConfigurationInternalText);
+            ShouldContainLogEntry(this.Installer.Logs, this.ConfigurationText);
             ShouldContainLogEntry(this.Installer.Logs, Uninstall);
             ShouldContainLogEntry(this.Installer.Logs, Uninstalled);
             ShouldContainLogEntry(this.Installer.Logs, Teardown);
@@ -175,10 +178,12 @@
                 PackageShouldBeInstalled);
         }
 
-        protected void Setup(PackageSource source)
+        [SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "This is test code.")]
+        protected void Setup(PackageSource source, string configurationText = null)
         {
             var configurationManager = new TestConfigurationManager();
             this.PackagePath = configurationManager.PackagePath;
+            this.ConfigurationText = configurationText ?? ConfigurationInternalText;
 
             var factory = new PackageInstallerFactory(
                 new SourcePackageRepositoryFactory(source), configurationManager, new TestDirectorySystem());
