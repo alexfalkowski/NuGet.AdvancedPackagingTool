@@ -179,7 +179,7 @@
         }
 
         [SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "This is test code.")]
-        protected void Setup(PackageSource source, string configurationText = null)
+        protected void Setup(PackageSource source, string configurationText = null, string configurationPath = null)
         {
             var configurationManager = new TestConfigurationManager();
             this.PackagePath = configurationManager.PackagePath;
@@ -188,7 +188,7 @@
             var factory = new PackageInstallerFactory(
                 new SourcePackageRepositoryFactory(source), configurationManager, new TestDirectorySystem());
 
-            this.Installer = factory.CreatePackageInstaller(true, this.PackagePath);
+            this.Installer = factory.CreatePackageInstaller(true, this.PackagePath, configurationPath);
 
             if (Directory.Exists(this.PackagePath))
             {

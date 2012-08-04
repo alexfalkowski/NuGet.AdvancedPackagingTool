@@ -20,6 +20,8 @@ namespace NuGet.AdvancedPackagingTool.Command
 
         public string Destination { get; set; }
 
+        public string Configuration { get; set; }
+
         [TypeConverter(typeof(VersionTypeConverter))]
         public SemanticVersion Version { get; set; }
 

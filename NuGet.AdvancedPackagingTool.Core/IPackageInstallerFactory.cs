@@ -2,6 +2,7 @@
 {
     public interface IPackageInstallerFactory
     {
-        IPackageInstaller CreatePackageInstaller(bool areArgumentsValid, string installationPath);
+        IPackageInstaller CreatePackageInstaller(
+            bool areArgumentsValid, string installationPath, string configurationPath);
     }
 }

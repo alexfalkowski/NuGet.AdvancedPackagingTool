@@ -18,7 +18,8 @@ namespace NuGet.AdvancedPackagingTool.Core
             this.directorySystem = directorySystem;
         }
 
-        public IPackageInstaller CreatePackageInstaller(bool areArgumentsValid, string installationPath)
+        public IPackageInstaller CreatePackageInstaller(
+            bool areArgumentsValid, string installationPath, string configurationPath)
         {
             if (areArgumentsValid)
             {
@@ -32,7 +33,10 @@ namespace NuGet.AdvancedPackagingTool.Core
                 var manager = new PackageManager(
                     sourceRepository, packagePathResolver, fileSystem, destinationRepository) { Logger = logger };
                 var powerShellPackageFile = new PowerShellPackageFile(
-                    new BackgroundProcess(), manager, new PhysicalFileSystem(this.directorySystem.TemporaryPath));
+                    new BackgroundProcess(),
+                    manager,
+                    new PhysicalFileSystem(this.directorySystem.TemporaryPath),
+                    configurationPath);
 
                 return new ValidPackageInstaller(manager, powerShellPackageFile, logger);
             }

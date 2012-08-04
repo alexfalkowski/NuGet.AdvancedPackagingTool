@@ -82,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConsoleTests.cs" />
+    <Compile Include="ExternalConfigLocalPackageInstallerTests.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="LocalPackageInstallerTests.cs" />
     <Compile Include="FeedPackageInstallerTests.cs" />

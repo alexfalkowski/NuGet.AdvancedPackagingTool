@@ -11,6 +11,8 @@
         
         private const string ParameterFormat = "-inputformat none -NoProfile -ExecutionPolicy unrestricted -Command \"{0} \"";
 
+        private const string PowershellExe = "powershell.exe";
+
         private readonly IPackage package;
 
         private readonly IPackageFile packageFile;
@@ -27,10 +29,11 @@
             this.packageFile = packageFile;
         }
 
-        public ProcessExitInfo Start(string installationPath)
+        public ProcessExitInfo Start(string installationPath, string configurationPath)
         {
-            var configurationFile = this.package.GetConfigurationPackageFile();
-
+            var configurationFile = configurationPath != null
+                                        ? new PhysicalPackageFile { SourcePath = configurationPath }
+                                        : this.package.GetConfigurationPackageFile();
             var configurationTempPath = Guid.NewGuid() + ".json";
             this.fileSystem.AddFile(configurationTempPath, configurationFile.GetStream());
 
@@ -44,7 +47,7 @@
                 this.fileSystem.GetFullPath(scriptTempPath),
                 installationPath);
             var parameters = string.Format(CultureInfo.CurrentCulture, ParameterFormat, executableScript);
-            var info = this.process.ExecuteProcess("powershell.exe", parameters);
+            var info = this.process.ExecuteProcess(PowershellExe, parameters);
 
             this.fileSystem.DeleteFile(configurationTempPath);
             this.fileSystem.DeleteFile(scriptTempPath);

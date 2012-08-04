@@ -1,8 +1,10 @@
 ﻿namespace NuGet.AdvancedPackagingTool.Test.Integration
 {
     using System;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
 
     using FluentAssertions;
 
@@ -19,6 +21,8 @@
 
         private IDirectorySystem directorySystem;
 
+        private string configurationPath;
+
         [SetUp]
         public void BeforeEach()
         {
@@ -27,9 +31,27 @@
             this.server = new PackagesWebServer();
             this.server.Startup();
 
+            var directoryName = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
+            Debug.Assert(directoryName != null, "directoryName != null");
+            this.configurationPath = Path.Combine(directoryName, "Configuration.json");
+
             if (Directory.Exists(this.configurationManager.PackagePath))
             {
                 Directory.Delete(this.configurationManager.PackagePath, true);
+            }
+
+            var version10Path = Path.Combine(directoryName, PackageInstallerTestsBase.DummyNews10Folder);
+
+            if (Directory.Exists(version10Path))
+            {
+                Directory.Delete(version10Path, true);
+            }
+
+            var version11Path = Path.Combine(directoryName, PackageInstallerTestsBase.DummyNews11Folder);
+
+            if (Directory.Exists(version11Path))
+            {
+                Directory.Delete(version11Path, true);
             }
         }
 
@@ -44,15 +66,17 @@
         {
             RunPackageManagerProcess("/i /p DummyNews /v 1.0");
 
-            Directory.EnumerateDirectories(this.configurationManager.PackagePath, "DummyNews.1.0").Any().Should().BeTrue(
-                "The package DummyNews should be installed.");
+            Directory.EnumerateDirectories(
+                this.configurationManager.PackagePath, PackageInstallerTestsBase.DummyNews10Folder).Any().Should()
+                .BeTrue("The package DummyNews should be installed.");
 
             var path = Path.Combine(this.directorySystem.CurrentDirectory, PackageInstallerTestsBase.DummyNews10Folder);
             Directory.EnumerateDirectories(path).Any().Should().BeTrue("Should have directories under " + path);
 
             RunPackageManagerProcess("/u /p DummyNews /v 1.0");
 
-            Directory.Exists(this.configurationManager.PackagePath).Should().BeFalse("The package DummyNews should not be installed.");
+            Directory.Exists(this.configurationManager.PackagePath).Should().BeFalse(
+                "The package DummyNews should not be installed.");
         }
 
         [Test]
@@ -61,15 +85,35 @@
             this.directorySystem = new TestDirectorySystem();
             RunPackageManagerProcess("/i /p DummyNews /v 1.0 /d " + this.directorySystem.CurrentDirectory);
 
-            Directory.EnumerateDirectories(this.configurationManager.PackagePath, "DummyNews.1.0").Any().Should().BeTrue(
-                "The package DummyNews should be installed.");
+            Directory.EnumerateDirectories(
+                this.configurationManager.PackagePath, PackageInstallerTestsBase.DummyNews10Folder).Any().Should()
+                .BeTrue("The package DummyNews should be installed.");
 
             var path = Path.Combine(this.directorySystem.CurrentDirectory, PackageInstallerTestsBase.DummyNews10Folder);
             Directory.EnumerateDirectories(path).Any().Should().BeTrue("Should have directories under " + path);
 
             RunPackageManagerProcess("/u /p DummyNews /v 1.0 /d " + this.directorySystem.CurrentDirectory);
 
-            Directory.Exists(this.configurationManager.PackagePath).Should().BeFalse("The package DummyNews should not be installed.");
+            Directory.Exists(this.configurationManager.PackagePath).Should().BeFalse(
+                "The package DummyNews should not be installed.");
+        }
+
+        [Test]
+        public void ShouldInstallAndUninstallVersion10PackageWithSpecificConfiguration()
+        {
+            RunPackageManagerProcess("/i /p DummyNews /v 1.0 /c " + this.configurationPath);
+
+            Directory.EnumerateDirectories(
+                this.configurationManager.PackagePath, PackageInstallerTestsBase.DummyNews10Folder).Any().Should()
+                .BeTrue("The package DummyNews should be installed.");
+
+            var path = Path.Combine(this.directorySystem.CurrentDirectory, PackageInstallerTestsBase.DummyNews10Folder);
+            Directory.EnumerateDirectories(path).Any().Should().BeTrue("Should have directories under " + path);
+
+            RunPackageManagerProcess("/u /p DummyNews /v 1.0 /c " + this.configurationPath);
+
+            Directory.Exists(this.configurationManager.PackagePath).Should().BeFalse(
+                "The package DummyNews should not be installed.");
         }
 
         [Test]
@@ -77,15 +121,17 @@
         {
             RunPackageManagerProcess("/i /p DummyNews /v 1.1");
 
-            Directory.EnumerateDirectories(this.configurationManager.PackagePath, "DummyNews.1.1").Any().Should().BeTrue(
-                "The package DummyNews should be installed.");
+            Directory.EnumerateDirectories(
+                this.configurationManager.PackagePath, PackageInstallerTestsBase.DummyNews11Folder).Any().Should()
+                .BeTrue("The package DummyNews should be installed.");
 
             var path = Path.Combine(this.directorySystem.CurrentDirectory, PackageInstallerTestsBase.DummyNews11Folder);
             Directory.EnumerateDirectories(path).Any().Should().BeTrue("Should have directories under " + path);
 
             RunPackageManagerProcess("/u /p DummyNews /v 1.1");
 
-            Directory.Exists(this.configurationManager.PackagePath).Should().BeFalse("The package DummyNews should not be installed.");
+            Directory.Exists(this.configurationManager.PackagePath).Should().BeFalse(
+                "The package DummyNews should not be installed.");
         }
 
         [Test]
@@ -94,15 +140,35 @@
             this.directorySystem = new TestDirectorySystem();
             RunPackageManagerProcess("/i /p DummyNews /v 1.1 /d " + this.directorySystem.CurrentDirectory);
 
-            Directory.EnumerateDirectories(this.configurationManager.PackagePath, "DummyNews.1.1").Any().Should().BeTrue(
-                "The package DummyNews should be installed.");
+            Directory.EnumerateDirectories(
+                this.configurationManager.PackagePath, PackageInstallerTestsBase.DummyNews11Folder).Any().Should()
+                .BeTrue("The package DummyNews should be installed.");
 
             var path = Path.Combine(this.directorySystem.CurrentDirectory, PackageInstallerTestsBase.DummyNews11Folder);
             Directory.EnumerateDirectories(path).Any().Should().BeTrue("Should have directories under " + path);
 
             RunPackageManagerProcess("/u /p DummyNews /v 1.1 /d " + this.directorySystem.CurrentDirectory);
 
-            Directory.Exists(this.configurationManager.PackagePath).Should().BeFalse("The package DummyNews should not be installed.");
+            Directory.Exists(this.configurationManager.PackagePath).Should().BeFalse(
+                "The package DummyNews should not be installed.");
+        }
+
+        [Test]
+        public void ShouldInstallAndUninstallVersion11PackageWithSpecificConfiguration()
+        {
+            RunPackageManagerProcess("/i /p DummyNews /v 1.1 /c " + this.configurationPath);
+
+            Directory.EnumerateDirectories(
+                this.configurationManager.PackagePath, PackageInstallerTestsBase.DummyNews11Folder).Any().Should()
+                .BeTrue("The package DummyNews should be installed.");
+
+            var path = Path.Combine(this.directorySystem.CurrentDirectory, PackageInstallerTestsBase.DummyNews11Folder);
+            Directory.EnumerateDirectories(path).Any().Should().BeTrue("Should have directories under " + path);
+
+            RunPackageManagerProcess("/u /p DummyNews /v 1.1 /d " + this.configurationPath);
+
+            Directory.Exists(this.configurationManager.PackagePath).Should().BeFalse(
+                "The package DummyNews should not be installed.");
         }
 
         [Test]
@@ -110,12 +176,14 @@
         {
             RunPackageManagerProcess("/i /p DummyNews");
 
-            Directory.EnumerateDirectories(this.configurationManager.PackagePath, "DummyNews.1.1").Any().Should().BeTrue(
-                "The package DummyNews should be installed.");
+            Directory.EnumerateDirectories(
+                this.configurationManager.PackagePath, PackageInstallerTestsBase.DummyNews11Folder).Any().Should()
+                .BeTrue("The package DummyNews should be installed.");
 
             RunPackageManagerProcess("/u /p DummyNews");
 
-            Directory.Exists(this.configurationManager.PackagePath).Should().BeFalse("The package DummyNews should not be installed.");
+            Directory.Exists(this.configurationManager.PackagePath).Should().BeFalse(
+                "The package DummyNews should not be installed.");
         }
 
         [Test]
@@ -123,13 +191,15 @@
         {
             RunPackageManagerProcess("/i /p DummyNews /v 1.0");
 
-            Directory.EnumerateDirectories(this.configurationManager.PackagePath, "DummyNews.1.0").Any().Should().BeTrue(
-                "The package DummyNews should be installed.");
+            Directory.EnumerateDirectories(
+                this.configurationManager.PackagePath, PackageInstallerTestsBase.DummyNews10Folder).Any().Should()
+                .BeTrue("The package DummyNews should be installed.");
 
             RunPackageManagerProcess("/i /p DummyNews /v 1.1");
 
-            Directory.EnumerateDirectories(this.configurationManager.PackagePath, "DummyNews.1.1").Any().Should().BeTrue(
-                "The package DummyNews should be installed.");
+            Directory.EnumerateDirectories(
+                this.configurationManager.PackagePath, PackageInstallerTestsBase.DummyNews11Folder).Any().Should()
+                .BeTrue("The package DummyNews should be installed.");
         }
 
         private static void RunPackageManagerProcess(string arguments)
