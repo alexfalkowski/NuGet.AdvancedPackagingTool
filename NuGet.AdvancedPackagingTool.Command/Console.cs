@@ -36,20 +36,14 @@ namespace NuGet.AdvancedPackagingTool.Command
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "We are logging the exception.")]
         public int Start()
         {
-            if (!this.arguments.IsValid)
-            {
-                WriteInformationToConsole(this.arguments.Errors);
-                return 1;
-            }
-
             try
             {
-                if (this.arguments.Install)
+                if (this.arguments.Action == ActionStatus.Install)
                 {
                     this.installer.InstallPackage(this.arguments.Package, this.arguments.Version);
                 }
 
-                if (this.arguments.Uninstall)
+                if (this.arguments.Action == ActionStatus.Uninstall)
                 {
                     this.installer.UninstallPackage(this.arguments.Package, this.arguments.Version);
                 }

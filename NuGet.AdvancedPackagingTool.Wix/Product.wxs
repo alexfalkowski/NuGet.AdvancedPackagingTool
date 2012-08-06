@@ -11,13 +11,13 @@
 						<Component Id="ProductComponent" Guid="ee09c39e-e912-49cc-9806-aaf88b9ea695">
 							<File Id="AptGet" Name="$(var.NuGet.AdvancedPackagingTool.Command.TargetFileName)" Source="$(var.NuGet.AdvancedPackagingTool.Command.TargetPath)"
 							DiskId="1" KeyPath="yes" />
-							<File Id="Args" Name="Args.dll" Source="$(var.NuGet.AdvancedPackagingTool.Command.TargetDir)\Args.dll" DiskId="1" />
+							<File Id="PowerArgs" Name="PowerArgs.dll" Source="$(var.NuGet.AdvancedPackagingTool.Command.TargetDir)\PowerArgs.dll" DiskId="1" />
 							<File Id="Common.Logging" Name="Common.Logging.dll" Source="$(var.NuGet.AdvancedPackagingTool.Command.TargetDir)\Common.Logging.dll" DiskId="1"  />
 							<File Id="Common.Logging.NLog" Name="Common.Logging.NLog.dll" Source="$(var.NuGet.AdvancedPackagingTool.Command.TargetDir)\Common.Logging.NLog.dll" DiskId="1"  />
 							<File Id="FluentValidation" Name="FluentValidation.dll" Source="$(var.NuGet.AdvancedPackagingTool.Command.TargetDir)\FluentValidation.dll" DiskId="1"  />
 							<File Id="NuGet.AdvancedPackagingTool.Core" Name="NuGet.AdvancedPackagingTool.Core.dll" Source="$(var.NuGet.AdvancedPackagingTool.Command.TargetDir)\NuGet.AdvancedPackagingTool.Core.dll" DiskId="1"  />
 							<File Id="NLog" Name="NLog.dll" Source="$(var.NuGet.AdvancedPackagingTool.Command.TargetDir)\NLog.dll" DiskId="1"  />
-							<File Id="npm.exe.config" Name="npm.exe.config" Source="$(var.NuGet.AdvancedPackagingTool.Command.TargetDir)\napt-get.exe.config" DiskId="1"  />
+							<File Id="Config" Name="napt-get.exe.config" Source="$(var.NuGet.AdvancedPackagingTool.Command.TargetDir)\napt-get.exe.config" DiskId="1"  />
 							<File Id="NuGet.Core" Name="NuGet.Core.dll" Source="$(var.NuGet.AdvancedPackagingTool.Command.TargetDir)\NuGet.Core.dll" DiskId="1"  />
 							<File Id="PackageSources.config" Name="PackageSources.config" Source="$(var.NuGet.AdvancedPackagingTool.Command.TargetDir)\PackageSources.config" DiskId="1"  />
 							<Environment Id="Path" Name="Path" Value="[INSTALLDIR]" Separator=";" Permanent="no" Part="last" Action="set" System="yes" />
@@ -29,7 +29,6 @@
 		<Feature Id="ProductFeature" Title="NuGet.AdvancedPackagingTool" Level="1">
 			<ComponentRef Id="ProductComponent" />
 			<ComponentGroupRef Id="Product.Generated" />
-			
 		</Feature>
 	</Product>
 </Wix>

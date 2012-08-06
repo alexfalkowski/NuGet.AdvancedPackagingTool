@@ -188,7 +188,7 @@
             var factory = new PackageInstallerFactory(
                 new SourcePackageRepositoryFactory(source), configurationManager, new TestDirectorySystem());
 
-            this.Installer = factory.CreatePackageInstaller(true, this.PackagePath, configurationPath);
+            this.Installer = factory.CreatePackageInstaller(this.PackagePath, configurationPath);
 
             if (Directory.Exists(this.PackagePath))
             {

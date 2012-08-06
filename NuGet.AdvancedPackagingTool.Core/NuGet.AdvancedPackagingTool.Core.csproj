@@ -79,6 +79,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionStatus.cs" />
     <Compile Include="IDirectorySystem.cs" />
     <Compile Include="IProcess.cs" />
     <Compile Include="IPackageInstallerFactory.cs" />
@@ -96,9 +97,8 @@
     <Compile Include="PackageInstallerFactory.cs" />
     <Compile Include="IPackageInstaller.cs" />
     <Compile Include="NullPackageFile.cs" />
-    <Compile Include="InvalidPackageInstaller.cs" />
     <Compile Include="PackageExtensions.cs" />
-    <Compile Include="ValidPackageInstaller.cs" />
+    <Compile Include="DefaultPackageInstaller.cs" />
     <Compile Include="PackageSourceFileFactory.cs" />
     <Compile Include="PowerShellConsole.cs" />
     <Compile Include="ProcessExitInfo.cs" />

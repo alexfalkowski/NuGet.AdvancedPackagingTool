@@ -5,7 +5,7 @@
 
     using NuGet;
 
-    public class ValidPackageInstaller : IPackageInstaller
+    public class DefaultPackageInstaller : IPackageInstaller
     {
         private readonly PackageLogger logger;
 
@@ -15,7 +15,7 @@
 
         private bool installCalled;
 
-        public ValidPackageInstaller(
+        public DefaultPackageInstaller(
             IPackageManager packageManager, IShellPackageFile shellPackageFile, PackageLogger logger)
         {
             this.shellPackageFile = shellPackageFile;
