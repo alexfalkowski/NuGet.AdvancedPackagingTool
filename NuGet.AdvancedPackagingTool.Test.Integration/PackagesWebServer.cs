@@ -39,7 +39,7 @@
             var arguments = string.Format(CultureInfo.CurrentCulture, @"/path:""{0}"" /port:1544", path);
 
             IProcess backgroundProcess = new BackgroundProcess();
-            this.process = backgroundProcess.CreateProcess(FileName, arguments);
+            this.process = backgroundProcess.CreateStartedProcess(FileName, arguments);
             Thread.Sleep(3000);
         }
 

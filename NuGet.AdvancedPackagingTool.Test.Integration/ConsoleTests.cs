@@ -202,6 +202,19 @@
                 .BeTrue("The package DummyNews should be installed.");
         }
 
+        [Test]
+        public void ShouldInstallAndUninstallAPackageThatWritesReallyLongOutput()
+        {
+            RunPackageManagerProcess("install -p DummyNewsReallyLongOutput");
+
+            Directory.EnumerateDirectories(this.configurationManager.PackagePath, "DummyNewsReallyLongOutput.1.0").Any().Should().BeTrue(
+                "The package DummyNews should be installed.");
+
+            RunPackageManagerProcess("uninstall -p DummyNewsReallyLongOutput");
+
+            Directory.Exists(this.configurationManager.PackagePath).Should().BeFalse("The package DummyNews should not be installed.");
+        }
+
         private static void RunPackageManagerProcess(string arguments)
         {
             var info = new BackgroundProcess().ExecuteProcess("napt-get.exe", arguments);
