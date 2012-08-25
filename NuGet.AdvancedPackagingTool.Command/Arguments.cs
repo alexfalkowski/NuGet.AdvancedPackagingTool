@@ -27,7 +27,7 @@ namespace NuGet.AdvancedPackagingTool.Command
         public SemanticVersion Version { get; set; }
 
         [ArgShortcut("s")]
-        [ArgDescription("The package to install or uninstall")]
+        [ArgDescription("The source of the packages.")]
         public string Source { get; set; }
 
         [ArgShortcut("d")]
