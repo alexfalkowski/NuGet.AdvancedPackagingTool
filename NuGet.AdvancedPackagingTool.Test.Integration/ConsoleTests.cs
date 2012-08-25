@@ -205,14 +205,15 @@
         [Test]
         public void ShouldInstallAndUninstallAPackageThatWritesReallyLongOutput()
         {
-            RunPackageManagerProcess("install -p DummyNewsReallyLongOutput");
+            RunPackageManagerProcess("install -p DummyBigNews");
 
-            Directory.EnumerateDirectories(this.configurationManager.PackagePath, "DummyNewsReallyLongOutput.1.0").Any().Should().BeTrue(
-                "The package DummyNews should be installed.");
+            Directory.EnumerateDirectories(this.configurationManager.PackagePath, "DummyBigNews.1.0").Any()
+                .Should().BeTrue("The package DummyNewsReallyLongOutput should be installed.");
 
-            RunPackageManagerProcess("uninstall -p DummyNewsReallyLongOutput");
+            RunPackageManagerProcess("uninstall -p DummyBigNews");
 
-            Directory.Exists(this.configurationManager.PackagePath).Should().BeFalse("The package DummyNews should not be installed.");
+            Directory.Exists(this.configurationManager.PackagePath).Should().BeFalse(
+                "The package DummyNewsReallyLongOutput should not be installed.");
         }
 
         private static void RunPackageManagerProcess(string arguments)
