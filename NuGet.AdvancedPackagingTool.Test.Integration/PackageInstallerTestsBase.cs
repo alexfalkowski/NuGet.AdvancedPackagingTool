@@ -52,6 +52,8 @@
 
         private const string ConfigurationInternalText = "Configuration internal";
 
+        private const string Error = "Error";
+
         private IPackageInstaller Installer { get; set; }
 
         private string PackagePath { get; set; }
@@ -178,6 +180,16 @@
                 PackageShouldBeInstalled);
         }
 
+        [Test]
+        public void ShouldNotInstallFailingPackage()
+        {
+            var version = new SemanticVersion(ShortVersion10);
+            this.Installer.InstallPackage("DummyOutputWithError", version);
+
+            ShouldContainLogEntry(this.Installer.Logs, SetupText);
+            ShouldContainLogEntry(this.Installer.Logs, Error);
+        }
+
         [SuppressMessage("Microsoft.Design", "CA1026:DefaultParametersShouldNotBeUsed", Justification = "This is test code.")]
         protected void Setup(PackageSource source, string configurationText = null, string configurationPath = null)
         {
@@ -212,7 +224,7 @@
 
         private static string GetWebsiteVersion(string path)
         {
-            var versionFile = Directory.EnumerateFiles(path).Where(x => x.EndsWith("WebsiteVersion.txt", StringComparison.CurrentCultureIgnoreCase)).First();
+            var versionFile = Directory.EnumerateFiles(path).First(x => x.EndsWith("WebsiteVersion.txt", StringComparison.CurrentCultureIgnoreCase));
             return File.ReadAllText(versionFile);
         }
     }

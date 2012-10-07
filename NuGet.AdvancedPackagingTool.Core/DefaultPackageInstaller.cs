@@ -59,10 +59,6 @@
 
                 this.packageManager.InstallPackage(packageId, version, false, false);
             }
-            catch (InvalidOperationException e)
-            {
-                this.logger.Log(MessageLevel.Error, e.Message);
-            }
             finally
             {
                 this.installCalled = false;

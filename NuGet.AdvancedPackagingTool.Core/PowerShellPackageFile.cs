@@ -43,6 +43,17 @@ namespace NuGet.AdvancedPackagingTool.Core
             IShellConsole console = new PowerShellConsole(package, this.process, this.fileSystem, file);
             var processExitInfo = console.Start(installationPath, this.configurationPath);
 
+            Func<string, bool> predicate = message => !string.IsNullOrWhiteSpace(message);
+            foreach (var message in processExitInfo.OutputMessage.Split('\n').Where(predicate))
+            {
+                logger.Log(MessageLevel.Info, message.Trim());
+            }
+
+            foreach (var message in processExitInfo.ErrorMessage.Split('\n').Where(predicate))
+            {
+                logger.Log(MessageLevel.Error, message.Trim());
+            }
+
             if (processExitInfo.ExitCode > 0)
             {
                 throw ExceptionFactory.CreateInvalidOperationException(
@@ -51,12 +62,6 @@ namespace NuGet.AdvancedPackagingTool.Core
                         Resources.PowershellErrorMessage,
                         file.Path,
                         processExitInfo.ErrorMessage));
-            }
-
-            Func<string, bool> predicate = message => !string.IsNullOrWhiteSpace(message);
-            foreach (var message in processExitInfo.OutputMessage.Split('\n').Where(predicate))
-            {
-                logger.Log(MessageLevel.Info, message.Trim());
             }
         }
     }

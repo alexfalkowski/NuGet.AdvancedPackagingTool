@@ -23,6 +23,12 @@
 
         private string configurationPath;
 
+        [Test]
+        public static void ShouldNotInstallFailingPackage()
+        {
+            RunPackageManagerProcess("install -p DummyOutputWithError -v 1.0", 1);
+        }
+
         [SetUp]
         public void BeforeEach()
         {
@@ -216,14 +222,14 @@
                 "The package DummyNewsReallyLongOutput should not be installed.");
         }
 
-        private static void RunPackageManagerProcess(string arguments)
+        private static void RunPackageManagerProcess(string arguments, int exitCode = 0)
         {
             var info = new BackgroundProcess().ExecuteProcess("napt-get.exe", arguments);
 
             Console.WriteLine(info.OutputMessage);
             Console.WriteLine(info.ErrorMessage);
 
-            info.ExitCode.Should().Be(0);
+            info.ExitCode.Should().Be(exitCode);
         }
     }
 }
